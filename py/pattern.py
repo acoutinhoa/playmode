@@ -1,10 +1,5 @@
 import string
 
-# # # # # # import sys
-# # # # # # sys.path.append('../')
-# # # # # # import numeros.irracionais
-# # # # # from id import var
-
 def var(v,v0=0,lista=[],tipo='',):
     if not v:
         if not v0:
@@ -58,7 +53,7 @@ def pattern(letra,letras,print_fonte=False):
     espacoh=0
     for car in letras:
         desenho=BezierPath()
-        desenho.text(car, font=fonte, fontSize=fs*m,offset=(fs*m/1.5,fs*m))
+        desenho.text(car, font=fonte, fontSize=fs*m,offset=(margem_x,fsh*m/4+margem_y))
     
         if car==letra:
             newPage(pw,ph)
@@ -99,87 +94,25 @@ def pattern(letra,letras,print_fonte=False):
     
     return fontes,chave
 
-
-fonts=[
-    '?',
-    '.ArabicUIDisplay-Medium', #23
-    '.DamascusPUABold', #40
-    '.HelveticaNeueDeskInterface-Bold', #52
-    '.Keyboard', #74
-    '.LucidaGrandeUI-Bold', #77
-    '.PingFangTC-Semibold', #111
-    '.SFCompactDisplay-Black', #114
-    '.SFCompactRounded-Black', #123
-    '.SFNS-HeavyG1', #169
-    '.SFNSMono-Heavy', #227
-    '.SFNSRounded-Bold', #238
-    'AmericanTypewriter-Bold', #297
-    'Arial-Black', #325
-    'ArialRoundedMTBold', #340
-    'Avenir-Black', #346
-    'BodoniSvtyTwoOSITCTT-Bold', #400
-    'BodoniSvtyTwoSCITCTT-Book', #403
-    'ComicSansMS-Bold', #423
-    'Courier-Bold', #430
-    'CourierNewPS-BoldMT', #434
-    'Futura-Bold', #461
-    'GillSans-UltraBold', #486
-    'HelveticaNeue-Bold', #503
-    'HelveticaNeue-CondensedBlack', #505
-    'Impact', #556
-    'LastResort', #603
-    'MyanmarSangamMN-Bold', #640
-    'Noteworthy-Bold', #646
-    'Optima-Bold', #759
-    'Optima-ExtraBlack', #761
-    'PTMono-Bold', #768
-    'PTSans-CaptionBold', #773
-    'PTSans-Narrow', #775
-    'PTSans-NarrowBold', #776
-    'PTSerif-Bold', #778
-    'PTSerif-BoldItalic', #779
-    'Palatino-Bold', #784
-    'Phosphate-Inline', #790
-    'PingFangTC-Semibold', #807
-    'Rockwell-Bold', #813
-    'Seravek-Bold', #862
-    'Silom', #877
-    'Skia-Regular_Black', #883
-    'SnellRoundhand-Black', #893
-    'SukhumvitSet-Bold', #895
-    'Superclarendon-Black', #901
-    'Tahoma-Bold', #911
-    'Times-Bold', #923
-    'Verdana-Bold', #938
-    'Wingdings-Regular', #944
-    'Wingdings2', #945
-    'Wingdings3', #946
-    'Zapfino', #948
-    ]
-
 cases = [
     'upper',
     'lower',
     ]
 
-fontes_do_pc = ['-','?',]+installedFonts()
+fontes_do_pc = ['?',]+installedFonts()
 
 Variable([
     dict(name="fonte_do_pc", ui="PopUpButton", args=dict(items=fontes_do_pc)),
-    dict(name="fonte", ui="PopUpButton", args=dict(items=fonts)),
     dict(name="case", ui="PopUpButton", args=dict(items=cases)),
     dict(name="letra", ui="EditText", args=dict(text='')),
     dict(name="altura", ui="EditText", args=dict(text='')),
     dict(name="ajuste_grid", ui="EditText", args=dict(text='')),
+    dict(name="margem_x", ui="Slider", args=dict(value=3, minValue=-10, maxValue=30)),    
+    dict(name="margem_y", ui="Slider", args=dict(value=2, minValue=-10, maxValue=30)),    
     dict(name="print_fonte", ui="CheckBox", args=dict(value=False)),
 ], globals())
 
-if fonte_do_pc:
-    fonte=var(fonte_do_pc,lista=fontes_do_pc)
-    if fonte=='?':
-        fonte=choice(fontes_do_pc[2:])
-else:
-    fonte=var(fonte,lista=fonts)
+fonte=var(fonte_do_pc,choice(fontes_do_pc[1:]),lista=fontes_do_pc)
 
 if case == 0:
     letras=string.ascii_uppercase
@@ -192,9 +125,14 @@ fs=var(altura,10,tipo='numero')
 ajuste=var(ajuste_grid,0,tipo='numero')
 
 m=10
+margem_x=margem_x*m
+margem_y=margem_y*m
 
-ph=3*fs*m
-pw=4*fs*m
+font(fonte,fs)
+fsw,fsh=textSize(letra, align=None, width=None, height=None)
+
+pw=int(3*margem_x+2*fsw*m)
+ph=int(1.5*margem_y+fsh*m)
 
 if print_fonte:
     fontes,chave = pattern(letra,letras,print_fonte)
@@ -205,7 +143,7 @@ else:
 fill(0)
 padrao = fontes[chave][letra.lower()].split()
 padrao.reverse()
-translate(2.2*fs*m,fs*m)
+translate(pw-margem_x-fsw*m,(ph-len(padrao)*m)/2)
 for j,linha in enumerate(padrao):
     for i,car in enumerate(linha):
         if car == '#':

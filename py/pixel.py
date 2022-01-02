@@ -91,7 +91,11 @@ def var(v,v0=0,lista=[],tipo='',):
             elif tipo=='cor':
                 v=()
                 for i in range(3):
-                    v+=(randint(0,1),)
+                    if cores_quebradas:
+                        v+=(randint(0,100)/100,)
+                    else:
+                        v+=(randint(0,1),)
+                    
         else:
             if v0=='none':
                 v=None
@@ -148,35 +152,34 @@ tipos = [
 
 
 Variable([
-    dict(name="w", ui="EditText", args=dict(text='')),
-    dict(name="h", ui="EditText", args=dict(text='')),
     dict(name="x", ui="Slider", args=dict(value=10, minValue=0, maxValue=100)),    
     dict(name="y", ui="Slider", args=dict(value=40, minValue=0, maxValue=100)),    
     dict(name="palavra", ui="EditText", args=dict(text='playmode')),
-    dict(name="modulo", ui="Slider", args=dict(value=20, minValue=1, maxValue=40)),    
+    dict(name="modulo", ui="EditText", args=dict(text='17')),
     dict(name="fonte", ui="PopUpButton", args=dict(items=fontes)),
     dict(name="tipo_px", ui="PopUpButton", args=dict(items=tipos)),
     dict(name="entreletra", ui="EditText", args=dict(text='1')),
     dict(name="cor_mode", ui="PopUpButton", args=dict(items=cor_modes)),
-    dict(name="colorido", ui="EditText", args=dict(text='')),
+    dict(name="colorido", ui="EditText", args=dict(text='+')),
     dict(name="cor1", ui="EditText", args=dict(text='')),
     dict(name="cor2", ui="EditText", args=dict(text='')),
     dict(name="cor3", ui="EditText", args=dict(text='')),
     dict(name="cor4", ui="EditText", args=dict(text='')),
     dict(name="degrade", ui="CheckBox", args=dict(value=False)),
     dict(name="degrade_linha", ui="CheckBox", args=dict(value=False)),
+    dict(name="cores_quebradas", ui="CheckBox", args=dict(value=False)),
 ], globals())
     
 
-w=var(w,30,tipo='numero')*cm
-h=var(h,20,tipo='numero')*cm
+w=1000
+h=w/2
 newPage(w,h)
 
-m=var(modulo,randint(5,8),tipo='numero')
+m=var(modulo,10,tipo='numero')
 tipo_px=var(tipo_px,randint(1,len(tipos)-1))
 
 # fonte
-fonte=var(fonte,fontes[3],lista=fontes)
+fonte=var(fonte,'sem buraco',lista=fontes)
 # fonte colorida
 colorido=var(colorido,choice(colore[1:]))
 if colorido == '+':
@@ -194,31 +197,28 @@ y0=y*height()/100
 
 # cor
 # contraste
-cor1=var(cor1,tipo='cor')
-
-# verifica se a cor1 nao é branca
-if tipo_px==6:
-    cor1=var('',tipo='cor')
-    cor4=var(cor2,tipo='cor')
+if tipo_px==6 and degrade:
+    if not cor1:
+        cor1=()
+        if cor_mode == 0:
+            while 0 not in cor1:
+                cor1=var('',tipo='cor')
+        elif cor_mode == 1:
+            while 1 not in cor1:
+                cor1=var('',tipo='cor')
+    else:
+        cor1=var(cor1,tipo='cor')
+    cor4=var(cor4,tipo='cor')
     cor3=var(cor3,dgd(cor1,cor4,2,4),tipo='cor')
     cor2=var(cor2,dgd(cor1,cor4,1,4),tipo='cor')
 else:
-    if cor_mode == 0:
-        while 0 not in cor1:
-            cor1=var('',tipo='cor')
-    elif cor_mode == 1:
-        while 1 not in cor1:
-            cor1=var('',tipo='cor')
-
+    cor1=var(cor1,tipo='cor')
     cor2=var(cor2,tipo='cor')
     cor3=var(cor3,tipo='cor')
     cor4=var(cor4,tipo='cor')
             
 
-print('pagina_w =', w/cm, 'cm')
-print('pagina_h =', h/cm, 'cm')
-print()
-print('modulo =', round(m/cm,2), 'cm')
+print('modulo =', m, 'px')
 print('fonte =', fonte)
 print('entreletra =', entreletra)
 print()
@@ -234,7 +234,7 @@ print('cor4 =', cor4, '>>> cor x')
 
 strokeWidth(m/10)
 miterLimit(m/10)
-# lineJoin("bevel")
+lineJoin("bevel")
 # lineCap("square")
 
 save()
