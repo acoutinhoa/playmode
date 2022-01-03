@@ -3,40 +3,35 @@ import os
 # caminho da pasta do playmode
 path='/'.join(os.path.abspath(os.getcwd()).split('/')[:-1])
 
-# unidade
-cm=72/2.54
-mm=cm/10
-
 # fonte
-from fontes import font
-from base import pixel
+from fontes import font as fonts
 
-px_lista=['#','o','t','x']
- 
-def redefine(pattern):
+
+def pixel(car,bezier,i,j,m,var=1):
+    x=i*var
+    y=j*var
+    if car != ' ':
+        bezier.translate(-x,-y)
+        bezier.appendPath(formas[car])
+        bezier.translate(x,y)
+    return bezier
+
+def redefine(pattern,px_lista):
     for j,y in enumerate(pattern):
-        linha=''
+        linha=[]
         for i,x in enumerate(y):
             if x == '#':
-                if tipo_px == 3:
-                    x='o'
-                elif tipo_px == 4:
-                    x='t'
-                elif tipo_px == 5:
-                    x='x'
-                else:
-                    x=choice(px_lista)
-            linha+=x
+                x=choice(px_lista)
+            linha.append(x)
         pattern[j]=linha
     return pattern
 
-def letra(car,layer=px_lista):
+def letra(car,layer):
     desenho=BezierPath()
     for j,y in enumerate(car):
         for i,x in enumerate(y):
             if x in layer:
                 desenho = pixel(x,desenho,i,j,m,var=m)
-    
     desenho.removeOverlap()
     w=(i+1)*m
     h=(j+1)*m
@@ -95,7 +90,6 @@ def var(v,v0=0,lista=[],tipo='',):
                         v+=(randint(0,100)/100,)
                     else:
                         v+=(randint(0,1),)
-                    
         else:
             if v0=='none':
                 v=None
@@ -128,7 +122,7 @@ def var(v,v0=0,lista=[],tipo='',):
 
 
 # fontes
-fontes=['👀']+[n for n in font.keys()]
+fontes=['👀']+[n for n in fonts.keys()]
 
 # opcoes de itens coloridos
 colore = ['👀','','p','pm','mode','play','playmode']
@@ -139,17 +133,7 @@ cor_modes = [
     '1_cmyk',
 ]
 
-# pixel
-tipos = [
-    '?',
-    '1_randomico',
-    '2_quadrado',
-    '3_circulo',
-    '4_triangulo',
-    '5_xis',
-    '6_colorido',
-]
-
+fontes_do_pc = ['?',]+installedFonts()
 
 Variable([
     dict(name="x", ui="Slider", args=dict(value=10, minValue=0, maxValue=100)),    
@@ -157,7 +141,6 @@ Variable([
     dict(name="palavra", ui="EditText", args=dict(text='playmode')),
     dict(name="modulo", ui="EditText", args=dict(text='17')),
     dict(name="fonte", ui="PopUpButton", args=dict(items=fontes)),
-    dict(name="tipo_px", ui="PopUpButton", args=dict(items=tipos)),
     dict(name="entreletra", ui="EditText", args=dict(text='1')),
     dict(name="cor_mode", ui="PopUpButton", args=dict(items=cor_modes)),
     dict(name="colorido", ui="EditText", args=dict(text='+')),
@@ -165,9 +148,17 @@ Variable([
     dict(name="cor2", ui="EditText", args=dict(text='')),
     dict(name="cor3", ui="EditText", args=dict(text='')),
     dict(name="cor4", ui="EditText", args=dict(text='')),
+    dict(name="pixel_colorido", ui="CheckBox", args=dict(value=False)),
     dict(name="degrade", ui="CheckBox", args=dict(value=False)),
     dict(name="degrade_linha", ui="CheckBox", args=dict(value=False)),
     dict(name="cores_quebradas", ui="CheckBox", args=dict(value=False)),
+    dict(name="caracteres", ui="EditText", args=dict(text='')),
+    dict(name="fonte_pixel", ui="PopUpButton", args=dict(items=fontes_do_pc)),
+    dict(name="fonte_size", ui="EditText", args=dict(text='')),
+    dict(name="quadrado", ui="CheckBox", args=dict(value=True)),
+    dict(name="circulo", ui="CheckBox", args=dict(value=True)),
+    dict(name="triangulo", ui="CheckBox", args=dict(value=True)),
+    dict(name="xis", ui="CheckBox", args=dict(value=True)),
 ], globals())
     
 
@@ -175,8 +166,20 @@ w=1000
 h=w/2
 newPage(w,h)
 
+px_lista=[]
+#formas geometricas
+if quadrado:
+    px_lista.append('quadrado')
+if circulo:
+    px_lista.append('circulo')
+if triangulo:
+    px_lista.append('triangulo')
+if xis:
+    px_lista.append('xis')
+#caracteres
+px_lista+=[car for car in caracteres]
+
 m=var(modulo,10,tipo='numero')
-tipo_px=var(tipo_px,randint(1,len(tipos)-1))
 
 # fonte
 fonte=var(fonte,'sem buraco',lista=fontes)
@@ -196,26 +199,19 @@ x0=x*width()/100
 y0=y*height()/100
 
 # cor
-# contraste
-if tipo_px==6 and degrade:
-    if not cor1:
-        cor1=()
-        if cor_mode == 0:
-            while 0 not in cor1:
-                cor1=var('',tipo='cor')
-        elif cor_mode == 1:
-            while 1 not in cor1:
-                cor1=var('',tipo='cor')
-    else:
-        cor1=var(cor1,tipo='cor')
-    cor4=var(cor4,tipo='cor')
-    cor3=var(cor3,dgd(cor1,cor4,2,4),tipo='cor')
-    cor2=var(cor2,dgd(cor1,cor4,1,4),tipo='cor')
+cor1=var(cor1,tipo='cor')
+cor2=var(cor2,tipo='cor')
+
+if pixel_colorido and degrade:
+    cor3=var(cor3,dgd(cor1,cor2,1,len(px_lista)),tipo='cor')
+    cor4=var(cor4,dgd(cor1,cor2,2,len(px_lista)),tipo='cor')
 else:
-    cor1=var(cor1,tipo='cor')
-    cor2=var(cor2,tipo='cor')
     cor3=var(cor3,tipo='cor')
     cor4=var(cor4,tipo='cor')
+
+# fonte pixel
+fonte_px=var(fonte_pixel,lista=fontes_do_pc)
+fs=var(fonte_size,m,tipo='numero')
             
 
 print('modulo =', m, 'px')
@@ -230,6 +226,9 @@ print('cor1 =', cor1, '>>> cor quadrado /// inicio degrade')
 print('cor2 =', cor2, '>>> cor circulo /// fim degrade')
 print('cor3 =', cor3, '>>> cor triangulo')
 print('cor4 =', cor4, '>>> cor x')
+print()
+print('fonte_pixel =', fonte_px)
+print('fonte_size =', fs)
 
 
 strokeWidth(m/10)
@@ -237,43 +236,77 @@ miterLimit(m/10)
 lineJoin("bevel")
 # lineCap("square")
 
+
+# cria dicionario com formas basicas formas basicas
+formas={}
+# formas geometricas
+car_lista=['#','o','t','+','x','X',]
+for c in car_lista:
+    x,y=0,0
+    bezier=BezierPath()
+    if c == '#':
+        c='quadrado'
+        bezier.rect(x,y,m,m)
+    elif c == 'o':
+        c='circulo'
+        bezier.oval(x,y,m,m)
+    elif c == 't':
+        c='triangulo'
+        bezier.polygon((x,y),(x+m/2,y+m),(x+m,y))
+    elif c == '+':
+        c='cruz'
+        bezier.rect(x+m/4,y,m/2,m)
+        bezier.rect(x,y+m/4,m,m/2)
+    elif c == 'X':
+        c='xis2'
+        n=3
+        bezier.polygon((x,y),(x+m/n,y),(x+m,y+m),(x+m-m/n,y+m))
+        bezier.polygon((x+m-m/n,y),(x+m,y),(x+m/n,y+m),(x,y+m),)
+    elif c == 'x':
+        c='xis'
+        n=4
+        bezier.polygon((x+m/n,y),(x+m,y+m-m/n),(x+m-m/n,y+m),(x,y+m/n))
+        bezier.polygon((x,y+m-m/n),(x+m-m/n,y),(x+m,y+m/n),(x+m/n,y+m))
+    formas[c]=bezier
+# caracteres
+for c in caracteres:
+    bezier=BezierPath()
+    bezier.textBox(c, (-m/2,-m+fs-m,2*m,2*m), font=fonte_px, fontSize=fs, align='center',)
+    formas[c]=bezier
+
+
+
 save()
 translate(x0,y0)
 margem0x,margem0y = x0,y0
 linha=0
 
 for n,car in enumerate(palavra):
-    pattern=font[fonte][car].split()
+    pattern=fonts[fonte][car].split()
     pattern.reverse()
 
     # recalcula pattern
-    if tipo_px != 2:
-        pattern=redefine(pattern)
+    pattern=redefine(pattern,px_lista)
         
-    if tipo_px == 6:
+    if pixel_colorido:
         for px in px_lista:
             if car in colorido:
                 def_cor(None,'stroke')
-                if px == '#':
-                    def_cor(cor1)
-                elif px == 'o':
-                    def_cor(cor2)
-                elif px == 't':
-                    def_cor(cor3)
-                elif px == 'x':
-                    def_cor(cor4)
+                tipo_cor='fill'
             else:
                 def_cor(None)
-                if px == '#':
-                    def_cor(cor1,'stroke')
-                elif px == 'o':
-                    def_cor(cor2,'stroke')
-                elif px == 't':
-                    def_cor(cor3,'stroke')
-                elif px == 'x':
-                    def_cor(cor4,'stroke')
+                tipo_cor='stroke'
 
-            desenho,dw,dh=letra(pattern,layer=[px,])
+            if px == px_lista[0]:
+                def_cor(cor1,tipo=tipo_cor)
+            elif px == px_lista[1]:
+                def_cor(cor2,tipo=tipo_cor)
+            elif px == px_lista[2]:
+                def_cor(cor3,tipo=tipo_cor)
+            elif px == px_lista[3]:
+                def_cor(cor4,tipo=tipo_cor)
+
+            desenho,dw,dh=letra(pattern,[px,])
             drawPath(desenho)
        
     else:
@@ -290,13 +323,12 @@ for n,car in enumerate(palavra):
             else:
                 def_cor(cor1,'stroke')
 
-        desenho,dw,dh=letra(pattern)
+        desenho,dw,dh=letra(pattern,px_lista)
         drawPath(desenho)
 
     largura=dw+entreletra*m
     translate(largura,0)
        
 restore()
-
 
     

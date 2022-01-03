@@ -14,10 +14,10 @@ def var(v,v0=0,lista=[],tipo='',):
             v=lista[v]
         elif tipo == 'numero':
             v=int(v)
-    if tipo == 'upper':
-        v=v.upper()
-    if tipo == 'lower':
-        v=v.lower()
+    # if tipo == 'upper':
+    #     v=v.upper()
+    # if tipo == 'lower':
+    #     v=v.lower()
     return v
 
 def limpa(padrao):
@@ -44,7 +44,7 @@ def limpa(padrao):
 
 def pattern(letra,letras,print_fonte=False):
     fontes={}
-    chave='%s_%s_%s' % (fonte,str(fs),cases[case])
+    chave='%s_%s' % (fonte,str(fs))
     fontes[chave]={}
     
     grid=BezierPath()
@@ -80,9 +80,9 @@ def pattern(letra,letras,print_fonte=False):
 
         padrao.reverse()
         padrao='\n'.join(padrao)
-        fontes[chave][car.lower()]=padrao
+        fontes[chave][car]=padrao
     
-    #cria caracter pro espaco
+    #cria espaco
     if print_fonte:
         espacow=int(espacow/len(letras))
         espacoh=int(espacoh/len(letras))
@@ -94,32 +94,36 @@ def pattern(letra,letras,print_fonte=False):
     
     return fontes,chave
 
-cases = [
-    'upper',
-    'lower',
-    ]
 
 fontes_do_pc = ['?',]+installedFonts()
 
 Variable([
     dict(name="fonte_do_pc", ui="PopUpButton", args=dict(items=fontes_do_pc)),
-    dict(name="case", ui="PopUpButton", args=dict(items=cases)),
+    # dict(name="case", ui="PopUpButton", args=dict(items=cases)),
+    dict(name="uppercase", ui="CheckBox", args=dict(value=True)),
+    dict(name="lowercase", ui="CheckBox", args=dict(value=False)),
+    dict(name="digits", ui="CheckBox", args=dict(value=False)),
+    dict(name="punctuation", ui="CheckBox", args=dict(value=False)),
     dict(name="letra", ui="EditText", args=dict(text='')),
-    dict(name="altura", ui="EditText", args=dict(text='')),
+    dict(name="altura", ui="EditText", args=dict(text='10')),
     dict(name="ajuste_grid", ui="EditText", args=dict(text='')),
     dict(name="margem_x", ui="Slider", args=dict(value=3, minValue=-10, maxValue=30)),    
     dict(name="margem_y", ui="Slider", args=dict(value=2, minValue=-10, maxValue=30)),    
     dict(name="print_fonte", ui="CheckBox", args=dict(value=False)),
 ], globals())
 
-fonte=var(fonte_do_pc,choice(fontes_do_pc[1:]),lista=fontes_do_pc)
+fonte=var(fonte_do_pc,lista=fontes_do_pc)
 
-if case == 0:
-    letras=string.ascii_uppercase
-elif case == 1:
-    letras=string.ascii_lowercase
-letras=[l for l in letras]
-letra=var(letra,choice(letras),tipo=cases[case])
+letras=[]
+if uppercase:
+    letras+=list(string.ascii_uppercase)
+if lowercase:
+    letras+=list(string.ascii_lowercase)
+if digits:
+    letras+=list(string.digits)
+if punctuation:
+    letras+=list(string.punctuation)
+letra=var(letra,choice(letras))
 
 fs=var(altura,10,tipo='numero')
 ajuste=var(ajuste_grid,0,tipo='numero')
@@ -141,7 +145,7 @@ else:
 
 # desenha fonte pixel:
 fill(0)
-padrao = fontes[chave][letra.lower()].split()
+padrao = fontes[chave][letra].split()
 padrao.reverse()
 translate(pw-margem_x-fsw*m,(ph-len(padrao)*m)/2)
 for j,linha in enumerate(padrao):
@@ -156,7 +160,7 @@ if print_fonte:
         print(txt % fonte)
         for car in fontes[fonte]:
             txt="        '%s':'''\n%s\n''',"
-            print(txt % (car,fontes[fonte][car.lower()]))
+            print(txt % (car,fontes[fonte][car]))
         print('    },')
 
 else:
@@ -164,7 +168,7 @@ else:
     print('fonte =', fonte)
     print('altura =', fs)
     print()
-    print(fontes[chave][letra.lower()])
+    print(fontes[chave][letra])
 
 
 

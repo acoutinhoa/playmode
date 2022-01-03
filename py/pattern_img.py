@@ -1,15 +1,12 @@
-#########################################
-# criar uma pasta pattern
-# dentro da pasta imagens
-# playmode/img/pattern
-#########################################
-
-
 import os
-import string
 
 # caminho da pasta do playmode
 path='/'.join(os.path.abspath(os.getcwd()).split('/')[:-1])
+
+# crias pasta pattern
+path_img=path+'/img/pattern/'
+if not os.path.isdir(path_img):
+    os.mkdir(path_img)
 
 def var(v,v0=0,lista=[],tipo='',):
     if not v:
@@ -57,12 +54,12 @@ def pattern(img):
     grid=BezierPath()
 
     desenho=BezierPath()
-    desenho.traceImage(img)
+    desenho.traceImage(img, threshold=threshold, blur=None, invert=False, turd=2, tolerance=0.2, offset=None)
 
     padrao=[]
-    for y in range(ajuste,imgh+m,m):
+    for y in range(ajuste,imgh,m):
         linha=''
-        for x in range(ajuste,imgw+m,m):
+        for x in range(ajuste,imgw,m):
             ponto=m/5
             grid.oval(x-ponto/2,y-ponto/2,ponto,ponto)
 
@@ -71,8 +68,9 @@ def pattern(img):
             else:
                 linha+='-'
         padrao+=[linha,]
-
-    padrao=limpa(padrao)
+    
+    if limpa_bordas:
+        padrao=limpa(padrao)
 
     padrao.reverse()
     padrao='\n'.join(padrao)
@@ -83,7 +81,6 @@ def pattern(img):
 ################################################
 
 # imagens
-path_img = path+'/img/pattern/'
 imgs=['?']+os.listdir(path_img)
 
 
@@ -93,7 +90,11 @@ Variable([
     dict(name="ajuste_grid", ui="EditText", args=dict(text='')),
     dict(name="contraste", ui="Slider", args=dict(value=1, minValue=1, maxValue=3)),
     dict(name="brilho", ui="Slider", args=dict(value=0, minValue=-1, maxValue=1)),
+    dict(name="threshold", ui="Slider", args=dict(value=0.2, minValue=0, maxValue=1)),
     dict(name="ver_imagem", ui="CheckBox", args=dict(value=False)),
+    dict(name="nome_da_fonte", ui="EditText", args=dict(text='nome da fonte')),
+    dict(name="letra", ui="EditText", args=dict(text='')),
+    dict(name="limpa_bordas", ui="CheckBox", args=dict(value=True)),
     dict(name="print_fonte", ui="CheckBox", args=dict(value=False)),
 ], globals())
 
@@ -108,6 +109,8 @@ img.colorControls(saturation=None, brightness=brilho, contrast=contraste)
 ajuste=var(ajuste_grid,0,tipo='numero')
 
 m=var(modulo,tipo='numero')
+
+letra=var(letra,imagem)
 
 
 ################################################
@@ -138,13 +141,17 @@ else:
         
 if print_fonte:
     txt="    '%s':{"
-    print(txt % 'imagem')
+    print(txt % nome_da_fonte)
     txt="        '%s':'''\n%s\n''',"
-    print(txt % (imagem,padrao))
+    print(txt % (letra,padrao))
     print('    },')
 else:
     print('img =', imagem)
     print('modulo =', m, 'px')
+    print()
+    print('contraste =', contraste)
+    print('brilho =', brilho)
+    print('threshold =', threshold)
     print()
     print(padrao)
     

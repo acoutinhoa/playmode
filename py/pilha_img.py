@@ -1,7 +1,7 @@
 
 import os
 # fonte
-from fontes import font
+from fontes import font as fonts
 from base import pixel
 
 # caminho da pasta do playmode
