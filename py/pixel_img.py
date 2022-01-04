@@ -3,7 +3,11 @@ import os
 
 # caminho da pasta do playmode
 path='/'.join(os.path.abspath(os.getcwd()).split('/')[:-1])
-    
+
+
+# desenho=BezierPath()
+# desenho.traceImage(img, threshold=threshold, blur=None, invert=False, turd=2, tolerance=0.2, offset=None)
+# gaussianBlur(radius=None)    
 
 def pixel(car,bezier,i,j,m,var=1):
     x=i*var
@@ -97,7 +101,9 @@ def var(v,v0=0,lista=[],tipo='',):
 
 # imagens
 path_img = path+'/img/0/'
-imgs=['?']+os.listdir(path_img)
+img_lista = os.listdir(path_img)
+img_lista.sort()
+imgs=['?']+img_lista
 
 # visualizar
 opcoes = [
@@ -108,12 +114,20 @@ opcoes = [
 
 fontes_do_pc = ['?',]+installedFonts()
 
+# tipos de texto
+tipos_txt=[
+    '0_caracteres randomicos',
+    '1_texto alinhado',
+    '2_texto deslocado',
+    '3_texto contado',
+    ]
 
 Variable([
     dict(name="img", ui="PopUpButton", args=dict(items=imgs)),
-    dict(name="modulo", ui="EditText", args=dict(text='70')),
+    dict(name="modulo", ui="EditText", args=dict(text='20')),
     dict(name="contraste", ui="Slider", args=dict(value=1, minValue=1, maxValue=3)),
     dict(name="brilho", ui="Slider", args=dict(value=0, minValue=-1, maxValue=1)),
+    dict(name="inverte", ui="CheckBox", args=dict(value=False)),
     dict(name="cor", ui="EditText", args=dict(text='')),
     dict(name="ver", ui="PopUpButton", args=dict(items=opcoes)),
     dict(name="com_linha", ui="CheckBox", args=dict(value=False)),
@@ -124,6 +138,7 @@ Variable([
     dict(name="circulo", ui="CheckBox", args=dict(value=True)),
     dict(name="triangulo", ui="CheckBox", args=dict(value=True)),
     dict(name="xis", ui="CheckBox", args=dict(value=True)),
+    dict(name="texto", ui="PopUpButton", args=dict(items=tipos_txt)),
 ], globals())
     
 
@@ -140,8 +155,6 @@ if triangulo:
     px_lista.append('triangulo')
 if xis:
     px_lista.append('xis')
-#caracteres
-px_lista+=[car for car in caracteres]
 
 cor_mode=0
 cor=var(cor,(0,),tipo='cor')
@@ -155,6 +168,12 @@ imgw,imgh=imageSize(img)
 # fonte pixel
 fonte_px=var(fonte_pixel,lista=fontes_do_pc)
 fs=var(fonte_size,m,tipo='numero')
+
+#caracteres
+if texto:
+    px_lista.append('texto')
+else:
+    px_lista+=[car for car in caracteres]
 
 
 ##############################################
@@ -177,6 +196,9 @@ fs=var(fonte_size,m,tipo='numero')
 print('imgw =', imgw, 'px')
 print('imgh =', imgh, 'px')
 print()
+print('contraste =', round(contraste,2))
+print('brilho =', round(brilho,2))
+print()
 print('fonte_pixel =', fonte_px)
 print('fonte_size =', fs)
 print()
@@ -184,7 +206,10 @@ print('modulo =', m, 'px')
 
 
 img=ImageObject(img)
+img.colorMonochrome(color=(1,1,1,1), intensity=None)
 img.colorControls(saturation=None, brightness=brilho, contrast=contraste)
+if inverte:
+    img.colorInvert()
 
 pw=(imgw//m)*m
 if imgw%m:
@@ -202,6 +227,7 @@ miterLimit(m/10)
 
 # cria dicionario com formas basicas formas basicas
 formas={}
+formas_txt={}
 # formas geometricas
 car_lista=['#','o','t','+','x','X',]
 for c in car_lista:
@@ -232,11 +258,11 @@ for c in car_lista:
         bezier.polygon((x,y+m-m/n),(x+m-m/n,y),(x+m,y+m/n),(x+m/n,y+m))
     formas[c]=bezier
 # caracteres
+
 for c in caracteres:
     bezier=BezierPath()
-    bezier.textBox(c, (-m/2,-m,2*m,2*m), font=fonte_px, fontSize=fs, align='center',)
+    bezier.textBox(c, (-m/2,-m+fs-m,2*m,2*m), font=fonte_px, fontSize=fs, align='center',)
     formas[c]=bezier
-
 
 if ver==1:
     image(img,(0,0))
@@ -251,30 +277,47 @@ else:
         vezes=1
         ordem=px_lista+[' ']
     print('ordem =',ordem)
+
+    cores=[]
+    for j,y in enumerate(range(0,imgh,m)):
+        cores.append([])
+        for i,x in enumerate(range(0,imgw,m)):
+            cinza=imagePixelColor(img,(x,y))
+            if ver==2:
+                fill(*cinza)
+                rect(x,y,m,m)
+            else:
+                c=int(cinza[0]//(1/len(ordem)))
+                if c==len(ordem):
+                    c=len(ordem)-1
+                car=ordem[c]
+                cores[j]+=[(car,x,y,c,i,j),]
     
     for n in range(vezes):
         desenho=BezierPath()
-        for j in range(0,imgh,m):
-            for i in range(0,imgw,m):
-                cor_px=imagePixelColor(img,(i,j))
-                cinza=(cor_px[0]+cor_px[1]+cor_px[2])/3
-            
-                if ver==2:
-                    fill(cinza)
-                    rect(i,j,m,m)
-                else:
-                    c=int(cinza//(1/len(ordem)))
-                    if c==len(ordem):
-                        c=len(ordem)-1
-                    car=ordem[c]
+        
+        car_c=0
+        for linha in cores:
+            for ponto in linha:
+                car,x,y,c,i,j = ponto
+                
+                if car=='texto':
+                    if texto == 1:
+                        car_n=i%len(caracteres)
+                    elif texto == 2:
+                        car_n=(i-j)%len(caracteres)
+                    elif texto == 3:
+                        car_n=car_c%len(caracteres)
+                        car_c+=1
+                    car=caracteres[car_n]
                     
-                    if com_linha:
-                        if n==0 and c<len(px_lista):
-                            desenho=pixel(car,desenho,i,j,m)
-                        elif n==1 and c>=len(px_lista):
-                            desenho=pixel(car,desenho,i,j,m)
-                    else:
-                        desenho=pixel(car,desenho,i,j,m)
+                if com_linha:
+                    if n==0 and c<len(px_lista):
+                        desenho=pixel(car,desenho,x,y,m)
+                    elif n==1 and c>=len(px_lista):
+                        desenho=pixel(car,desenho,x,y,m)
+                else:
+                    desenho=pixel(car,desenho,x,y,m)
         if n==1:
             desenho.removeOverlap()
         if ver==0:
