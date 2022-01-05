@@ -18,6 +18,45 @@ def pixel(car,bezier,i,j,m,var=1):
         bezier.translate(x,y)
     return bezier
 
+def playmode(vezes,cores,layer,camada=0):
+    for n in range(vezes):
+        desenho=BezierPath()
+    
+        car_c=0
+        for linha in cores:
+            for ponto in linha:
+                car,x,y,c,i,j = ponto
+                
+                if car in layer:
+                    if car=='texto':
+                        if texto == 1:
+                            car_n=i%len(caracteres)
+                        elif texto == 2:
+                            car_n=(i-j)%len(caracteres)
+                        elif texto == 3:
+                            car_n=car_c%len(caracteres)
+                            car_c+=1
+                        car=caracteres[car_n]
+                
+                    if com_linha:
+                        if n==0 and c<len(px_lista):
+                            desenho=pixel(car,desenho,x,y,m)
+                        elif n==1 and c>=len(px_lista):
+                            desenho=pixel(car,desenho,x,y,m)
+                    else:
+                        desenho=pixel(car,desenho,x,y,m)
+        if n==1:
+            desenho.removeOverlap()
+        if ver==0:
+            cor=dgd(cor1,cor2,camada,len(ordem))
+            if n==0:
+                fill(*cor)
+                stroke(None)
+            elif n==1:
+                fill(None)
+                stroke(*cor)
+            drawPath(desenho)
+
 def def_cor(cor,tipo='fill'):
     if tipo == 'stroke':
         if not cor:
@@ -102,6 +141,7 @@ def var(v,v0=0,lista=[],tipo='',):
 # imagens
 path_img = path+'/img/0/'
 img_lista = os.listdir(path_img)
+img_lista.remove('.DS_Store')
 img_lista.sort()
 imgs=['?']+img_lista
 
@@ -116,7 +156,7 @@ fontes_do_pc = ['?',]+installedFonts()
 
 # tipos de texto
 tipos_txt=[
-    '0_caracteres randomicos',
+    '0_caracteres',
     '1_texto alinhado',
     '2_texto deslocado',
     '3_texto contado',
@@ -139,6 +179,9 @@ Variable([
     dict(name="triangulo", ui="CheckBox", args=dict(value=True)),
     dict(name="xis", ui="CheckBox", args=dict(value=True)),
     dict(name="texto", ui="PopUpButton", args=dict(items=tipos_txt)),
+    dict(name="cor1", ui="EditText", args=dict(text='')),
+    dict(name="cor2", ui="EditText", args=dict(text='')),
+    dict(name="degrade", ui="CheckBox", args=dict(value=False)),
 ], globals())
     
 
@@ -157,7 +200,8 @@ if xis:
     px_lista.append('xis')
 
 cor_mode=0
-cor=var(cor,(0,),tipo='cor')
+cor1=var(cor1,tipo='cor')
+cor2=var(cor2,tipo='cor')
 
 # imagem
 img=var(img,lista=imgs)
@@ -202,6 +246,9 @@ print()
 print('fonte_pixel =', fonte_px)
 print('fonte_size =', fs)
 print()
+print('cor1 =', cor1)
+print('cor2 =', cor2)
+print()
 print('modulo =', m, 'px')
 
 
@@ -210,6 +257,7 @@ img.colorMonochrome(color=(1,1,1,1), intensity=None)
 img.colorControls(saturation=None, brightness=brilho, contrast=contraste)
 if inverte:
     img.colorInvert()
+
 
 pw=(imgw//m)*m
 if imgw%m:
@@ -293,38 +341,8 @@ else:
                 car=ordem[c]
                 cores[j]+=[(car,x,y,c,i,j),]
     
-    for n in range(vezes):
-        desenho=BezierPath()
-        
-        car_c=0
-        for linha in cores:
-            for ponto in linha:
-                car,x,y,c,i,j = ponto
-                
-                if car=='texto':
-                    if texto == 1:
-                        car_n=i%len(caracteres)
-                    elif texto == 2:
-                        car_n=(i-j)%len(caracteres)
-                    elif texto == 3:
-                        car_n=car_c%len(caracteres)
-                        car_c+=1
-                    car=caracteres[car_n]
-                    
-                if com_linha:
-                    if n==0 and c<len(px_lista):
-                        desenho=pixel(car,desenho,x,y,m)
-                    elif n==1 and c>=len(px_lista):
-                        desenho=pixel(car,desenho,x,y,m)
-                else:
-                    desenho=pixel(car,desenho,x,y,m)
-        if n==1:
-            desenho.removeOverlap()
-        if ver==0:
-            if n==0:
-                fill(*cor)
-                stroke(None)
-            elif n==1:
-                fill(None)
-                stroke(*cor)
-            drawPath(desenho)
+    if degrade:
+        for level,camada in enumerate(ordem):
+            playmode(vezes,cores,[camada,],level)
+    else:
+        playmode(vezes,cores,ordem)
