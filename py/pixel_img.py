@@ -1,3 +1,5 @@
+import time
+start = time.time()
 
 import os
 
@@ -18,37 +20,44 @@ def pixel(car,bezier,i,j,m,var=1):
         bezier.translate(x,y)
     return bezier
 
-def playmode(vezes,cores,layer,camada=0):
+def car_texto(car,car_c,i,j):
+    if car not in formas.keys():
+        if texto == 1:
+            car_n=i%len(car)
+        elif texto == 2:
+            car_n=(i+j)%len(car)
+        elif texto == 3:
+            car_n=car_c%len(car)
+            car_c+=1
+        car=car[car_n]
+    return car,car_c
+
+def playmode(vezes,cores,layer,c=0):
     for n in range(vezes):
         desenho=BezierPath()
     
         car_c=0
         for linha in cores:
             for ponto in linha:
-                car,x,y,c,i,j = ponto
-                
+                car,x,y,i,j = ponto
+
                 if car in layer:
-                    if car=='texto':
-                        if texto == 1:
-                            car_n=i%len(caracteres)
-                        elif texto == 2:
-                            car_n=(i-j)%len(caracteres)
-                        elif texto == 3:
-                            car_n=car_c%len(caracteres)
-                            car_c+=1
-                        car=caracteres[car_n]
-                
                     if com_linha:
                         if n==0 and c<len(px_lista):
+                            car,car_c=car_texto(car,car_c,i,j)
                             desenho=pixel(car,desenho,x,y,m)
                         elif n==1 and c>=len(px_lista):
+                            car=car[:-1]
+                            car,car_c=car_texto(car,car_c,i,j)
                             desenho=pixel(car,desenho,x,y,m)
                     else:
+                        car,car_c=car_texto(car,car_c,i,j)
                         desenho=pixel(car,desenho,x,y,m)
+
         if n==1:
             desenho.removeOverlap()
         if ver==0:
-            cor=dgd(cor1,cor2,camada,len(ordem))
+            cor=dgd(cor1,cor2,c,len(ordem)-1)
             if n==0:
                 fill(*cor)
                 stroke(None)
@@ -171,7 +180,7 @@ Variable([
     dict(name="cor", ui="EditText", args=dict(text='')),
     dict(name="ver", ui="PopUpButton", args=dict(items=opcoes)),
     dict(name="com_linha", ui="CheckBox", args=dict(value=False)),
-    dict(name="caracteres", ui="EditText", args=dict(text='')),
+    dict(name="caracteres", ui="EditText", args=dict(text='PLAYMODE')),
     dict(name="fonte_pixel", ui="PopUpButton", args=dict(items=fontes_do_pc)),
     dict(name="fonte_size", ui="EditText", args=dict(text='')),
     dict(name="quadrado", ui="CheckBox", args=dict(value=True)),
@@ -181,7 +190,7 @@ Variable([
     dict(name="texto", ui="PopUpButton", args=dict(items=tipos_txt)),
     dict(name="cor1", ui="EditText", args=dict(text='')),
     dict(name="cor2", ui="EditText", args=dict(text='')),
-    dict(name="degrade", ui="CheckBox", args=dict(value=False)),
+    dict(name="degrade", ui="CheckBox", args=dict(value=True)),
 ], globals())
     
 
@@ -215,7 +224,10 @@ fs=var(fonte_size,m,tipo='numero')
 
 #caracteres
 if texto:
-    px_lista.append('texto')
+    if texto==3:
+        px_lista.append(caracteres)
+    else:
+        px_lista+=caracteres.split(' ')
 else:
     px_lista+=[car for car in caracteres]
 
@@ -239,16 +251,12 @@ else:
 
 print('imgw =', imgw, 'px')
 print('imgh =', imgh, 'px')
-print()
 print('contraste =', round(contraste,2))
 print('brilho =', round(brilho,2))
-print()
 print('fonte_pixel =', fonte_px)
 print('fonte_size =', fs)
-print()
 print('cor1 =', cor1)
 print('cor2 =', cor2)
-print()
 print('modulo =', m, 'px')
 
 
@@ -318,7 +326,7 @@ if ver==1:
 else:
     if com_linha:
         vezes=2
-        px_lista2=px_lista.copy()
+        px_lista2=[px+'_' for px in px_lista]
         px_lista2.reverse()
         ordem=px_lista+px_lista2+[' ']
     else:
@@ -327,7 +335,9 @@ else:
     print('ordem =',ordem)
 
     cores=[]
-    for j,y in enumerate(range(0,imgh,m)):
+    listay=list(range(0,imgh,m))
+    listay.reverse()
+    for j,y in enumerate(listay):
         cores.append([])
         for i,x in enumerate(range(0,imgw,m)):
             cinza=imagePixelColor(img,(x,y))
@@ -339,10 +349,14 @@ else:
                 if c==len(ordem):
                     c=len(ordem)-1
                 car=ordem[c]
-                cores[j]+=[(car,x,y,c,i,j),]
-    
+                cores[j]+=[(car,x,y,i,j),]
+
     if degrade:
-        for level,camada in enumerate(ordem):
-            playmode(vezes,cores,[camada,],level)
+        for c,camada in enumerate(ordem[:-1]):
+            playmode(vezes,cores,[camada,],c)
     else:
         playmode(vezes,cores,ordem)
+
+
+end = time.time()
+print('>>>', end-start, 's')
