@@ -5,10 +5,10 @@ import os
 
 # caminho da pasta do playmode
 pasta=os.path.dirname(os.getcwd())
-# path='/'.join(os.path.abspath(os.getcwd()).split('/')[:-1])+'/'
+# pasta='/'.join(os.path.abspath(os.getcwd()).split('/')[:-1])+'/'
 
 def deleta(item,lista):
-    if item in lista:
+    while item in lista:
         lista.remove(item)
     return lista
 
@@ -59,16 +59,6 @@ path_gif = os.path.join(pasta, 'gif')
 os.chdir(path_gif)
 gif_lista = sorted(filter(os.path.isdir, os.listdir('.')))
 
-# gif_lista = os.listdir(path_gif)
-# # somente pastas
-# x=[]
-# for i in gif_lista:
-#     if os.path.isdir(path_gif+i):
-#         x.append(i)
-# gif_lista=x
-# # gif_lista=deleta('.DS_Store',gif_lista)
-# gif_lista.sort()
-
 gifs=['-','ps']+gif_lista
 
 
@@ -89,30 +79,20 @@ else:
     path_gif=os.path.join(path_gif, gif)
 
 print(path_gif,'\n')
-# os.chdir(path_gif)
-# img_lista = sorted(filter(os.path.isfile, os.listdir('.')), key=os.path.getmtime)
-
-img_lista=deleta('.DS_Store',img_lista)
-
-img_lista=os.listdir(path_gif)
-img_lista.sort()
+img_lista=[os.path.join(path_gif,img) for img in os.listdir(path_gif) if img[0] != '.']
 
 if gif == 'ps':
-    # os.chdir(path_pdf)
-    # pdf_lista = sorted(filter(os.path.isfile, os.listdir('.')), key=os.path.getmtime)
-
-    pdf_lista=os.listdir(path_gif)
-    pdf_lista=deleta('.DS_Store',img_lista)
-    pdf_lista.sort()
+    pdf_lista=[os.path.join(path_pdf,pdf) for pdf in os.listdir(path_pdf) if pdf[0] != '.']
+    img_lista+=pdf_lista
     
+img_lista.sort(key=os.path.getmtime)
 if inverte_ordem:
     img_lista.reverse()
 
 imgw,imgh=0,0
 pw,ph=0,0
-for img in img_lista:
-    print(img)
-    img_path= os.path.join(path_gif,img)
+for img_path in img_lista:
+    print(img_path)
     imgw,imgh=imageSize(img_path)
     if gif in ['3','4','5','6']:
         newPage(1500,1000)
@@ -121,7 +101,7 @@ for img in img_lista:
         if imgw<pw or imgh<ph:
             newPage(pw,ph)
             # image(img2,(0,0))
-            rect(0,0,width(),height())
+            # rect(0,0,width(),height())
             translate( ( width()-imgw ) /2, ( height()-imgh ) /2 )
         else:
             newPage(imgw,imgh)
