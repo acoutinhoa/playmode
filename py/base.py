@@ -1,29 +1,6 @@
-from random import choice
+from random import choice,randint
 
-def pixel(car,bezier,i,j,m,var=1):
-    x=i*var
-    y=j*var
-    if car == '#':
-        bezier.rect(x,y,m,m)
-    elif car == 'o':
-        bezier.oval(x,y,m,m)
-    elif car == 't':
-        bezier.polygon((x,y),(x+m/2,y+m),(x+m,y))
-    elif car == '+':
-        bezier.rect(x+m/4,y,m/2,m)
-        bezier.rect(x,y+m/4,m,m/2)
-    elif car == 'X':
-        n=3
-        bezier.polygon((x,y),(x+m/n,y),(x+m,y+m),(x+m-m/n,y+m))
-        bezier.polygon((x+m-m/n,y),(x+m,y),(x+m/n,y+m),(x,y+m),)
-    elif car == 'x':
-        n=4
-        bezier.polygon((x+m/n,y),(x+m,y+m-m/n),(x+m-m/n,y+m),(x,y+m/n))
-        bezier.polygon((x,y+m-m/n),(x+m-m/n,y),(x+m,y+m/n),(x+m/n,y+m))
-    return bezier
-
-
-def var(v,v0=0,lista=[],tipo='',):
+def var(v,v0=0,lista=[],tipo='',cor_mode=0):
     if not v:
         if not v0:
             if lista:
@@ -33,10 +10,7 @@ def var(v,v0=0,lista=[],tipo='',):
             elif tipo=='cor':
                 v=()
                 for i in range(3):
-                    if cores_quebradas:
-                        v+=(randint(0,100)/100,)
-                    else:
-                        v+=(randint(0,1),)
+                    v+=(randint(0,1),)
         else:
             if v0=='none':
                 v=None
@@ -63,4 +37,44 @@ def var(v,v0=0,lista=[],tipo='',):
         for i in range(n-len(v)):
             v+=(0,)
     return v
+
+def def_cor(cor,tipo='fill'):
+    if tipo == 'stroke':
+        if not cor:
+            if cor_mode==0:
+                stroke(None)
+            if cor_mode==1:
+                cmykStroke(None)
+        else:
+            if cor_mode==0:
+                stroke(*cor)
+            if cor_mode==1:
+                cmykStroke(*cor)
+    elif tipo == 'fill':
+        if not cor:
+            if cor_mode==0:
+                fill(None)
+            if cor_mode==1:
+                cmykFill(None)
+        else:
+            if cor_mode==0:
+                fill(*cor)
+            if cor_mode==1:
+                cmykFill(*cor)
+
+def dgd(cor1,cor2,p,repete):
+    c=()
+    for nc in range(len(cor1)):
+        c1=cor1[nc]
+        c2=cor2[nc]
+        if c1 == c2:
+            c3=c1
+        else:
+            if repete-1 == 0:
+                c3=c2
+            else:
+                c3=c1-((c1-c2)/(repete-1))*p
+        c+=(c3,)
+    return c
+
 

@@ -4,8 +4,8 @@ start = time.time()
 import os
 
 # caminho da pasta do playmode
-pasta=os.path.dirname(os.getcwd())
-# pasta='/'.join(os.path.abspath(os.getcwd()).split('/')[:-1])+'/'
+# pasta=os.path.dirname(os.getcwd())
+pasta='/'.join(os.path.abspath(os.getcwd()).split('/')[:-1])+'/'
 
 def deleta(item,lista):
     while item in lista:
@@ -73,7 +73,7 @@ s=s/10
 
 gif=var(gif,lista=gifs)
 if gif == 'ps':
-    path_gif=os.path.join(pasta, gif)
+    path_gif=os.path.join(pasta, 'ps/0')
     path_pdf=os.path.join(pasta, 'pdf/0')
 else:
     path_gif=os.path.join(path_gif, gif)

@@ -50,11 +50,11 @@ image(im, (0,0))
 
 # ##########################################
 # # pra salvar outras imagens:
-# #    mudar o valor de n
+# # mudar o valor de n
 # ##########################################
 
 # n=14
-# path_img=path + '/img/0/playmode_%s_%s.png' % (n,fonte)
+# path_img=path + '/img/1/playmode_%s_%s.png' % (n,fonte)
 # saveImage(path_img)
 # print('img salva >>>')
 # print(path_img)

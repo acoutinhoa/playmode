@@ -1,7 +1,7 @@
 import os
 
 # caminho da pasta do playmode
-path='/'.join(os.path.abspath(os.getcwd()).split('/')[:-1])
+path='/'.join(os.path.abspath(os.getcwd()).split('/')[:-2])
 
 # crias pasta pattern
 path_img=path+'/img/pattern/'
