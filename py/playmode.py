@@ -2,55 +2,27 @@ import time
 start = time.time()
 
 import os
-from base import var, def_cor, dgd
+from base import var, dgd, pixel
 
 # caminho da pasta do playmode
 path='/'.join(os.path.abspath(os.getcwd()).split('/')[:-1])
 
 
-def pixel(car,bezier,i,j,m,var=1):
-    x=i*var
-    y=j*var
-    if car != ' ':
-        bezier.translate(-x,-y)
-        bezier.appendPath(formas[car])
-        bezier.translate(x,y)
-    return bezier
-
-def car_texto(car,car_c,i,j):
-    if car not in formas.keys():
-        if texto == 2:
-            car_n=i%len(car)
-        elif texto == 3:
-            car_n=(i+j)%len(car)
-        elif texto == 4:
-            car_n=car_c%len(car)
-            car_c+=1
-        car=car[car_n]
-    return car,car_c
-
-def playmode(vezes,cores,layer,c=0):
+def playmode(vezes,pontos,layer,c=0):
     for n in range(vezes):
         desenho=BezierPath()
-    
         car_c=0
-        for linha in cores:
-            for ponto in linha:
-                car,x,y,i,j = ponto
-
-                if car in layer:
+        for linha in pontos:
+            for pt in linha:
+                if pt[0] in layer:
                     if com_linha:
                         if n==0 and c<len(px_lista):
-                            car,car_c=car_texto(car,car_c,i,j)
-                            desenho=pixel(car,desenho,x,y,m)
+                            desenho,car_c=pixel(pt,m,car_c,desenho,base,texto)
                         elif n==1 and c>=len(px_lista):
-                            car=car[:-1]
-                            car,car_c=car_texto(car,car_c,i,j)
-                            desenho=pixel(car,desenho,x,y,m)
+                            pt[0]=pt[0][:-1]
+                            desenho,car_c=pixel(pt,m,car_c,desenho,base,texto)
                     else:
-                        car,car_c=car_texto(car,car_c,i,j)
-                        desenho=pixel(car,desenho,x,y,m)
-
+                        desenho,car_c=pixel(pt,m,car_c,desenho,base,texto)
         if n==1:
             desenho.removeOverlap()
         if ver==0:
@@ -62,6 +34,44 @@ def playmode(vezes,cores,layer,c=0):
                 fill(None)
                 stroke(*cor)
             drawPath(desenho)
+
+def formas(caracteres):
+    base={}
+    # formas geometricas
+    car_lista=['#','o','t','+','x','X',]
+    for c in car_lista:
+        x,y=0,0
+        bezier=BezierPath()
+        if c == '#':
+            c='quadrado'
+            bezier.rect(x,y,m,m)
+        elif c == 'o':
+            c='circulo'
+            bezier.oval(x,y,m,m)
+        elif c == 't':
+            c='triangulo'
+            bezier.polygon((x,y),(x+m/2,y+m),(x+m,y))
+        elif c == '+':
+            c='cruz'
+            bezier.rect(x+m/4,y,m/2,m)
+            bezier.rect(x,y+m/4,m,m/2)
+        elif c == 'X':
+            c='xis2'
+            n=3
+            bezier.polygon((x,y),(x+m/n,y),(x+m,y+m),(x+m-m/n,y+m))
+            bezier.polygon((x+m-m/n,y),(x+m,y),(x+m/n,y+m),(x,y+m),)
+        elif c == 'x':
+            c='xis'
+            n=4
+            bezier.polygon((x+m/n,y),(x+m,y+m-m/n),(x+m-m/n,y+m),(x,y+m/n))
+            bezier.polygon((x,y+m-m/n),(x+m-m/n,y),(x+m,y+m/n),(x+m/n,y+m))
+        base[c]=bezier
+    # caracteres
+    for c in caracteres:
+        bezier=BezierPath()
+        bezier.textBox(c, (-m/2,-m+fs-m,2*m,2*m), font=fonte_px, fontSize=fs, align='center',)
+        base[c]=bezier
+    return base
 
 ###############################
 
@@ -212,16 +222,16 @@ for pg in pgs:
     m=pg
     fs=m
 
-    # define ponto central do modulo para verificacao da cor
+    # ponto central do modulo para verificacao da cor
     p0=round(m/2)
 
-    # define pontos da vertical e horizontal
+    # lista pontos da vertical e horizontal
     pontos_y=list(range(p0,imgh,m))
     pontos_x=list(range(p0,imgw,m))
     # inverte a lista vertical para desenha de cima para baixo
     pontos_y.reverse()
 
-    # define medidas da pagina
+    # pagina
     pw=len(pontos_x)*m
     ph=len(pontos_y)*m
 
@@ -230,44 +240,8 @@ for pg in pgs:
         ph=pw
     
     # cria dicionario com formas basicas formas basicas
-    formas={}
-    formas_txt={}
-    # formas geometricas
-    car_lista=['#','o','t','+','x','X',]
-    for c in car_lista:
-        x,y=0,0
-        bezier=BezierPath()
-        if c == '#':
-            c='quadrado'
-            bezier.rect(x,y,m,m)
-        elif c == 'o':
-            c='circulo'
-            bezier.oval(x,y,m,m)
-        elif c == 't':
-            c='triangulo'
-            bezier.polygon((x,y),(x+m/2,y+m),(x+m,y))
-        elif c == '+':
-            c='cruz'
-            bezier.rect(x+m/4,y,m/2,m)
-            bezier.rect(x,y+m/4,m,m/2)
-        elif c == 'X':
-            c='xis2'
-            n=3
-            bezier.polygon((x,y),(x+m/n,y),(x+m,y+m),(x+m-m/n,y+m))
-            bezier.polygon((x+m-m/n,y),(x+m,y),(x+m/n,y+m),(x,y+m),)
-        elif c == 'x':
-            c='xis'
-            n=4
-            bezier.polygon((x+m/n,y),(x+m,y+m-m/n),(x+m-m/n,y+m),(x,y+m/n))
-            bezier.polygon((x,y+m-m/n),(x+m-m/n,y),(x+m,y+m/n),(x+m/n,y+m))
-        formas[c]=bezier
-    # caracteres
-    for c in caracteres:
-        bezier=BezierPath()
-        bezier.textBox(c, (-m/2,-m+fs-m,2*m,2*m), font=fonte_px, fontSize=fs, align='center',)
-        formas[c]=bezier
+    base=formas(caracteres)
 
-    
     newPage(pw,ph)
     sw=m/10
     strokeWidth(sw)
@@ -284,7 +258,6 @@ for pg in pgs:
         image(img,(0,0))
 
     else:
-        # ajuste do desenho
         translate(-p0,-p0)
         
         if com_linha:
@@ -297,26 +270,26 @@ for pg in pgs:
             ordem=px_lista+['']
         print('ordem =',ordem)
         
-        cores=[]
+        pontos=[]
         for j,y in enumerate(pontos_y):
-            cores.append([])
+            pontos.append([])
             for i,x in enumerate(pontos_x):
                 cinza=imagePixelColor(img,(x,y))
                 if ver==2:
                     fill(*cinza)
                     rect(x,y,m,m)
                 else:
-                    c=int(cinza[0]//(1/len(ordem)))
-                    if c==len(ordem):
-                        c=len(ordem)-1
-                    car=ordem[c]
-                    cores[j]+=[(car,x,y,i,j),]
+                    car=int(cinza[0]//(1/len(ordem)))
+                    if car==len(ordem):
+                        car=len(ordem)-1
+                    car=ordem[car]
+                    pontos[j]+=[[car,x,y,i,j],]
 
         if degrade:
             for c,camada in enumerate(ordem[:-1]):
-                playmode(vezes,cores,[camada,],c)
+                playmode(vezes,pontos,[camada,],c)
         else:
-            playmode(vezes,cores,ordem)
+            playmode(vezes,pontos,ordem)
 
     # # # # para salvar antere o valor de n e descomente as linhas abaixo
     # m_str=str(m)
@@ -325,8 +298,8 @@ for pg in pgs:
     # elif len(m_str)==2:
     #      m_str='0'+m_str
     # gif=6
-    # nome="gif/%s/%s_m-%s.pdf" % (gif,img_nome.split('.')
-    # path_save=os.path.join( path,nome )[0],m_str)
+    # nome="gif/%s/%s_m-%s.pdf" % (gif,img_nome.split('.')[0],m_str)
+    # path_save=os.path.join( path,nome )
     # saveImage(path_save, multipage=False)
     # print('gif salvo >>>')
     # print(path_save)

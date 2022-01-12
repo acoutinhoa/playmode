@@ -1,5 +1,6 @@
 from random import choice,randint
 
+
 def var(v,v0=0,lista=[],tipo='',cor_mode=0):
     if not v:
         if not v0:
@@ -76,5 +77,29 @@ def dgd(cor1,cor2,p,repete):
                 c3=c1-((c1-c2)/(repete-1))*p
         c+=(c3,)
     return c
+
+def car_texto(car,car_c,i,j,texto):
+    if texto == 2:
+        car_n=i%len(car)
+    elif texto == 3:
+        car_n=(i+j)%len(car)
+    elif texto == 4:
+        car_n=car_c%len(car)
+        car_c+=1
+    car=car[car_n]
+    return car,car_c
+
+def pixel(ponto,m,car_c,bezier,formas,texto):
+    car,x,y,i,j = ponto
+
+    if car not in formas.keys():
+        car,car_c=car_texto(car,car_c,i,j,texto)
+    
+    bezier.translate(-x,-y)
+    bezier.appendPath(formas[car])
+    bezier.translate(x,y)
+
+    return bezier,car_c
+
 
 
