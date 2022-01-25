@@ -1,12 +1,15 @@
 from random import choice,randint
 
 
-def var(v,v0=0,lista=[],tipo='',cor_mode=0):
+def var(v,v0=None,lista=[],tipo='',cor_mode=0):
     if not v:
         if not v0:
             if lista:
-                v=choice(lista[1:])
-            elif tipo=='numero':
+                if tipo == 'indice':
+                    v=randint(1,len(lista)-1)
+                else:
+                    v=choice(lista[1:])
+            elif tipo in ['int','float']:
                 v=randint(0,1)
             elif tipo=='cor':
                 v=()
@@ -18,9 +21,11 @@ def var(v,v0=0,lista=[],tipo='',cor_mode=0):
             else:
                 v=v0
     else:
-        if lista:
+        if lista and tipo!='indice':
             v=lista[v]
-        elif tipo=='numero':
+        elif tipo=='int':
+            v=int(v)
+        elif tipo=='float':
             v=float(v)
         elif tipo=='cor':
             if v == 'none':
