@@ -133,7 +133,7 @@ Variable([
     dict(name="triangulo", ui="CheckBox", args=dict(value=True)),
     dict(name="xis", ui="CheckBox", args=dict(value=True)),
     dict(name="cor1", ui="EditText", args=dict(text='0')),
-    dict(name="cor2", ui="EditText", args=dict(text='')),
+    dict(name="cor2", ui="EditText", args=dict(text='0')),
     dict(name="degrade", ui="CheckBox", args=dict(value=True)),
     dict(name="bg", ui="EditText", args=dict(text='100 100 100')),
 ], globals())
