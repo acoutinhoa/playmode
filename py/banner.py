@@ -109,7 +109,7 @@ caracteres='PLAYMODE'
 #formas geometricas
 px_lista=['quadrado','circulo','triangulo','xis']
 
-texto=var(texto,lista=tipos_txt,tipo='indice')
+texto=var(texto,lista=tipos_txt,tipo='lista')
 if texto>1 and caracteres:
     if texto==4:
         px_lista.append(caracteres)

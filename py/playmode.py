@@ -8,7 +8,7 @@ from base import var, dgd, pixel
 path='/'.join(os.path.abspath(os.getcwd()).split('/')[:-1])
 
 
-def playmode(vezes,pontos,layer,c=0):
+def playmode(vezes,pontos,layer,c=0,ajuste_txt=0):
     for n in range(vezes):
         desenho=BezierPath()
         car_c=0
@@ -21,7 +21,7 @@ def playmode(vezes,pontos,layer,c=0):
                         pt[0]=pt[0][:-1]
                         desenho,car_c=pixel(pt,m,car_c,desenho,base,texto)
                 else:
-                    desenho,car_c=pixel(pt,m,car_c,desenho,base,texto)
+                    desenho,car_c=pixel(pt,m,car_c,desenho,base,texto,ajuste_txt)
         if n==1:
             desenho.removeOverlap()
         if ver==0:
@@ -37,7 +37,7 @@ def playmode(vezes,pontos,layer,c=0):
 def formas(caracteres):
     base={}
     # formas geometricas
-    car_lista=['#','o','t','+','x','X',]
+    car_lista=['#','o','t','x',]
     for c in car_lista:
         x,y=0,0
         bezier=BezierPath()
@@ -54,14 +54,19 @@ def formas(caracteres):
             c='cruz'
             bezier.rect(x+m/4,y,m/2,m)
             bezier.rect(x,y+m/4,m,m/2)
-        elif c == 'X':
+        elif c == '*':
             c='xis2'
             n=3
             bezier.polygon((x,y),(x+m/n,y),(x+m,y+m),(x+m-m/n,y+m))
             bezier.polygon((x+m-m/n,y),(x+m,y),(x+m/n,y+m),(x,y+m),)
-        elif c == 'x':
+        elif c == 'X':
             c='xis'
             n=4
+            bezier.polygon((x+m/n,y),(x+m,y+m-m/n),(x+m-m/n,y+m),(x,y+m/n))
+            bezier.polygon((x,y+m-m/n),(x+m-m/n,y),(x+m,y+m/n),(x+m/n,y+m))
+        elif c == 'x':
+            c='xis'
+            n=6
             bezier.polygon((x+m/n,y),(x+m,y+m-m/n),(x+m-m/n,y+m),(x,y+m/n))
             bezier.polygon((x,y+m-m/n),(x+m-m/n,y),(x+m,y+m/n),(x+m/n,y+m))
         base[c]=bezier
@@ -77,6 +82,11 @@ def formas(caracteres):
 
 # imagens
 path_img = os.path.join(path,'img/1')
+# crias pasta 1
+if not os.path.isdir(path_img):
+    os.mkdir(path_img)
+    print('>>> pasta criada \n>>>',path_img)
+
 img_lista = [img for img in os.listdir(path_img) if img[0]!='.']
 img_lista.sort()
 imgs=['?']+img_lista
@@ -100,31 +110,32 @@ tipos_txt=[
     ]
 
 # tipos
-tipos=[
-    '0_todas imagens',
-    ]
+# tipos=[
+#     '0_todas imagens',
+#     ]
 
 Variable([
+    # dict(name="filtro", ui="PopUpButton", args=dict(items=tipos)),
     dict(name="img", ui="PopUpButton", args=dict(items=imgs)),
-    dict(name="filtro", ui="PopUpButton", args=dict(items=tipos)),
+    dict(name="ver", ui="PopUpButton", args=dict(items=opcoes)),
     dict(name="modulo", ui="EditText", args=dict(text='30')),
     dict(name="contraste", ui="Slider", args=dict(value=1, minValue=1, maxValue=3)),
     dict(name="brilho", ui="Slider", args=dict(value=0, minValue=-1, maxValue=1)),
     dict(name="inverte_cores", ui="CheckBox", args=dict(value=False)),
-    dict(name="ver", ui="PopUpButton", args=dict(items=opcoes)),
     dict(name="com_linha", ui="CheckBox", args=dict(value=False)),
     dict(name="caracteres", ui="EditText", args=dict(text='PLAYMODE')),
     dict(name="fonte_pixel", ui="PopUpButton", args=dict(items=fontes_do_pc)),
-    dict(name="fonte_size", ui="EditText", args=dict(text='')),
+    dict(name="texto", ui="PopUpButton", args=dict(items=tipos_txt)),
+    dict(name="ajuste_texto", ui="Slider", args=dict(value=0, minValue=-10, maxValue=10)),
+    # dict(name="fonte_size", ui="EditText", args=dict(text='')),
     dict(name="quadrado", ui="CheckBox", args=dict(value=True)),
     dict(name="circulo", ui="CheckBox", args=dict(value=True)),
-    dict(name="xis", ui="CheckBox", args=dict(value=True)),
     dict(name="triangulo", ui="CheckBox", args=dict(value=True)),
-    dict(name="texto", ui="PopUpButton", args=dict(items=tipos_txt)),
-    dict(name="cor1", ui="EditText", args=dict(text='')),
+    dict(name="xis", ui="CheckBox", args=dict(value=True)),
+    dict(name="cor1", ui="EditText", args=dict(text='0')),
     dict(name="cor2", ui="EditText", args=dict(text='')),
     dict(name="degrade", ui="CheckBox", args=dict(value=True)),
-    dict(name="bg", ui="EditText", args=dict(text='')),
+    dict(name="bg", ui="EditText", args=dict(text='100 100 100')),
 ], globals())
     
 
@@ -137,19 +148,19 @@ if quadrado:
     px_lista.append('quadrado')
 if circulo:
     px_lista.append('circulo')
-if xis:
-    px_lista.append('xis')
 if triangulo:
     px_lista.append('triangulo')
+if xis:
+    px_lista.append('xis')
 
 cor1=var(cor1,tipo='cor')
 cor2=var(cor2,tipo='cor')
 bg=var(bg,tipo='cor')
 
 # imagem
-if not img:
-    if filtro == 1:
-        imgs=[]
+# if not img:
+#     if filtro == 1:
+#         imgs=[]
 img=var(img,lista=imgs)
 print('img =', img)
 img=os.path.join(path_img,img)
@@ -157,10 +168,11 @@ imgw,imgh=imageSize(img)
 
 # fonte pixel
 fonte_px=var(fonte_pixel,lista=fontes_do_pc)
-fs=var(fonte_size,m,tipo='float')
+# fs=var(fonte_size,m,tipo='float')
 
 #caracteres
-texto=var(texto,lista=tipos_txt,tipo='indice')
+texto=var(texto,lista=tipos_txt,tipo='lista')
+ajuste_txt=round(ajuste_texto)
 
 if texto>1 and caracteres:
     if texto==4:
@@ -195,7 +207,7 @@ print('imgh =', imgh, 'px')
 print('contraste =', round(contraste,2))
 print('brilho =', round(brilho,2))
 print('fonte_pixel =', fonte_px)
-print('fonte_size =', fs)
+# print('fonte_size =', fs)
 print('cor1 =', cor1)
 print('cor2 =', cor2)
 print('bg =', bg)
@@ -236,9 +248,9 @@ for pg in pgs:
     pw=len(pontos_x)*m
     ph=len(pontos_y)*m
 
-    if filtro==1:
-        ah=(pw-ph)/2
-        ph=pw
+    # if filtro==1:
+    #     ah=(pw-ph)/2
+    #     ph=pw
     
     # cria dicionario com formas basicas formas basicas
     base=formas(caracteres)
@@ -253,8 +265,8 @@ for pg in pgs:
     if bg:
         fill(*bg)
         rect(0,0,pw,ph)
-    if filtro==1:
-        translate(0,ah)
+    # if filtro==1:
+    #     translate(0,ah)
     if ver==1:
         image(img,(0,0))
 
@@ -287,11 +299,11 @@ for pg in pgs:
 
         if degrade:
             for c,camada in enumerate(ordem[:-1]):
-                playmode(vezes,pontos,[camada,],c)
+                playmode(vezes,pontos,[camada,],c,ajuste_txt)
         else:
-            playmode(vezes,pontos,ordem)
+            playmode(vezes,pontos,ordem,ajuste_txt)
 
-    # # # # para salvar antere o valor de n e descomente as linhas abaixo
+    # # # # salvar
     # m_str=str(m)
     # if len(m_str)==1:
     #      m_str='00'+m_str

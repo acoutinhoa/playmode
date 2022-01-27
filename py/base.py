@@ -5,7 +5,7 @@ def var(v,v0=None,lista=[],tipo='',cor_mode=0):
     if not v:
         if not v0:
             if lista:
-                if tipo == 'indice':
+                if tipo == 'lista':
                     v=randint(1,len(lista)-1)
                 else:
                     v=choice(lista[1:])
@@ -21,7 +21,7 @@ def var(v,v0=None,lista=[],tipo='',cor_mode=0):
             else:
                 v=v0
     else:
-        if lista and tipo!='indice':
+        if lista and tipo!='lista':
             v=lista[v]
         elif tipo=='int':
             v=int(v)
@@ -83,22 +83,22 @@ def dgd(cor1,cor2,p,repete):
         c+=(c3,)
     return c
 
-def car_texto(car,car_c,i,j,texto):
+def car_texto(car,car_c,i,j,texto,ajuste=0):
     if texto == 2:
-        car_n=i%len(car)
+        car_n=(i+ajuste)%len(car)
     elif texto == 3:
-        car_n=(i+j)%len(car)
+        car_n=(i+j+ajuste)%len(car)
     elif texto == 4:
         car_n=car_c%len(car)
         car_c+=1
     car=car[car_n]
     return car,car_c
 
-def pixel(ponto,m,car_c,bezier,formas,texto):
+def pixel(ponto,m,car_c,bezier,formas,texto,ajuste_txt=0):
     car,x,y,i,j = ponto
 
     if car not in formas.keys():
-        car,car_c=car_texto(car,car_c,i,j,texto)
+        car,car_c=car_texto(car,car_c,i,j,texto,ajuste_txt)
     
     bezier.translate(-x,-y)
     bezier.appendPath(formas[car])

@@ -6,6 +6,11 @@ path='/'.join(os.path.abspath(os.getcwd()).split('/')[:-1])
 
 # imagens
 path_img = os.path.join(path,'img/pixelizacao')
+# crias pasta 1
+if not os.path.isdir(path_img):
+    os.mkdir(path_img)
+    print('>>> pasta criada \n>>>',path_img)
+
 img_lista = [img for img in os.listdir(path_img) if img[0]!='.']
 img_lista.sort()
 imgs=['?']+img_lista
@@ -44,9 +49,10 @@ image(im, (0,0))
 # ##########################################
 # # pra salvar outras imagens:
 # # mudar o valor de n
+# # e descomentar as linhas abaixo
 # ##########################################
 
-# n=1
+# n=2
 # path_img=path + '/img/1/banner_%s.png' % (n)
 # saveImage(path_img)
 # print('img salva >>>')
