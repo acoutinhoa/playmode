@@ -44,42 +44,6 @@ with im:
     fontSize(fs)
     text(palavra, (width()/2, (height()-fs/y)/2), align='center')
 
-
-# # # # # # ########################################
-
-# # # # # # # unidades
-# # # # # # # 1 inch = 2.54 cm
-# # # # # # # cm = dpi/2.54
-# # # # # # # cm = 72/2.54
-# # # # # # cm = 36/2.54
-# # # # # # mm = cm*10
-
-# # # # # # # banner
-# # # # # # pw=230*cm
-# # # # # # ph=312*cm
-
-# # # # # # palavra='''PLAY
-# # # # # # MODE'''
-
-# # # # # # fs=80
-
-
-
-# # # # # # newPage(pw, ph)
-
-# # # # # # im = ImageObject()
-# # # # # # with im:
-# # # # # #     size(pw/e,ph/e)
-# # # # # #     fill(1)
-# # # # # #     rect(0,0,width(),height())
-# # # # # #     fill(0)
-# # # # # #     font(fonte)
-# # # # # #     lineHeight(fs-10)
-# # # # # #     fontSize(fs)
-# # # # # #     text(palavra, (15*cm/e, 190*cm/e), align='left')
-
-# # # # # # ########################################
-
 scale(e)
 image(im, (0,0))
 
@@ -89,7 +53,7 @@ image(im, (0,0))
 # # mudar o valor de n
 # ##########################################
 
-# n=1
+# n=2
 # path_img=path + '/img/1/playmode_%s_%s.png' % (n,fonte)
 # saveImage(path_img)
 # print('img salva >>>')

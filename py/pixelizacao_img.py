@@ -52,8 +52,8 @@ image(im, (0,0))
 # # e descomentar as linhas abaixo
 # ##########################################
 
-# n=2
-# path_img=path + '/img/1/banner_%s.png' % (n)
+# n=3
+# path_img=path + '/img/1/painel_%s.png' % (n)
 # saveImage(path_img)
 # print('img salva >>>')
 # print(path_img)
