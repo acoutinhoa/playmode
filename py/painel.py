@@ -129,7 +129,7 @@ for i,img in enumerate(imgs):
     drawPath(mascara)
 
     # salva
-    nome="img/painel/_drawbot_img-%s.png" % i
+    nome="img/painel/_drawbot_img-%s.pdf" % i
     path_save=os.path.join( path,nome )
     saveImage(path_save, multipage=False)
     imgs_path.append(path_save)
