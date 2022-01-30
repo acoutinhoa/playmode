@@ -18,6 +18,10 @@ mm = cm*10
 # painel
 painel=1
 
+# medidas em cm
+w=50
+h=20
+
 # imagens
 path_img = os.path.join(path,'img/painel/%s' % painel)
 img_lista = [img for img in os.listdir(path_img) if img[0] not in ['.','_']]
@@ -33,8 +37,6 @@ tipos=[
 
 
 Variable([
-    dict(name="w_cm", ui="EditText", args=dict(text='50')),
-    dict(name="h_cm", ui="EditText", args=dict(text='20')),
     dict(name="img1", ui="PopUpButton", args=dict(items=imgs)),
     dict(name="img2", ui="PopUpButton", args=dict(items=imgs)),
     dict(name="img3", ui="PopUpButton", args=dict(items=imgs)),
@@ -46,8 +48,8 @@ Variable([
 ], globals())
     
 #painel
-pw=var(w_cm,tipo='int')*cm
-ph=var(h_cm,tipo='int')*cm
+pw=w*cm
+ph=h*cm
 
 #modulo
 tipo=var(tipo,1,lista=tipos,tipo='lista')
