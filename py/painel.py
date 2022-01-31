@@ -11,7 +11,7 @@ path='/'.join(os.path.abspath(os.getcwd()).split('/')[:-1])
 # 1 inch = 2.54 cm
 # cm = dpi/2.54
 cm = 72/2.54
-mm = cm*10
+mm = cm/10
 
 ###############################
 
@@ -22,11 +22,18 @@ painel=1
 w=50
 h=20
 
+###############################
+
 # imagens
 path_img = os.path.join(path,'img/painel/%s' % painel)
 img_lista = [img for img in os.listdir(path_img) if img[0] not in ['.','_']]
 img_lista.sort()
 imgs=['?']+img_lista+['-']
+
+# cria pasta drawbot
+path_drawbot=os.path.join(path,'img/painel/_drawbot')
+if not os.path.isdir(path_drawbot):
+    os.mkdir(path_drawbot)
 
 tipos=[
     '?',
@@ -129,8 +136,8 @@ for i,img in enumerate(imgs):
     drawPath(mascara)
 
     # salva
-    nome="img/painel/_drawbot_img-%s.pdf" % i
-    path_save=os.path.join( path,nome )
+    nome="img-%s.pdf" % i
+    path_save=os.path.join( path_drawbot,nome )
     saveImage(path_save, multipage=False)
     imgs_path.append(path_save)
     
@@ -143,24 +150,6 @@ blendMode("multiply")
 for i,img in enumerate(imgs_path):
     image(img,(0,0))
     
-
-
-
-
-# # # # para salvar antere o valor de n e descomente as linhas abaixo
-# m_str=str(m)
-# if len(m_str)==1:
-#      m_str='00'+m_str
-# elif len(m_str)==2:
-#      m_str='0'+m_str
-# gif=6
-# nome="gif/%s/%s_m-%s.pdf" % (gif,img_nome.split('.')[0],m_str)
-# path_save=os.path.join( path,nome )
-# saveImage(path_save, multipage=False)
-# print('gif salvo >>>')
-# print(path_save)
-
-
 
 end = time.time()
 print('\n>>>', end-start, 's')

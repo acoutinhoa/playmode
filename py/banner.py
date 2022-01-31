@@ -12,7 +12,7 @@ path='/'.join(os.path.abspath(os.getcwd()).split('/')[:-1])
 # cm = dpi/2.54
 # cm = 72/2.54
 cm = 36/2.54
-mm = cm*10
+mm = cm/10
 
 def playmode(pontos,layer,c=0):
     desenho=BezierPath()

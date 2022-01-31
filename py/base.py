@@ -106,5 +106,3 @@ def pixel(ponto,m,car_c,bezier,formas,texto,ajuste_txt=0):
 
     return bezier,car_c
 
-
-

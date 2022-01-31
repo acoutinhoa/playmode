@@ -34,7 +34,9 @@ def playmode(vezes,pontos,layer,c=0,ajuste_txt=0):
                 stroke(*cor)
             drawPath(desenho)
 
-def formas(caracteres):
+def formas(caracteres,m,fs=0,fonte='CourierNewPSMT'):
+    if not fs:
+        fs=m
     base={}
     # formas geometricas
     car_lista=['#','o','t','x',]
@@ -73,7 +75,7 @@ def formas(caracteres):
     # caracteres
     for c in caracteres:
         bezier=BezierPath()
-        bezier.textBox(c, (-m/2,-m+fs-m,2*m,2*m), font=fonte_px, fontSize=fs, align='center',)
+        bezier.textBox(c, (-m/2,-m+fs-m,2*m,2*m), font=fonte, fontSize=fs, align='center',)
         base[c]=bezier
     return base
 
@@ -233,7 +235,6 @@ if not pgs:
 
 for pg in pgs:
     m=pg
-    fs=m
 
     # ponto central do modulo para verificacao da cor
     p0=round(m/2)
@@ -253,7 +254,7 @@ for pg in pgs:
     #     ph=pw
     
     # cria dicionario com formas basicas formas basicas
-    base=formas(caracteres)
+    base=formas(caracteres,m,fonte=fonte_px)
 
     newPage(pw,ph)
     sw=m/10
