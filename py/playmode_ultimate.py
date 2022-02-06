@@ -11,44 +11,95 @@ path='/'.join(os.path.abspath(os.getcwd()).split('/')[:-1])
 
 ##########################################################
 
+pw=1000 # largura da pagina
+ph=1000 # altura da pagina
+
 faixas=10 # numero de faixas
-modulos=list(range(1,20,5))
+# modulos=list(range(1,20,5)) # modulos/faixa
+modulos=[1,2,4,8,16,32] # modulos/faixa
+
+caracteres='PLAYMODE PLAYMODE'
 cores='rgbk'
 cores_bg='kw'
 
-# imagem
-imgs=[
-    # 'paciencia.jpeg',
-    'painel_1.png',
-    'painel_3.png',
-    # 'playmode_2_BodoniSvtyTwoITCTT-BookIta.png',
-]
+sw=0.5 # espessura da linha (px) --- versao: com_linhas
 
-# com_linhas
-sw=0.5 #espessura da linha
+# ______legenda imagens
+# 'path' : 'str'
+# 'x' : int / ['c']= centralizado / 'r'=randomico
+# 'y' : int / ['c']= centralizado / 'r'=randomico
+# 'zoom' : float. [1.0] / 'w'= ajusta a largura / 'h'=ajusta a altura
+# 'inverte_cores' : True / [False]
+# 'brilho' : float. [0] (-1,1)
+# 'contraste' : float. [1] (1,3)
+
+imagens={
+    # 'playmode':{
+    #     'path':'painel_1.png',
+    #     'x':'c',
+    #     'y':'c',
+    #     'zoom':'w',
+    #     'inverte_cores':False,
+    #     'brilho':0,
+    #     'contraste':1,
+    # },
+
+    # 'paciencia':{
+    #     'path':'paciencia.jpeg',
+    #     'x':'c',
+    #     'y':'c',
+    #     'zoom':3,
+    #     'inverte_cores':False,
+    #     'brilho':0,
+    #     'contraste':1,
+    # },
+
+    'bh':{
+        'path':'/Users/alien/x3/x/qdd/playmode/img/1/playmode_2_BodoniSvtyTwoITCTT-BookIta.png',
+        'x':'r',
+        'y':'r',
+        'zoom':randint(3,6),
+        'inverte_cores':False,
+        'brilho':0,
+        'contraste':1,
+    },
+
+    'bh2':{
+        'path':'/Users/alien/x3/x/qdd/playmode/img/1/playmode_2_BodoniSvtyTwoITCTT-BookIta.png',
+        'x':'r',
+        'y':'r',
+        'zoom':randint(3,6),
+        'inverte_cores':False,
+        'brilho':0,
+        'contraste':1,
+    },
+}
+
 
 ##########################################################
 
 print('faixas = ', faixas)
 print('modulos = ', modulos)
 print()
-print('imgs =', imgs)
+print('imgs =', list(imagens.keys()))
 
 ##########################################################
 
 # # # CMYK
 
 # # # varicao das faixas:
-# # #     zomm
 # # #     texto
     
 # # # questoes:
 # # #     outras formas? seta?
 # # #     ajuste_texto?
-# # #     contraste/brilho - no menu?
-
 
 ##########################################################
+
+def cria_pasta(path):
+    if not os.path.isdir(path):
+        os.mkdir(path)
+        print('>>> pasta criada \n>>>',path)
 
 def playmode(vezes,pontos,layer,c=0,ajuste_txt=0,car_c=0):
     for n in range(vezes):
@@ -153,15 +204,12 @@ def cor(cores,cor_repetida=None):
 
 # imagens
 path_img = os.path.join(path,'img/1')
-# crias pasta 1
-if not os.path.isdir(path_img):
-    os.mkdir(path_img)
-    print('>>> pasta criada \n>>>',path_img)
+cria_pasta(path_img) # cria pasta 1
 
 # visualizar
 opcoes = [
     '0_textura',
-    '1_imagem',
+    '1_imagens',
     ]
 
 fontes_do_pc = ['?',]+installedFonts()
@@ -178,11 +226,7 @@ tipos_txt=[
 Variable([
     # dict(name="CMYK", ui="CheckBox", args=dict(value=False)),
     dict(name="ver", ui="PopUpButton", args=dict(items=opcoes)),
-    # dict(name="contraste", ui="Slider", args=dict(value=1, minValue=1, maxValue=3)),
-    # dict(name="brilho", ui="Slider", args=dict(value=0, minValue=-1, maxValue=1)),
-    dict(name="inverte_cores", ui="CheckBox", args=dict(value=False)),
     dict(name="com_linha", ui="CheckBox", args=dict(value=False)),
-    dict(name="caracteres", ui="EditText", args=dict(text='PLAYMODE')),
     dict(name="fonte", ui="PopUpButton", args=dict(items=fontes_do_pc)),
     dict(name="texto", ui="PopUpButton", args=dict(items=tipos_txt)),
     dict(name="quadrado", ui="CheckBox", args=dict(value=True)),
@@ -198,8 +242,8 @@ Variable([
     dict(name="grid", ui="CheckBox", args=dict(value=False)),
 ], globals())
 
-px_lista=[]
 #formas geometricas
+px_lista=[]
 if quadrado:
     px_lista.append('quadrado')
 if circulo:
@@ -240,41 +284,82 @@ print('texto =', tipos_txt[texto])
 
 ##########################################################
 
-# cria dicionario de imagens
-pw=0
-ph=0
+# imagens
+w=0
+h=0
+for i in imagens:
+    i=imagens[i]
 
-imagens={}
-
-for i,img in enumerate(imgs):
-    imagens[i]={}
+    img=i['path']
+    e=i['zoom']
     
-    img=os.path.join(path_img,img)
+    if len(img.split('/')) == 1:
+        img=os.path.join(path_img,img)
+        i['path']=img
+        
     imgw,imgh=imageSize(img)
-    
-    imagens[i]['path']=img
-    imagens[i]['w']=imgw
-    imagens[i]['h']=imgh
-    
-    if imgw > pw:
-        pw=imgw
-    if imgh > ph:
-        ph=imgh
+    i['w']=imgw
+    i['h']=imgh
 
-# posicao e tamanho das imagens
+    if e not in ['w','h']:
+        imgw=imgw*e
+        imgh=imgh*e
+        if not pw and imgw > w:
+            w=imgw
+        if not ph and imgh > h:
+            h=imgh
+
+# define pagina
+if not pw:
+    pw=w
+if not ph:
+    ph=h
+print('pagina = %spx x %spx' % (pw,ph) )
+
 for i in imagens:
     i=imagens[i]
     
-    img_path=i['path']
+    i_path=i['path']
     imgw=i['w']
     imgh=i['h']
+    x=i['x']
+    y=i['y']
+    e=i['zoom']
+    inverte=i['inverte_cores']
+    brilho=i['brilho']
+    contraste=i['contraste']
     
-    e=1 #escala
+    # escala
+    if e == 'w':
+        e=pw/imgw
+    if e == 'h':
+        e=ph/imgh
     
+    imgw=imgw*e
+    imgh=imgh*e
+
     # centraliza imagem
-    x=(pw-imgw*e)/2
-    y=(ph-imgh*e)/2
-    
+    if x == 'c':
+        x=(pw-imgw)/2
+    elif x == 'r':
+        w=imgw-pw
+        x=randint(0,abs(w))
+        if w>0:
+            x=x*-1
+
+    if y == 'c':
+        y=(ph-imgh)/2
+    elif y == 'r':
+        h=imgh-ph
+        y=randint(0,abs(h))
+        if h>0:
+            y=y*-1
+
+    i['x']=x
+    i['y']=y
+    i['zoom']=e
+
+    # imagem
     img = ImageObject()
     with img:
         size(pw,ph)
@@ -282,16 +367,14 @@ for i in imagens:
         rect(0,0,pw,ph)
         translate(x,y)
         scale(e)
-        image(img_path,(0,0))
+        image(i_path,(0,0))
         
     img.colorMonochrome(color=(1,1,1,1), intensity=None)
-    # img.colorControls(saturation=None, brightness=brilho, contrast=contraste)
-    if inverte_cores:
+    img.colorControls(saturation=None, brightness=brilho, contrast=contraste)
+    if inverte:
         img.colorInvert()
     
     i['img']=img
-    i['xy']=(x,y)
-    i['escala']=e
 
 
 # visualiza imagens
@@ -299,10 +382,15 @@ if ver==1:
     for i in imagens:
         img=imagens[i]
         newPage(pw,ph)
+        translate(pw/2,ph/2)
+        escala=1/10
+        scale(escala)
+        fill(1,0,0)
+        rect(0,0,pw,ph)
         image(img['img'],(0,0))
 
 else:
-    # faixas
+    # largura da faixa
     fw=pw/faixas
     
     # cria dicionario com formas basicas formas basicas pra cada zoom
@@ -341,7 +429,6 @@ else:
         print()
         print('>>> faixa', f)
         print('n_modulos =', nm)
-        print('modulos/faixa =', m)
         print('imagem =', imagens[img_i]['path'])
         
         # cores
