@@ -32,6 +32,11 @@ def playmode(vezes,pontos,layer,c=0,ajuste_txt=0):
             elif n==1:
                 fill(None)
                 stroke(*cor)
+                sw=m/50
+                strokeWidth(sw)
+                # miterLimit(sw)
+                # lineJoin("bevel")
+                # lineCap("square")
             drawPath(desenho)
 
 def formas(caracteres,m,fs=0,fonte='CourierNewPSMT'):
@@ -139,7 +144,9 @@ Variable([
     dict(name="degrade", ui="CheckBox", args=dict(value=True)),
     dict(name="bg", ui="EditText", args=dict(text='100 100 100')),
 ], globals())
-    
+
+# contraste=1.00
+# brilho=0.00
 
 m=var(modulo,randint(5,50),tipo='int')
 # m=int(m)
@@ -169,7 +176,7 @@ img=os.path.join(path_img,img)
 imgw,imgh=imageSize(img)
 
 # fonte pixel
-fonte_px=var(fonte_pixel,lista=fontes_do_pc)
+fonte_px=var(fonte_pixel,'CourierNewPS-BoldMT', lista=fontes_do_pc)
 # fs=var(fonte_size,m,tipo='float')
 
 #caracteres
@@ -227,8 +234,14 @@ if inverte_cores:
 # gerar varias paginas para fazer o gif
 # pgs = lista de valores de modulo para cada pagina
 pgs=[]
+
+# # gifs
 # pgs=list(range(15,101,5))+list(range(3,12))+[13,17]
 # pgs=list(range(20,81,10))+list(range(3,12))+[13,17,140,120,100]+list(range(15,50,10))
+
+# # escalas cortina
+# pgs=[4,8,16,32,64]
+
 if not pgs:
     pgs=[m,]
 
@@ -257,11 +270,6 @@ for pg in pgs:
     base=formas(caracteres,m,fonte=fonte_px)
 
     newPage(pw,ph)
-    sw=m/10
-    strokeWidth(sw)
-    miterLimit(sw)
-    # lineJoin("bevel")
-    # lineCap("square")
 
     if bg:
         fill(*bg)
@@ -310,12 +318,26 @@ for pg in pgs:
     #      m_str='00'+m_str
     # elif len(m_str)==2:
     #      m_str='0'+m_str
-    # gif=6
-    # nome="gif/%s/%s_m-%s.pdf" % (gif,img_nome.split('.')[0],m_str)
+    # painel='seta'
+    # nome=os.path.join(path,'img/painel/2/seta-%s.pdf' % m_str)
     # path_save=os.path.join( path,nome )
     # saveImage(path_save, multipage=False)
     # print('gif salvo >>>')
     # print(path_save)
+
+
+
+
+
+
+
+
+# # filtro
+# opcoes='normal, multiply, screen, overlay, darken, lighten, colorDodge, colorBurn, softLight, hardLight, difference, exclusion, hue, saturation, color, luminosity, clear, copy, sourceIn, sourceOut, sourceAtop, destinationOver, destinationIn, destinationOut, destinationAtop, xOR, plusDarker, plusLighter'
+# opcoes=opcoes.split(', ')
+# blendMode(opcoes[8])
+# fill(0)
+# rect(0,0,pw,ph)
 
 end = time.time()
 print('\n>>>', end-start, 's')

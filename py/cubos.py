@@ -2,7 +2,7 @@ import time
 start = time.time()
 
 import os
-from base import var,formas
+from base import var
 
 # caminho da pasta do playmode
 path = '/'.join(os.path.abspath(os.getcwd()).split('/')[:-1])
@@ -118,25 +118,25 @@ tipos = [
     '3_prateleira-branca',
     ]
 
-faces = [
+repeticoes = [
     '?',
-    '1_repetida',
+    '1_iguais',
     '2_randomica',
     ]
 
 
 Variable([
-    dict(name = "w_cm", ui = "EditText", args = dict(text = '200')),
+    dict(name = "w_cm", ui = "EditText", args = dict(text = '300')),
     dict(name = "h_cm", ui = "EditText", args = dict(text = '200')),
-    dict(name = "cubo_cm", ui = "EditText", args = dict(text = '20')),
+    dict(name = "cubo_cm", ui = "EditText", args = dict(text = '30')),
     dict(name = "tipo", ui = "PopUpButton", args = dict(items = tipos)),
-    dict(name = "pilha_max", ui = "EditText", args = dict(text = '7')),
+    dict(name = "pilha_max", ui = "EditText", args = dict(text = '6')),
     dict(name = "prateleira_mm", ui = "EditText", args = dict(text = '12')),
     dict(name = "cubo_simples", ui = "CheckBox", args = dict(value = True)),
     dict(name = "cubo_dado", ui = "CheckBox", args = dict(value = False)),
     dict(name = "cubo_escala", ui = "CheckBox", args = dict(value = True)),
-    dict(name = "escala_max", ui = "EditText", args = dict(text = '10')),
-    dict(name = "face", ui = "PopUpButton", args = dict(items = faces)),
+    dict(name = "escala_max", ui = "EditText", args = dict(text = '3')),
+    dict(name = "repeticao_forma", ui = "PopUpButton", args = dict(items = repeticoes)),
     dict(name = "caracteres", ui = "EditText", args = dict(text = 'PLAYMODE')),
     dict(name = "fonte", ui = "PopUpButton", args = dict(items = fontes_do_pc)),
 ], globals())
@@ -169,15 +169,15 @@ else:
 
 e_max = var(escala_max,6,tipo = 'int')
 
-face = var(face,1,lista = faces,tipo = 'lista')
+face = var(repeticao_forma,1,lista = repeticoes,tipo = 'lista')
 
-fonte = var(fonte,'BodoniSvtyTwoITCTT-Book',lista = fontes_do_pc)
+fonte = var(fonte,'CourierNewPSMT',lista = fontes_do_pc)
 fs = m
 
 print('fonte =', fonte)
 print('tipo =', tipos[tipo])
 print('cubos =', cubos)
-print('face =', faces[face])
+print('repeticao_forma =', repeticoes[face])
 # print('fonte_size =', fs)
 
 

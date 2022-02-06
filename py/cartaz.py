@@ -41,8 +41,8 @@ Variable([
     dict(name="margem_sup_cm", ui="EditText", args=dict(text='5')),
     dict(name="margem_inf_cm", ui="EditText", args=dict(text='5')),
     dict(name="img", ui="PopUpButton", args=dict(items=imgs)),
-    dict(name="n_modulos", ui="EditText", args=dict(text='')),
-    dict(name="zoom", ui="EditText", args=dict(text='1.6')),
+    dict(name="n_modulos", ui="EditText", args=dict(text='6')),
+    dict(name="zoom", ui="EditText", args=dict(text='2.1')),
     dict(name="alinha", ui="PopUpButton", args=dict(items=alinhamentos)),
 ], globals())
     
@@ -65,9 +65,9 @@ h=ph-m_sup-m_inf
 # imagem
 img=var(img,lista=imgs)
 
-print('modulos =', n)
-print()
 print('img =', img)
+print('modulos =', n)
+print('alinhamento =', alinhamentos[alinha])
 
 img=os.path.join(path_img,img)
 imgw,imgh=imageSize(img)

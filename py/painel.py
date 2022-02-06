@@ -19,8 +19,13 @@ mm = cm/10
 painel=1
 
 # medidas em cm
-w=50
-h=20
+if painel == 1:
+    pw=25*cm
+    ph=19*cm
+
+# ajuste
+p0x=-pw
+p0y=0
 
 ###############################
 
@@ -54,22 +59,33 @@ Variable([
     dict(name="tipo", ui="PopUpButton", args=dict(items=tipos)),
 ], globals())
     
-#painel
-pw=w*cm
-ph=h*cm
-
 #modulo
 tipo=var(tipo,1,lista=tipos,tipo='lista')
 
-n=var(n_modulos,randint(10,80),tipo='int')
-
 # imagem
-img1=var(img1,lista=imgs)
-img2=var(img2,lista=imgs)
-img3=var(img3,lista=imgs)
-img4=var(img4,lista=imgs)
-img5=var(img5,lista=imgs)
-img6=var(img6,lista=imgs)
+if painel == 1:
+    n=var(n_modulos,15,tipo='int')
+    
+    img1=var(img1,lista=imgs)
+    img2=var(img2,lista=imgs)
+    img3=var(img3,lista=imgs)
+    img4=var(img4,lista=imgs)
+    img5=var(img5,lista=imgs)
+    img6=var(img6,lista=imgs)
+
+elif painel == 2:
+    # tamanho a partir da imagem
+    p_img=os.path.join(path_img,imgs[-2])
+    pw,ph=imageSize(p_img)
+
+    n=var(n_modulos,15,tipo='int')
+    
+    img1=var(img1,imgs[1],lista=imgs)
+    img2=var(img2,imgs[-1],lista=imgs)
+    img3=var(img3,imgs[3],lista=imgs)
+    img4=var(img4,imgs[-1],lista=imgs)
+    img5=var(img5,imgs[5],lista=imgs)
+    img6=var(img6,imgs[-1],lista=imgs)
 
 print('modulos =', n)
 print()
@@ -112,7 +128,10 @@ size(pw,ph)
 for i,img in enumerate(imgs):
     img=os.path.join(path_img,img)
     imgw,imgh=imageSize(img)
-    image(img,((pw-imgw)/2,(ph-imgh)/2))
+    # #imagem centralizada
+    # image(img,((pw-imgw)/2,(ph-imgh)/2))
+    #imagem alinhada 0,0
+    image(img,(p0x,p0y))
 
     mascara=BezierPath()
     mascara.rect(0,0,pw,ph)
