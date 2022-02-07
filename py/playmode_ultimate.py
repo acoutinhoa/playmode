@@ -9,21 +9,31 @@ from base import var, dgd, pixel
 # caminho da pasta do playmode
 path='/'.join(os.path.abspath(os.getcwd()).split('/')[:-1])
 
-##########################################################
+# _____________________________________
+# _____________________________________
+# _____________________________________
+
 
 pw=1000 # largura da pagina
-ph=1000 # altura da pagina
+ph=300 # altura da pagina
 
 faixas=10 # numero de faixas
-# modulos=list(range(1,20,5)) # modulos/faixa
-modulos=[1,2,4,8,16,32] # modulos/faixa
 
-caracteres='PLAYMODE PLAYMODE'
-cores='rgbk'
-cores_bg='kw'
+modulos=list(range(1,20,5)) # modulos/faixa
+modulos=[2**i for i in range(1,6)] # n_modulos/faixa
+
+caracteres='PLAYMODE'
+
+# cores
+# 'rgbcmykw' / (0-1,0-1,0-1,0-1) / [ (0-1,0-1,0-1,0-1),(0-1,0-1,0-1,0-1) ]
+cores_0='rgbkkk' 
+cores_1=None
+cores_bg='w'
 
 sw=0.5 # espessura da linha (px) --- versao: com_linhas
 
+
+# _____________________________________
 # ______legenda imagens
 # 'path' : 'str'
 # 'x' : int / ['c']= centralizado / 'r'=randomico
@@ -32,67 +42,55 @@ sw=0.5 # espessura da linha (px) --- versao: com_linhas
 # 'inverte_cores' : True / [False]
 # 'brilho' : float. [0] (-1,1)
 # 'contraste' : float. [1] (1,3)
+# 'txt' : int (numeros do menu texto)
+# _____________________________________
 
 imagens={
-    # 'playmode':{
-    #     'path':'painel_1.png',
-    #     'x':'c',
-    #     'y':'c',
-    #     'zoom':'w',
-    #     'inverte_cores':False,
-    #     'brilho':0,
-    #     'contraste':1,
-    # },
+    'playmode':{
+        'path':'/Users/alien/x3/x/qdd/playmode/img/1/painel_1.png',
+        'x':'c',
+        'y':'c',
+        'zoom':'w',
+        'inverte_cores':False,
+        'brilho':0,
+        'contraste':1,
+        'txt':0,
+    },
 
     # 'paciencia':{
-    #     'path':'paciencia.jpeg',
+    #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/paciencia.jpeg',
     #     'x':'c',
     #     'y':'c',
     #     'zoom':3,
     #     'inverte_cores':False,
     #     'brilho':0,
     #     'contraste':1,
+    #     'txt':0,
     # },
 
-    'bh':{
-        'path':'/Users/alien/x3/x/qdd/playmode/img/1/playmode_2_BodoniSvtyTwoITCTT-BookIta.png',
-        'x':'r',
-        'y':'r',
-        'zoom':randint(3,6),
-        'inverte_cores':False,
-        'brilho':0,
-        'contraste':1,
-    },
+    # 'bh':{
+    #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/playmode_2_BodoniSvtyTwoITCTT-BookIta.png',
+    #     'x':'r',
+    #     'y':'r',
+    #     'zoom':randint(1,6),
+    #     'inverte_cores':False,
+    #     'brilho':0,
+    #     'contraste':1,
+    #     'txt':0,
+    # },
 
-    'bh2':{
-        'path':'/Users/alien/x3/x/qdd/playmode/img/1/playmode_2_BodoniSvtyTwoITCTT-BookIta.png',
-        'x':'r',
-        'y':'r',
-        'zoom':randint(3,6),
-        'inverte_cores':False,
-        'brilho':0,
-        'contraste':1,
-    },
 }
 
 
-##########################################################
+# _____________________________________
+# _____________________________________
+# _____________________________________
 
-print('faixas = ', faixas)
-print('modulos = ', modulos)
-print()
-print('imgs =', list(imagens.keys()))
-
-##########################################################
 
 # # # CMYK
 
-# # # varicao das faixas:
-# # #     texto
-    
 # # # questoes:
 # # #     outras formas? seta?
-# # #     ajuste_texto?
 
 ##########################################################
 
@@ -108,16 +106,16 @@ def playmode(vezes,pontos,layer,c=0,ajuste_txt=0,car_c=0):
             if pt[0] in layer:
                 if com_linha:
                     if n==0 and c<len(px_lista):
-                        desenho,car_c=pixel(pt,m,car_c,desenho,base,texto)
+                        desenho,car_c=pixel(pt,m,car_c,desenho,base,tipo_txt)
                     elif n==1 and c>=len(px_lista):
                         pt[0]=pt[0][:-1]
-                        desenho,car_c=pixel(pt,m,car_c,desenho,base,texto)
+                        desenho,car_c=pixel(pt,m,car_c,desenho,base,tipo_txt)
                 else:
                     desenho,car_c=pixel(pt,m,car_c,desenho,base,texto,ajuste_txt)
         if n==1:
             desenho.removeOverlap()
         if ver==0:
-            cor_=dgd(cor1,cor2,c,len(ordem)-1)
+            cor_=dgd(cor0,cor1,c,len(ordem)-1)
             if n==0:
                 fill(*cor_)
                 stroke(None)
@@ -125,6 +123,7 @@ def playmode(vezes,pontos,layer,c=0,ajuste_txt=0,car_c=0):
                 fill(None)
                 stroke(*cor_)
                 strokeWidth(sw)
+                miterLimit(sw)
             drawPath(desenho)
     return car_c
 
@@ -174,36 +173,41 @@ def formas(caracteres,m,fs=0,fonte='CourierNewPSMT'):
     return base
 
 def cor(cores,cor_repetida=None):
-    c_lista=[c for c in cores]
-    c=choice(c_lista)
-    if c == 'r':
-        c=(1,0,0)
-    elif c == 'g':
-        c=(0,1,0)
-    elif c == 'b':
-        c=(0,0,1)
-    elif c == 'c':
-        c=(0,1,1)
-    elif c == 'm':
-        c=(1,0,1)
-    elif c == 'y':
-        c=(1,1,0)
-    elif c == 'k':
-        c=(0,0,0)
-    elif c == 'w':
-        c=(1,1,1)
-    else:
-        c='cor nao definida'
+    if type(cores) == type(''):
+        c_lista=[c for c in cores]
+        c=choice(c_lista)
+        if c == 'r':
+            c=(1,0,0)
+        elif c == 'g':
+            c=(0,1,0)
+        elif c == 'b':
+            c=(0,0,1)
+        elif c == 'c':
+            c=(0,1,1)
+        elif c == 'm':
+            c=(1,0,1)
+        elif c == 'y':
+            c=(1,1,0)
+        elif c == 'k':
+            c=(0,0,0)
+        elif c == 'w':
+            c=(1,1,1)
+        else:
+            c='cor nao definida'
         
-    while c == cor_repetida:
-        c=cor(cores,cor_repetida)
+        while c == cor_repetida:
+            c=cor(cores,cor_repetida)
+    elif type(cores) == []:
+        c=choice(cores)
+    else:
+        c=cores
         
     return c
 
 ##########################################################
 
 # imagens
-path_img = os.path.join(path,'img/1')
+path_img = os.path.join(path,'img/ultimate')
 cria_pasta(path_img) # cria pasta 1
 
 # visualizar
@@ -226,20 +230,17 @@ tipos_txt=[
 Variable([
     # dict(name="CMYK", ui="CheckBox", args=dict(value=False)),
     dict(name="ver", ui="PopUpButton", args=dict(items=opcoes)),
-    dict(name="com_linha", ui="CheckBox", args=dict(value=False)),
+    dict(name="grid", ui="CheckBox", args=dict(value=False)),
     dict(name="fonte", ui="PopUpButton", args=dict(items=fontes_do_pc)),
     dict(name="texto", ui="PopUpButton", args=dict(items=tipos_txt)),
     dict(name="quadrado", ui="CheckBox", args=dict(value=True)),
     dict(name="circulo", ui="CheckBox", args=dict(value=True)),
     dict(name="triangulo", ui="CheckBox", args=dict(value=True)),
     dict(name="xis", ui="CheckBox", args=dict(value=True)),
-    dict(name="cor1", ui="EditText", args=dict(text='')),
-    dict(name="cor2", ui="EditText", args=dict(text='')),
+    dict(name="com_linha", ui="CheckBox", args=dict(value=False)),
     dict(name="degrade", ui="CheckBox", args=dict(value=False)),
     dict(name="faixas_randomicas", ui="CheckBox", args=dict(value=False)),
-    dict(name="bg", ui="EditText", args=dict(text='100 100 100')),
     dict(name="bg_randomico", ui="CheckBox", args=dict(value=False)),
-    dict(name="grid", ui="CheckBox", args=dict(value=False)),
 ], globals())
 
 #formas geometricas
@@ -254,12 +255,12 @@ if xis:
     px_lista.append('xis')
 
 # cores
-cor1=var(cor1,cor(cores),tipo='cor')
+cor0=cor(cores_0)
 if degrade:
-    cor2=var(cor2,cor(cores),tipo='cor')
+    cor1=cor(cores_1)
 else:
-    cor2=cor1
-bg=var(bg,cor(cores_bg,cor1),tipo='cor')
+    cor1=cor0
+bg=cor(cores_bg,cor0)
 
 # fonte
 fonte_px=var(fonte,'CourierNewPS-BoldMT', lista=fontes_do_pc)
@@ -276,12 +277,16 @@ if texto>1 and caracteres:
 else:
     px_lista+=[car for car in caracteres]
 
+##########################################################
+print('faixas = ', faixas)
+print('modulos = ', modulos)
+print()
+print('imgs =', list(imagens.keys()))
 print('fonte =', fonte_px)
+print('cor0 =', cor0)
 print('cor1 =', cor1)
-print('cor2 =', cor2)
 print('bg =', bg)
 print('texto =', tipos_txt[texto])
-
 ##########################################################
 
 # imagens
@@ -382,9 +387,6 @@ if ver==1:
     for i in imagens:
         img=imagens[i]
         newPage(pw,ph)
-        translate(pw/2,ph/2)
-        escala=1/10
-        scale(escala)
         fill(1,0,0)
         rect(0,0,pw,ph)
         image(img['img'],(0,0))
@@ -429,19 +431,27 @@ else:
         print()
         print('>>> faixa', f)
         print('n_modulos =', nm)
-        print('imagem =', imagens[img_i]['path'])
+        print('imagem =', imagens[img_i]['path'].split('/')[-1])
         
         # cores
         if faixas_randomicas:
-            cor1=cor(cores)
+            cor0=cor(cores_0)
             if degrade:
-                cor2=cor(cores)
+                cor1=cor(cores_1)
             else:
-                cor2=cor1
+                cor1=cor0
         if bg_randomico:
-            bg=cor(cores_bg,cor1)
+            bg=cor(cores_bg,cor0)
             fill(*bg)
             rect(f*fw,0,fw,ph)
+        
+        # tipo texto
+        txt=imagens[img_i]['txt']
+        if txt:
+            tipo_txt=txt
+        else:
+            tipo_txt=texto
+            
         
         # formas
         base=bases[nm]
@@ -471,6 +481,7 @@ else:
         for c,camada in enumerate(ordem[:-1]):
             car_c=playmode(vezes,pontos,[camada,],c,ajuste_txt,car_c=car_c)
         
+        car_c+=nm
         restore()
 
 # grid
@@ -481,20 +492,18 @@ if grid:
         if i:
             line((fw*i,0),(fw*i,ph))
 
-# # # # salvar
-# m_str=str(m)
-# if len(m_str)==1:
-#      m_str='00'+m_str
-# elif len(m_str)==2:
-#      m_str='0'+m_str
-# painel='seta'
-# nome=os.path.join(path,'img/painel/2/seta-%s.pdf' % m_str)
-# path_save=os.path.join( path,nome )
-# saveImage(path_save, multipage=False)
-# print('gif salvo >>>')
-# print(path_save)
+##########################################################
 
+print('\n---------------------')
+for img in imagens:
+    print("'%s' :" % img)
+    for i in imagens[img]:
+        print("    '%s' : %s," % (i,str(imagens[img][i])))
+    print()
+print('---------------------')
 
+##########################################################
+##########################################################
 ##########################################################
 
 end = time.time()

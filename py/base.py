@@ -85,9 +85,9 @@ def dgd(cor1,cor2,p,repete):
 
 def car_texto(car,car_c,i,j,texto,ajuste=0):
     if texto == 2:
-        car_n=(i+ajuste)%len(car)
+        car_n=(car_c+i+ajuste)%len(car)
     elif texto == 3:
-        car_n=(i+j+ajuste)%len(car)
+        car_n=(car_c+i+j+ajuste)%len(car)
     elif texto == 4:
         car_n=car_c%len(car)
         car_c+=1
