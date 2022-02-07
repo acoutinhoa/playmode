@@ -430,8 +430,8 @@ else:
         
         print()
         print('>>> faixa', f)
+        print('imagem =', img_i)
         print('n_modulos =', nm)
-        print('imagem =', imagens[img_i]['path'].split('/')[-1])
         
         # cores
         if faixas_randomicas:
