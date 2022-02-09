@@ -24,8 +24,8 @@ Variable([
 # imagem
 img=var(img,lista=imgs)
 print('img =', img)
-img=os.path.join(path_img,img)
-imgw,imgh=imageSize(img)
+img_=os.path.join(path_img,img)
+imgw,imgh=imageSize(img_)
 
 pw=imgw
 ph=imgh
@@ -40,20 +40,17 @@ im = ImageObject()
 with im:
     size(pw/e,ph/e)
     scale(1/e)
-    image(img, (0,0))
+    image(img_, (0,0))
 
 scale(e)
 image(im, (0,0))
 
 
 # ##########################################
-# # pra salvar outras imagens:
-# # mudar o valor de n
-# # e descomentar as linhas abaixo
+# # salvar
 # ##########################################
 
-# n=3
-# path_img=path + '/img/1/painel_%s.png' % (n)
+# path_img=path + '/img/ultimate/%s' % (img)
 # saveImage(path_img)
 # print('img salva >>>')
 # print(path_img)

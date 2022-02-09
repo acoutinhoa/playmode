@@ -21,19 +21,19 @@ def dump(obj):
     print("obj.%s = %r" % (attr, getattr(obj, attr)))
 #####################################
 
-def medidas(painel):
+def medidas(painel='',keys=False):
     dados={
         'pg1':{
             'w':410,
-            'h':340,
+            'h':320,
             },
         'pg2':{
             'w':1250,
-            'h':380,
+            'h':320,
             },
         'painel_playmode':{
             'w':80,
-            'h':260,
+            'h':250,
             'margem':8,
             'dist':4,
             'base':randint(20,80),
@@ -42,7 +42,7 @@ def medidas(painel):
             },
         'painel_corredor':{
             'w':70,
-            'h':260,
+            'h':250,
             'margem':6,
             'dist':20,
             'base':randint(20,80),
@@ -51,16 +51,16 @@ def medidas(painel):
             },
         'painel_cortina':{
             'w':60,
-            'h':280,
+            'h':250,
             'margem':0,
-            'dist':20,
+            'dist':40,
             'base':randint(20,80),
             'b2':randint(20,80),
             'suporte':'mobile',
             },
-        'painel_obra1':{
+        'painel_obra3':{
             'w':30,
-            'h':290,
+            'h':250,
             'margem':8,
             'dist':20,
             'base':randint(20,80),
@@ -76,17 +76,20 @@ def medidas(painel):
             'b2':0,
             'suporte':'obra2',
             },
-        'painel_obra3':{
+        'painel_obra1':{
             'w':30,
-            'h':320,
+            'h':280,
             'margem':8,
             'dist':20,
-            'base':0,
-            'b2':0,
+            'base':randint(20,80),
+            'b2':randint(20,80),
             'suporte':'suspenso',
             },
     }
-    return dados[painel]
+    if painel:
+        return dados[painel]
+    elif keys:
+        return list(dados.keys())
 
 paineis_textos = [
     'painel_playmode',
@@ -100,19 +103,37 @@ paineis_obras = [
 ]
 
 
-def tecido(largura, altura, base, b2):
+def tecido(largura, altura, base, b2,gira=0):
+    save()
+    translate(largura/2,0)
+    x=-largura/2
+    if gira:
+        fill(None)
+        stroke(.6)
+        strokeWidth(.2)
+        lineDash(2,4)
+        rect(x,b2,largura,altura-b2)
+        rect(x,base,largura,altura-base)
+        eg=randint(10,100)/100
+    else:
+        eg=1
+    scale(eg,1)
     if b2 and b2<base:
         fill(0.7)
-        rect(0,b2,largura,altura-b2)
+        rect(x,b2,largura,altura-b2)
     fill(1)
-    rect(0,base,largura,altura-base)
+    rect(x,base,largura,altura-base)
+    restore()
 
-def suporte(tipo,largura,altura,ajuste=0):
+def suporte(tipo,largura,altura,ajuste=0,gira=0):
+    g=0
     if tipo == 'mobile':
         stroke(0)
         strokeWidth(1.5)
         line((largura/2,altura),(largura/2,height()))
         stroke(None)
+        if gira:
+            g=1
 
     elif tipo == 'base_mobile':
         dh=30
@@ -126,6 +147,8 @@ def suporte(tipo,largura,altura,ajuste=0):
         stroke(None)
         fill(0)
         rect(-ajuste/2,0,largura+ajuste,2)
+        if gira:
+            g=1
 
     elif tipo == 'obra2':
         stroke(0)
@@ -166,6 +189,7 @@ def suporte(tipo,largura,altura,ajuste=0):
         stroke(None)
         fill(0)
         rect(-ajuste/2,0,largura+ajuste,2)
+    return g
 
 #########################################
 
@@ -200,6 +224,7 @@ tipos = [
     '3_eixo3',
     '4_cortina',
     '5_obras',
+    '5_paineis',
     ]
 
 Variable([
@@ -217,6 +242,8 @@ Variable([
     # dict(name = "repeticao_forma", ui = "PopUpButton", args = dict(items = repeticoes)),
     # dict(name = "caracteres", ui = "EditText", args = dict(text = 'PLAYMODE')),
     dict(name = "fonte", ui = "PopUpButton", args = dict(items = fontes_do_pc)),
+    dict(name = "alturas", ui = "CheckBox", args = dict(value = True)),
+    dict(name = "gira", ui = "CheckBox", args = dict(value = True)),
 ], globals())
     
 fonte=var(fonte,'HelveticaNeue',lista=fontes_do_pc)
@@ -228,7 +255,7 @@ tipo=var(tipo,lista=tipos, tipo='lista')-1
 meio=150
 
 # pagina:
-if tipo in [4,]:
+if tipo in [4,6]:
     dados = medidas('pg2')
 else:
     dados = medidas('pg1')
@@ -245,9 +272,11 @@ elif tipo==2:
 elif tipo==3:
     paineis=[('painel_corredor',aberturas[3]),('painel_obra3',['obra',])]
 elif tipo==4:
-    paineis=[('painel_cortina',choice([11,13])*['',])]
+    paineis=[('painel_cortina',choice([9,])*['',])]
 elif tipo==5:
     paineis=[('painel_obra1',['obra',]),('painel_obra2',['obra',]),('painel_obra3',['obra',]),]
+elif tipo==6:
+    paineis=[('painel_corredor',aberturas[1]),('painel_obra1',['obra',]),('painel_obra2',['obra',]),('painel_obra3',['obra',]),]
 
 ############################
 
@@ -258,12 +287,28 @@ scale(e_pg)
 fill(.8)
 rect(0,0,pw,ph)
 
-# meio
+# meio + alturas
+hs=[meio,]
+if alturas:
+    chaves=medidas(keys=True)
+    for k in chaves:
+        h=medidas(k)['h']
+        if h not in hs:
+            hs.append(h)
+
 save()
 fill(None)
 stroke(.4)
 lineDash(1,2)
-line((0,meio),(width(),meio))
+for h in hs:
+    line((0,h),(width(),h))
+if alturas:
+    fs=6
+    fill(0,0,1)
+    stroke(None)
+    fontSize(fs)
+    for h in hs:
+        text(str(h)+'cm',(fs/2,h-1.5*fs))        
 restore()
 
 for i,info in enumerate(paineis):
@@ -289,6 +334,12 @@ for i,info in enumerate(paineis):
     
     if tipo==5:
         translate(100*(i+1),0)
+    if tipo==6:
+        x0=90
+        if i:
+            translate(80*(i+1)+x0*2,0)
+        else:
+            translate(x0,0)
     elif painel in paineis_textos:
         translate(50,0)
     elif painel in paineis_obras:
@@ -305,10 +356,10 @@ for i,info in enumerate(paineis):
             b2=medidas(painel)['b2']
 
         # suporte
-        suporte(suporte_tipo,largura,altura,ajuste)
+        g=suporte(suporte_tipo,largura,altura,ajuste,gira=gira)
 
         #tecido
-        tecido(largura, altura, base, b2)
+        tecido(largura, altura, base, b2,gira=g)
 
         #grafico
         if tipo==0:
@@ -337,11 +388,11 @@ for i,info in enumerate(paineis):
             hyphenation(False)
             c=2
             ec=3
-            fs=2.2
+            fs=2
             lh=3.5
             
             tit = FormattedString()
-            tit.append(abertura[0].upper()+'\n\n',font="CourierNewPS-BoldMT",fontSize=fs+1,lineHeight=lh+1,align='right')
+            tit.append(abertura[0].upper()+'\n\n',font="CourierNewPS-BoldMT",fontSize=fs+1,lineHeight=lh+.5,align='right')
             
             if not l:
                 fonte='HelveticaNeueLTStd-Roman'
@@ -380,7 +431,7 @@ for i,info in enumerate(paineis):
 # modulor
 blendMode('darken')
 for i in range(randint(1,2)):
-    modulor = os.path.join(path,'img/modulor%s.pdf' % randint(0,3))
+    modulor = os.path.join(path,'img/escala/modulor%s.pdf' % randint(0,3))
     save()
     translate(randint(120,pw-120),0)
     scale(choice([-1,1]),1)

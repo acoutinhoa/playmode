@@ -35,10 +35,10 @@ medidas={
         'pp':(-3450,-1470),
     },        
     4 : {
-        'pw':1600,
+        'pw':1800,
         'ph':1140,
         'p0':(3640,900),
-        'pp':(-3430,-760),
+        'pp':(-3300,-750),
     },        
     5 : {
         'pw':1600,
@@ -62,9 +62,9 @@ def escala_humana(x,y,humano=None,angulo=None):
         angulo=randint(0,360)
 
     if humano==0:
-        humano=os.path.join(path,'img/escala2_35.pdf')
+        humano=os.path.join(path,'img/escala/escala2_35.pdf')
     elif humano==1:
-        humano=os.path.join(path,'img/escala3_46.pdf')
+        humano=os.path.join(path,'img/escala/escala3_46.pdf')
 
     save()
     blendMode('multiply')
@@ -81,38 +81,66 @@ def eixo(pnt=50):
     line((0,-pnt/2), (0,pnt/2))
     restore()
 
-def painel_giratorio(modulo,repeticao_w=1,repeticao_h=1,grid_w=0,grid_h=0,esp=3,gira=1,grid=0,intercalado=0,xy=(0,0),tipo='h'):
+def linha00(xy):
+    stroke(0,1,0)
+    line((0,0),(-xy[0],-xy[1]))
+    text(str(xy),(-100,0))
+
+def painel_giratorio(modulo,repeticao_w=1,repeticao_h=1,grid_w=0,grid_h=0,esp=3,gira=1,grid=0,intercalado=0,xy=(0,0),tipo='h',base=0,bw=10,bh=40):
     if modulo == 'obras':
         modulo=30
     
-    if not gira and tipo=='v':
-        gira='90'
     # calcula dimensoes da cortina
     cw=(repeticao_w-1)*grid_w+modulo
     ch=(repeticao_h-1)*grid_h+modulo
-    print('cortina = %scm x %scm' % (cw, ch))
+    # print('cortina = %scm x %scm' % (cw, ch))
 
     save()
     translate(*xy)
     save()
+    if tipo=='v':
+        rotate(90)
+    save()
+    w=modulo+bw
     for l in range(repeticao_h):
         save()
         for m in range(repeticao_w):
             if not intercalado or not (l+m+repeticao_h)%2:
+                # base
+                if base:
+                    if base==1:
+                        esp=1.2
+                        fill(None)
+                        stroke(0.6)
+                        strokeWidth(.2)
+                    
+                        save()
+                        translate(-w/2,-bh/2)
+                        rect(0,0,w,bh)
+                        fill(0)
+                        for bi in range(2):
+                            rect(0,0,esp,bh)
+                            translate(w-esp,0)
+                        restore()
+                        fill(0)
+                        rect(-w/2,-esp/2,w,esp)
+                    else:
+                        esp=3
+                        fill(0)
+                        stroke(None)
+                        rect(-base/2,-esp/2,base,esp)
+
+
                 save()
                 fill(None)
                 stroke(0)
                 strokeWidth(esp)
                 if gira:
-                    if gira=='90':
-                        rotate(90)
-                        gira=0
-                    else:
-                        rotate(randint(0,360))
+                    rotate(randint(0,360))
                     oval(-esp,-esp,2*esp,2*esp)
-                else:
-                    oval(-modulo/2,-esp,2*esp,2*esp)
-                    oval(modulo/2,-esp,-2*esp,2*esp)
+                # else:
+                #     oval(-modulo/2,-esp,2*esp,2*esp)
+                #     oval(modulo/2,-esp,-2*esp,2*esp)
                 line((-modulo/2,0),(modulo/2,0))
                 restore()
                 
@@ -127,35 +155,107 @@ def painel_giratorio(modulo,repeticao_w=1,repeticao_h=1,grid_w=0,grid_h=0,esp=3,
         translate(0,grid_h)
     restore()
     #grid
+    legenda='\n'
+    if repeticao_h>1:
+        legenda+= 'grid = %s x %s pontos\n' % (repeticao_w,repeticao_h)
+        legenda+= 'modulo = %scm x %scm\n' % (grid_w,grid_h)
+        legenda+= 'total = %scm x %scm\n' % (cw,ch)
+
+    elif repeticao_w>1:
+        legenda+='%s paineis\n' % repeticao_w
+        legenda+='dist_eixos= %scm\n' % grid_w
+    legenda+='tecido = %scm largura\n' % modulo
+    if base==1:
+        legenda+= 'base = %scm x %scm\n' % (w,bh)
+    elif base>1:
+        legenda+= 'barra = %scm largura\n' % (base)
+    if intercalado:
+        legenda+='paineis intercalados\n'
+    if gira:
+        legenda+='painel móbile\n'
+    print(legenda)
+
     if grid:
         fill(None)
-        stroke(1,0,1)
         strokeWidth(1)
-        for i in range(repeticao_h):
-            y=grid_h*i
-            line((0,y),(cw-modulo,y))
-        for i in range(repeticao_w):
-            x=grid_w*i
-            line((x,0),(x,ch-modulo))
+        if not base:
+            stroke(1,0,1)
+            for i in range(repeticao_h):
+                y=grid_h*i
+                line((0,y),(cw-modulo,y))
+            for i in range(repeticao_w):
+                x=grid_w*i
+                line((x,0),(x,ch-modulo))
     restore()
-    
+    if grid:
+        # 0,0
+        linha00(xy)
+        # legenda
+        stroke(None)
+        fill(0,0,1)
+        text(legenda,(0,-20-modulo/2))
+    restore()    
     return cw,ch
 
-def painel_texto(w,dist,xy=(0,0),tipo='h',humano=1):
+def painel_texto(w,dist,xy=(0,0),tipo='h',humano=1,base=0,bh=40,bw=10,info=1,txt=[]):
     save()
     translate(*xy)
+
+    # info
+    legenda='\n'
+    legenda+='tecido = %scm largura\n' % w
+    if base:
+        legenda+= 'base = %scm x %scm\n' % (bh,w+bw)
+    legenda+= 'dist_paineis = %scm' % (dist)
+
+    if grid:        
+        # 0,0
+        linha00(xy)
+        # legenda
+        if info:
+            stroke(None)
+            fill(0,0,1)
+            text(legenda,(0,-20-modulo/2))
 
     if tipo=='v':
         translate(w,0)
         rotate(90)
-
+    
+    if grid and txt:
+        dt=100
+        fill(1,0,0)
+        fontSize(15)
+        text(txt[0]+' >',(-dt,w/2),align='right')
+        text('< '+txt[1],(dist+dt,w/2))
+            
+    
+    fill(None)
     stroke(0.6)
     strokeWidth(.2)
+
+    if base:
+        esp=1.2
+        esp2=3
+        save()
+        translate(-bh/2,0)
+        for bi in range(2):
+            rect(0,0,bh,w+bw)
+            save()
+            fill(0)
+            rect(bh/2,0,esp2,w+bw)
+            for bj in range(2):
+                rect(0,0,bh,esp)
+                translate(0,w+bw-esp)
+            restore()
+            translate(dist-esp2,0)
+        restore()
+        translate(0,bw/2)
+    
     linearGradient(
-        (0, 0),                         # startPoint
-        (dist, 0),                         # endPoint
-        [(1,), (0.5,), (1,)],  # colors
-        [0, .5, 1]                          # locations
+        (0, 0), # startPoint
+        (dist, 0), # endPoint
+        [(1,), (0.5,), (1,)], # colors
+        [0, .5, 1], # locations
         )
     rect(0,0,dist,w)
     
@@ -165,6 +265,7 @@ def painel_texto(w,dist,xy=(0,0),tipo='h',humano=1):
             escala_humana(-randint(30,100),randint(10,w+10),humano=None,angulo=90)
         if randint(0,1):
             escala_humana(dist+randint(30,100),randint(10,w+10),humano=None,angulo=270)
+            
     restore()
 
 ###############################
@@ -192,22 +293,25 @@ possibilidades=[
 
 Variable([
     dict(name="zoom", ui="PopUpButton", args=dict(items=areas)),
-    dict(name="proposta", ui="PopUpButton", args=dict(items=possibilidades)),
+    dict(name="painel", ui="PopUpButton", args=dict(items=possibilidades)),
+    dict(name="cortina", ui="PopUpButton", args=dict(items=possibilidades)),
+    dict(name="porta", ui="PopUpButton", args=dict(items=possibilidades)),
     # dict(name="n_modulos", ui="EditText", args=dict(text='')),
     dict(name = "pessoas", ui = "CheckBox", args = dict(value = True)),
     dict(name = "painel_mobile", ui = "CheckBox", args = dict(value = True)),
-    dict(name = "txt_mobile", ui = "CheckBox", args = dict(value = True)),
+    dict(name = "txt_mobile", ui = "CheckBox", args = dict(value = False)),
     dict(name = "cortina_mobile", ui = "CheckBox", args = dict(value = True)),
     dict(name = "porta_mobile", ui = "CheckBox", args = dict(value = True)),
-    dict(name = "porta_fora", ui = "CheckBox", args = dict(value = True)),
     dict(name = "grid", ui = "CheckBox", args = dict(value = False)),
 ], globals())
     
-# cortina variaveis
+# zoom
 zoom=var(zoom,1,lista=areas,tipo='lista')
 
-# cortina variaveis
-versao=var(proposta,3,lista=possibilidades,tipo='lista')
+# proposta
+versao=var(painel,3,lista=possibilidades,tipo='lista')
+versao_cortina=var(cortina,lista=possibilidades,tipo='lista')
+versao_porta=var(porta,lista=possibilidades,tipo='lista')
 
 # planta
 planta = os.path.join(path_img,'_planta.pdf')
@@ -231,7 +335,7 @@ size(pw,ph)
 translate(*pp)
 save()
 scale(e)
-image(planta,(0,0),.3)
+image(planta,(0,0),.25)
 restore()
 
 #########################################
@@ -248,8 +352,8 @@ if versao==1:
     grid_w=modulo
 
     # ofset do p0
-    dist_porta=40
-    dist_parede=50
+    dist_porta=50
+    dist_parede=60
 
 # 2
 if versao == 2:
@@ -302,10 +406,8 @@ rect(520,70,80,70)
 # 0,0
 eixo()
 
-translate(dist_porta,dist_parede)
-
 # desenha cortina
-cw,ch=painel_giratorio(modulo,repeticao_w,repeticao_h,grid_w,grid_h,gira=painel_mobile,grid=grid,intercalado=1)
+cw,ch=painel_giratorio(modulo,repeticao_w,repeticao_h,grid_w,grid_h,gira=painel_mobile,grid=grid,intercalado=1,xy=(dist_porta,dist_parede))
     
 # escala humana
 if pessoas:
@@ -341,23 +443,33 @@ if pessoas:
 
 # texto entrada
 save()
-translate(770,100)
 w=80
 dist=150
-painel_texto(w,dist,)
-painel_texto(w,dist,(0,w+15))
+x=700
+y=100
+painel_texto(w,dist,(x,y),base=1,txt=['titulo eixo1 en','txt curatorial pt'])
+painel_texto(w,dist,(x,y+w+20),base=1,txt=['titulo eixo1 pt','txt curatorial en'])
 
-painel_texto(w,100,(-420,60),tipo='v')
+painel_texto(w,100,(x-420,y+60),tipo='v',base=1,txt=['txt eixo1 en','txt eixo1 pt'])
 
 restore()
 
 # cortina
-m=60
-painel_giratorio(m,11,1,m+20,m,gira=cortina_mobile,grid=grid,xy=(210,770))
+if versao_cortina == 1:
+    m=60
+    painel_giratorio(m,9,1,m+50,m,gira=cortina_mobile,grid=grid,xy=(160,790),base=1)
+elif versao_cortina == 2:
+    m=150
+    painel_giratorio(m,3,1,m+200,m,gira=cortina_mobile,grid=grid,xy=(255,800),base=1,bh=60)
+elif versao_cortina == 3:
+    m=110
+    janela=180
+    dist=m+241
+    dist=painel_giratorio(m,3,1,dist,m,gira=cortina_mobile,grid=grid,xy=(256,845),base=janela)
 
 # texto obras
-painel_giratorio('obras',gira=txt_mobile,grid=grid,xy=(140,550))
-painel_giratorio('obras',gira=txt_mobile,grid=grid,xy=(870,580))
+painel_giratorio('obras',gira=txt_mobile,grid=grid,xy=(140,550),base=1,tipo='v')
+painel_giratorio('obras',gira=txt_mobile,grid=grid,xy=(870,580),base=1,tipo='v')
 
 restore()
 
@@ -390,18 +502,33 @@ if pessoas:
         escala_humana(randint(100,w),randint(100,h))
 
 # cortina
-m=60
-painel_giratorio(m,13,1,m+20,m,gira=cortina_mobile,grid=grid,xy=(120,90))
+if versao_cortina == 1:
+    m=60
+    painel_giratorio(m,9,1,m+50,m,gira=cortina_mobile,grid=grid,xy=(160,60),base=1)
+elif versao_cortina == 2:
+    m=180
+    painel_giratorio(m,3,1,m+240,m,gira=cortina_mobile,grid=grid,xy=(190,50),base=1,bh=60)
+elif versao_cortina == 3:
+    m=120
+    janela=230
+    dist=m+296
+    dist=painel_giratorio(m,3,1,dist,m,gira=cortina_mobile,grid=grid,xy=(190,-2),base=janela)
 
 # texto obras
-painel_giratorio('obras',gira=txt_mobile,grid=grid,xy=(950,420))
+painel_giratorio('obras',gira=txt_mobile,grid=grid,xy=(950,420),base=1,tipo='v')
 
 # porta
-if porta_fora:
-    painel_giratorio(80,gira=porta_mobile,grid=grid,xy=(-133,346),tipo='v')
-else:
-    # painel_giratorio(80,gira=porta_mobile,grid=grid,xy=(615,670))
-    painel_giratorio(80,gira=porta_mobile,grid=grid,xy=(-30,345),tipo='v')
+translate(-80,290)
+eixo()
+if versao_porta==1:
+    painel_giratorio(80,gira=porta_mobile,grid=grid,xy=(50,55),tipo='v',base=115)
+    
+elif versao_porta==2:
+    painel_giratorio(80,gira=porta_mobile,grid=grid,xy=(-90,55),tipo='v',base=1)
+
+elif versao_porta==3:
+    m=20
+    painel_giratorio(m,repeticao_w=8,repeticao_h=2,grid_w=m,grid_h=m,esp=3,gira=1,grid=grid,intercalado=1,xy=(-50,-10),tipo='v')
 
 restore()
 
@@ -435,23 +562,25 @@ if pessoas:
 # texto
 save()
 w=70
-dist=randint(100,300)
-painel_texto(w,dist,(40,-300-dist),tipo='v')
-dist=randint(150,400)
-painel_texto(w,dist,(140,-900-dist),tipo='v')
+dist=randint(100,200)
+painel_texto(w,dist,(50,-300-dist),tipo='v',base=1,txt=['titulo eixo2 en','txt eixo2 en'])
+dist=randint(150,300)
+painel_texto(w,dist,(150,-900-dist),tipo='v',base=1,txt=['titulo eixo2 pt','txt eixo2 pt'])
 restore()
 
-# porta
-if porta_fora:
-    painel_giratorio(80,gira=porta_mobile,grid=grid,xy=(-142, 51),tipo='v')
-    painel_giratorio(80,gira=porta_mobile,grid=grid,xy=(73, -2336),tipo='v')
+# porta2
+if versao_porta==1:
+    painel_giratorio(80,gira=porta_mobile,grid=grid,xy=(-32, 51),tipo='v',base=110)
 else:
-    painel_giratorio(80,gira=porta_mobile,grid=grid,xy=(-32, 51),tipo='v')
-    painel_giratorio(80,gira=porta_mobile,grid=grid,xy=(-36, -2336),tipo='v')
+    painel_giratorio(80,gira=porta_mobile,grid=grid,xy=(-150, 51),tipo='v',base=1)
 
-# # texto obras
-# painel_giratorio('obras',gira=txt_mobile,grid=grid,xy=(140,550))
-# painel_giratorio('obras',gira=txt_mobile,grid=grid,xy=(870,580))
+# porta1
+translate(-20,-2390)
+eixo()
+if versao_porta==1:
+    painel_giratorio(80,gira=porta_mobile,grid=grid,xy=(-18, 55),tipo='v',base=110)
+else:
+    painel_giratorio(80,gira=porta_mobile,grid=grid,xy=(80, 51),tipo='v',base=1)
 
 restore()
 
@@ -484,21 +613,23 @@ if pessoas:
 # texto
 save()
 w=70
-painel_texto(w,randint(150,400),(-250,190),tipo='v')
-painel_texto(w,randint(100,300),(-150,800),tipo='v')
+painel_texto(w,randint(150,300),(-250,190),tipo='v',base=1,txt=['txt eixo3 en','titulo eixo3 en'])
+painel_texto(w,randint(100,200),(-150,800),tipo='v',base=1,txt=['txt eixo3 pt','titulo eixo3 pt'])
 restore()
 
-# porta
-if porta_fora:
-    painel_giratorio(80,gira=porta_mobile,grid=grid,xy=(76, -107),tipo='v')
-    painel_giratorio(80,gira=porta_mobile,grid=grid,xy=(-156, 1626))
+# porta3
+if versao_porta==1:
+    painel_giratorio(80,gira=porta_mobile,grid=grid,xy=(-15, -105),tipo='v',base=110)
 else:
-    painel_giratorio(80,gira=porta_mobile,grid=grid,xy=(-16, -107),tipo='v')
-    painel_giratorio(80,gira=porta_mobile,grid=grid,xy=(-156, 1726))
+    painel_giratorio(80,gira=porta_mobile,grid=grid,xy=(80, -107),tipo='v',base=1)
 
-# # texto obras
-# painel_giratorio('obras',gira=txt_mobile,grid=grid,xy=(140,550))
-# painel_giratorio('obras',gira=txt_mobile,grid=grid,xy=(870,580))
+# porta2
+translate(-215,1700)
+eixo()
+if versao_porta==1:
+    painel_giratorio(80,gira=porta_mobile,grid=grid,xy=(55, 25),base=110)
+else:
+    painel_giratorio(80,gira=porta_mobile,grid=grid,xy=(55, -90),base=1)
 
 restore()
 

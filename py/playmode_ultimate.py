@@ -2,32 +2,36 @@ import time
 start = time.time()
 
 ##########################################################
-
 import os
 from base import var, dgd, pixel
 
 # caminho da pasta do playmode
 path='/'.join(os.path.abspath(os.getcwd()).split('/')[:-1])
 
+# unidades
+cm = 72/2.54
+mm = cm/10
+
 # _____________________________________
 # _____________________________________
 # _____________________________________
 
 
-pw=1000 # largura da pagina
-ph=300 # altura da pagina
+pw=42*cm # largura da pagina
+ph=60*cm # altura da pagina
 
-faixas=10 # numero de faixas
+faixas=6 # numero de faixas
 
-modulos=list(range(1,20,5)) # modulos/faixa
-modulos=[2**i for i in range(1,6)] # n_modulos/faixa
+# modulos=[1,5,19]
+# modulos=list(range(1,20,5)) # modulos/faixa
+modulos=[2**i for i in range(1,5)] # n_modulos/faixa
 
-caracteres='PLAYMODE'
+caracteres='BH BH'
 
 # cores
 # 'rgbcmykw' / (0-1,0-1,0-1,0-1) / [ (0-1,0-1,0-1,0-1),(0-1,0-1,0-1,0-1) ]
-cores_0='rgbkkk' 
-cores_1=None
+cores_0='rgbk' 
+cores_1='k'
 cores_bg='w'
 
 sw=0.5 # espessura da linha (px) --- versao: com_linhas
@@ -36,26 +40,35 @@ sw=0.5 # espessura da linha (px) --- versao: com_linhas
 # _____________________________________
 # ______legenda imagens
 # 'path' : 'str'
-# 'x' : int / ['c']= centralizado / 'r'=randomico
-# 'y' : int / ['c']= centralizado / 'r'=randomico
-# 'zoom' : float. [1.0] / 'w'= ajusta a largura / 'h'=ajusta a altura
-# 'inverte_cores' : True / [False]
-# 'brilho' : float. [0] (-1,1)
-# 'contraste' : float. [1] (1,3)
-# 'txt' : int (numeros do menu texto)
+# 'x' : int / 'c'= centralizado / 'r'=randomico
+# 'y' : int / 'c'= centralizado / 'r'=randomico
+# 'zoom' : float. / 'w'= ajusta a largura / 'h'=ajusta a altura
+# 'inverte_cores' : True / False
+# 'brilho' : float. (-1,1)
+# 'contraste' : float. (1,3)
 # _____________________________________
 
 imagens={
-    'playmode':{
-        'path':'/Users/alien/x3/x/qdd/playmode/img/1/painel_1.png',
-        'x':'c',
-        'y':'c',
-        'zoom':'w',
-        'inverte_cores':False,
-        'brilho':0,
-        'contraste':1,
-        'txt':0,
-    },
+    
+    # 'playmode':{
+    #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/painel_1.png',
+    #     'x':'c',
+    #     'y':'c',
+    #     'zoom':'w',
+    #     'inverte_cores':False,
+    #     'brilho':0,
+    #     'contraste':1,
+    # },
+
+    # 'playmode2':{
+    #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/painel_1.png',
+    #     'x':'r',
+    #     'y':'c',
+    #     'zoom':randint(2,3),
+    #     'inverte_cores':False,
+    #     'brilho':0,
+    #     'contraste':1,
+    # },
 
     # 'paciencia':{
     #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/paciencia.jpeg',
@@ -65,18 +78,154 @@ imagens={
     #     'inverte_cores':False,
     #     'brilho':0,
     #     'contraste':1,
-    #     'txt':0,
     # },
 
     # 'bh':{
     #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/playmode_2_BodoniSvtyTwoITCTT-BookIta.png',
     #     'x':'r',
     #     'y':'r',
-    #     'zoom':randint(1,6),
+    #     'zoom':randint(3,5),
     #     'inverte_cores':False,
     #     'brilho':0,
     #     'contraste':1,
-    #     'txt':0,
+    # },
+
+    # 'bh2':{
+    #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/playmode_2_BodoniSvtyTwoITCTT-BookIta.png',
+    #     'x':'r',
+    #     'y':'r',
+    #     'zoom':randint(3,6),
+    #     'inverte_cores':False,
+    #     'brilho':0,
+    #     'contraste':1,
+    # },
+
+    'bh4':{
+        'path':'bh.png',
+        'x':'r',
+        'y':'r',
+        'zoom':randint(3,13),
+        'inverte_cores':False,
+        'brilho':0,
+        'contraste':1,
+    },
+
+    # 'bh3':{
+    #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/playmode_2_BodoniSvtyTwoITCTT-BookIta.png',
+    #     'x':'r',
+    #     'y':'r',
+    #     'zoom':'w',
+    #     'inverte_cores':False,
+    #     'brilho':0,
+    #     'contraste':1,
+    # },
+
+    # 'q':{
+    #     'path':'pixel_q_1000.png',
+    #     'x':'c',
+    #     'y':'c',
+    #     'zoom':1.3,
+    #     'inverte_cores':False,
+    #     'brilho':0.00,
+    #     'contraste':1,
+    # },
+    # 'qc':{
+    #     'path':'pixel_q_1000.png',
+    #     'x':'c',
+    #     'y':'c',
+    #     'zoom':1.3,
+    #     'inverte_cores':False,
+    #     'brilho':0.05,
+    #     'contraste':1,
+    # },
+    # 'qt':{
+    #     'path':'pixel_q_1000.png',
+    #     'x':'c',
+    #     'y':'c',
+    #     'zoom':1.3,
+    #     'inverte_cores':False,
+    #     'brilho':0.1,
+    #     'contraste':1,
+    # },
+    # 'qx':{
+    #     'path':'pixel_q_1000.png',
+    #     'x':'c',
+    #     'y':'c',
+    #     'zoom':1.3,
+    #     'inverte_cores':False,
+    #     'brilho':0.2,
+    #     'contraste':1,
+    # },
+    
+    # 'c':{
+    #     'path':'pixel_c_1000.png',
+    #     'x':'r',
+    #     'y':'r',
+    #     'zoom':randint(10,30)/10,
+    #     'inverte_cores':False,
+    #     'brilho':0,
+    #     'contraste':1,
+    # },
+
+    # 't':{
+    #     'path':'pixel_t_1000.png',
+    #     'x':'r',
+    #     'y':'r',
+    #     'zoom':randint(10,30)/10,
+    #     'inverte_cores':False,
+    #     'brilho':0,
+    #     'contraste':1,
+    # },
+    
+    # 'x':{
+    #     'path':'pixel_x_1000.png',
+    #     'x':'c',
+    #     'y':'c',
+    #     'zoom':1.4,
+    #     'inverte_cores':False,
+    #     'brilho':0,
+    #     'contraste':1,
+    # },
+
+
+    # 'q100':{
+    #     'path':'pixel_q_100.png',
+    #     'x':'r',
+    #     'y':'r',
+    #     'zoom':randint(12,50),
+    #     'inverte_cores':False,
+    #     'brilho':0.00,
+    #     'contraste':1,
+    # },
+    
+    # 'c100':{
+    #     'path':'pixel_c_100.png',
+    #     'x':'r',
+    #     'y':'r',
+    #     'zoom':randint(12,40),
+    #     'inverte_cores':False,
+    #     'brilho':0,
+    #     'contraste':1,
+    # },
+
+    # 't100':{
+    #     'path':'pixel_t_100.png',
+    #     'x':'r',
+    #     'y':'r',
+    #     'zoom':randint(12,50),
+    #     'inverte_cores':False,
+    #     'brilho':0,
+    #     'contraste':1,
+    # },
+    
+    # 'x100':{
+    #     'path':'pixel_x_100.png',
+    #     'x':'r',
+    #     'y':'r',
+    #     'zoom':randint(12,50),
+    #     'inverte_cores':False,
+    #     'brilho':0,
+    #     'contraste':1,
     # },
 
 }
@@ -106,10 +255,10 @@ def playmode(vezes,pontos,layer,c=0,ajuste_txt=0,car_c=0):
             if pt[0] in layer:
                 if com_linha:
                     if n==0 and c<len(px_lista):
-                        desenho,car_c=pixel(pt,m,car_c,desenho,base,tipo_txt)
+                        desenho,car_c=pixel(pt,m,car_c,desenho,base,texto)
                     elif n==1 and c>=len(px_lista):
                         pt[0]=pt[0][:-1]
-                        desenho,car_c=pixel(pt,m,car_c,desenho,base,tipo_txt)
+                        desenho,car_c=pixel(pt,m,car_c,desenho,base,texto)
                 else:
                     desenho,car_c=pixel(pt,m,car_c,desenho,base,texto,ajuste_txt)
         if n==1:
@@ -348,7 +497,7 @@ for i in imagens:
         x=(pw-imgw)/2
     elif x == 'r':
         w=imgw-pw
-        x=randint(0,abs(w))
+        x=randint(0,abs(int(w)))
         if w>0:
             x=x*-1
 
@@ -356,7 +505,7 @@ for i in imagens:
         y=(ph-imgh)/2
     elif y == 'r':
         h=imgh-ph
-        y=randint(0,abs(h))
+        y=randint(0,abs(int(h)))
         if h>0:
             y=y*-1
 
@@ -424,6 +573,10 @@ else:
         m=fw/nm
         m0=m/2 # ponto central do modulo para verificacao da cor
         
+        if f%2:
+            fill(1,0,1)
+            rect(f*fw,ph,fw,fw)
+        
         # imagem
         img_i=choice(list(imagens.keys()))
         img=imagens[img_i]['img']
@@ -444,14 +597,6 @@ else:
             bg=cor(cores_bg,cor0)
             fill(*bg)
             rect(f*fw,0,fw,ph)
-        
-        # tipo texto
-        txt=imagens[img_i]['txt']
-        if txt:
-            tipo_txt=txt
-        else:
-            tipo_txt=texto
-            
         
         # formas
         base=bases[nm]
