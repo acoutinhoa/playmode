@@ -16,21 +16,32 @@ mm = cm/10
 # _____________________________________
 # _____________________________________
 
+fh=4
 
-pw=42*cm # largura da pagina
-ph=60*cm # altura da pagina
+# faixas=6 # numero de faixas
+faixas=2 # numero de faixas do painel de entrada
 
-faixas=6 # numero de faixas
+# # cartaz
+# pw=42*cm
+# ph=60*cm
+
+# # painel entrada
+# pw=faixas*20
+# ph=250
+
+# texto abertura
+pw=800
+ph=440
 
 # modulos=[1,5,19]
 # modulos=list(range(1,20,5)) # modulos/faixa
-modulos=[2**i for i in range(1,5)] # n_modulos/faixa
+modulos=[2**i for i in range(0,8)] # n_modulos/faixa
 
-caracteres='BH BH'
+caracteres='PLAYMODE PLAYMODE'
 
 # cores
 # 'rgbcmykw' / (0-1,0-1,0-1,0-1) / [ (0-1,0-1,0-1,0-1),(0-1,0-1,0-1,0-1) ]
-cores_0='rgbk' 
+cores_0='k' 
 cores_1='k'
 cores_bg='w'
 
@@ -60,12 +71,23 @@ imagens={
     #     'contraste':1,
     # },
 
-    # 'playmode2':{
-    #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/painel_1.png',
+    'playmode_abertura_4':{
+        'path':'/Users/alien/x3/x/qdd/playmode/img/1/painel_1.png',
+        'x':0,
+        'y' : -99.22566995768688,
+        'zoom' : 'w',
+        'inverte_cores':False,
+        'brilho':0,
+        'contraste':1,
+    },
+
+
+    # 'qctx':{
+    #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/painel_3.png',
     #     'x':'r',
-    #     'y':'c',
-    #     'zoom':randint(2,3),
-    #     'inverte_cores':False,
+    #     'y':'r',
+    #     'zoom':randint(1,4),
+    #     'inverte_cores':True,
     #     'brilho':0,
     #     'contraste':1,
     # },
@@ -84,7 +106,7 @@ imagens={
     #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/playmode_2_BodoniSvtyTwoITCTT-BookIta.png',
     #     'x':'r',
     #     'y':'r',
-    #     'zoom':randint(3,5),
+    #     'zoom':randint(3,10)/3,
     #     'inverte_cores':False,
     #     'brilho':0,
     #     'contraste':1,
@@ -100,15 +122,15 @@ imagens={
     #     'contraste':1,
     # },
 
-    'bh4':{
-        'path':'bh.png',
-        'x':'r',
-        'y':'r',
-        'zoom':randint(3,13),
-        'inverte_cores':False,
-        'brilho':0,
-        'contraste':1,
-    },
+    # 'bh4':{
+    #     'path':'bh.png',
+    #     'x':'r',
+    #     'y':'r',
+    #     'zoom':randint(3,13),
+    #     'inverte_cores':False,
+    #     'brilho':0,
+    #     'contraste':1,
+    # },
 
     # 'bh3':{
     #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/playmode_2_BodoniSvtyTwoITCTT-BookIta.png',
@@ -202,7 +224,7 @@ imagens={
     #     'path':'pixel_c_100.png',
     #     'x':'r',
     #     'y':'r',
-    #     'zoom':randint(12,40),
+    #     'zoom':randint(10,20),
     #     'inverte_cores':False,
     #     'brilho':0,
     #     'contraste':1,
@@ -222,7 +244,17 @@ imagens={
     #     'path':'pixel_x_100.png',
     #     'x':'r',
     #     'y':'r',
-    #     'zoom':randint(12,50),
+    #     'zoom':randint(10,20),
+    #     'inverte_cores':False,
+    #     'brilho':0,
+    #     'contraste':1,
+    # },
+
+    # 'c_painel':{
+    #     'path':'pixel_c_100.png',
+    #     'x' : -476,
+    #     'y' : -1307,
+    #     'zoom' : 18,
     #     'inverte_cores':False,
     #     'brilho':0,
     #     'contraste':1,
@@ -311,8 +343,11 @@ def formas(caracteres,m,fs=0,fonte='CourierNewPSMT'):
         elif c == 'x':
             c='xis'
             n=6
-            bezier.polygon((x+m/n,y),(x+m,y+m-m/n),(x+m-m/n,y+m),(x,y+m/n))
-            bezier.polygon((x,y+m-m/n),(x+m-m/n,y),(x+m,y+m/n),(x+m/n,y+m))
+            x1=BezierPath()
+            x2=BezierPath()
+            x1.polygon((x+m/n,y),(x+m,y+m-m/n),(x+m-m/n,y+m),(x,y+m/n))
+            x2.polygon((x,y+m-m/n),(x+m-m/n,y),(x+m,y+m/n),(x+m/n,y+m))
+            bezier=x1.union(x2)
         base[c]=bezier
     # caracteres
     for c in caracteres:
@@ -470,6 +505,10 @@ if not ph:
     ph=h
 print('pagina = %spx x %spx' % (pw,ph) )
 
+
+# faixas horizontais
+ph=ph/fh
+
 for i in imagens:
     i=imagens[i]
     
@@ -535,10 +574,10 @@ for i in imagens:
 if ver==1:
     for i in imagens:
         img=imagens[i]
-        newPage(pw,ph)
-        fill(1,0,0)
-        rect(0,0,pw,ph)
-        image(img['img'],(0,0))
+        newPage(pw,ph*fh)
+        for j in range(fh):
+            image(img['img'],(0,0))
+            translate(0,ph)
 
 else:
     # largura da faixa
@@ -561,73 +600,77 @@ else:
         ordem=px_lista+['']
     print('ordem =',ordem)
 
-    newPage(pw,ph)
+    newPage(pw,ph*fh)
 
     if bg and not faixas_randomicas:
         fill(*bg)
-        rect(0,0,pw,ph)
+        rect(0,0,pw,ph*fh)
     
-    car_c=0
-    for f in range(faixas):
-        nm=choice(modulos)
-        m=fw/nm
-        m0=m/2 # ponto central do modulo para verificacao da cor
+    for jh in range(fh):
+        car_c=0
+        for f in range(faixas):
+            nm=choice(modulos)
+            m=fw/nm
+            m0=m/2 # ponto central do modulo para verificacao da cor
+                
+            # imagem
+            img_i=choice(list(imagens.keys()))
+            img=imagens[img_i]['img']
         
-        if f%2:
-            fill(1,0,1)
-            rect(f*fw,ph,fw,fw)
+            print()
+            print('>>> faixa', f)
+            print('imagem =', img_i)
+            print('n_modulos =', nm)
         
-        # imagem
-        img_i=choice(list(imagens.keys()))
-        img=imagens[img_i]['img']
-        
-        print()
-        print('>>> faixa', f)
-        print('imagem =', img_i)
-        print('n_modulos =', nm)
-        
-        # cores
-        if faixas_randomicas:
-            cor0=cor(cores_0)
-            if degrade:
-                cor1=cor(cores_1)
-            else:
-                cor1=cor0
-        if bg_randomico:
-            bg=cor(cores_bg,cor0)
-            fill(*bg)
-            rect(f*fw,0,fw,ph)
-        
-        # formas
-        base=bases[nm]
-        
-        # cria lista de pontos
-        pontos_x=[f*fw+m0+m*x for x in range(nm)]
-        pontos_y=[m0*(y+1) for y in range(round(ph/m0)) if not y%2]
-        pontos_y.reverse() # inverte a lista vertical para desenha de cima para baixo
-
-        pontos=[]
-        for j,y in enumerate(pontos_y):
-            for i,x in enumerate(pontos_x):
-                cinza=imagePixelColor(img,(x,y))
-                if cinza==None:
-                    cinza=1
+            # cores
+            if faixas_randomicas:
+                cor0=cor(cores_0)
+                if degrade:
+                    cor1=cor(cores_1)
                 else:
-                    cinza=cinza[0]
-                car=int(cinza//(1/len(ordem)))
-                if car==len(ordem):
-                    car=len(ordem)-1
-                car=ordem[car]
-                pontos.append([car,x,y,i,j])
-
-        save()
-        translate(-m0,-m0)
-
-        for c,camada in enumerate(ordem[:-1]):
-            car_c=playmode(vezes,pontos,[camada,],c,ajuste_txt,car_c=car_c)
+                    cor1=cor0
+            if bg_randomico:
+                bg=cor(cores_bg,cor0)
+                fill(*bg)
+                rect(f*fw,0,fw,ph)
         
-        car_c+=nm
-        restore()
+            # formas
+            base=bases[nm]
+        
+            # cria lista de pontos
+            pontos_x=[f*fw+m0+m*x for x in range(nm)]
+            pontos_y=[m0*(y+1) for y in range(round(ph/m0)) if not y%2]
+            pontos_y.reverse() # inverte a lista vertical para desenha de cima para baixo
+
+            pontos=[]
+            for j,y in enumerate(pontos_y):
+                for i,x in enumerate(pontos_x):
+                    cinza=imagePixelColor(img,(x,y))
+                    if cinza==None:
+                        cinza=1
+                    else:
+                        cinza=cinza[0]
+                    car=int(cinza//(1/len(ordem)))
+                    if car==len(ordem):
+                        car=len(ordem)-1
+                    car=ordem[car]
+                    pontos.append([car,x,y,i,j])
+
+            save()
+            translate(-m0,-m0)
+
+            for c,camada in enumerate(ordem[:-1]):
+                car_c=playmode(vezes,pontos,[camada,],c,ajuste_txt,car_c=car_c)
+        
+            car_c+=nm
+            restore()
+            
+            if jh==fh-1 and f%2:
+                fill(1,0,1)
+                rect(f*fw,ph,fw,fw)
+
+        translate(0,ph)
+
 
 # grid
 if grid:
@@ -635,15 +678,15 @@ if grid:
     stroke(0)
     for i in range(faixas):
         if i:
-            line((fw*i,0),(fw*i,ph))
+            line((fw*i,0),(fw*i,ph*fh))
 
 ##########################################################
 
 print('\n---------------------')
 for img in imagens:
-    print("'%s' :" % img)
+    print("    '%s' :" % img)
     for i in imagens[img]:
-        print("    '%s' : %s," % (i,str(imagens[img][i])))
+        print("        '%s' : %s," % (i,str(imagens[img][i])))
     print()
 print('---------------------')
 

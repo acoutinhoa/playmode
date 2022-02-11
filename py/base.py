@@ -106,3 +106,34 @@ def pixel(ponto,m,car_c,bezier,formas,texto,ajuste_txt=0):
 
     return bezier,car_c
 
+def cor(cores,cor_repetida=None):
+    if type(cores) == type(''):
+        c_lista=[c for c in cores]
+        c=choice(c_lista)
+        if c == 'r':
+            c=(1,0,0)
+        elif c == 'g':
+            c=(0,1,0)
+        elif c == 'b':
+            c=(0,0,1)
+        elif c == 'c':
+            c=(0,1,1)
+        elif c == 'm':
+            c=(1,0,1)
+        elif c == 'y':
+            c=(1,1,0)
+        elif c == 'k':
+            c=(0,0,0)
+        elif c == 'w':
+            c=(1,1,1)
+        else:
+            c='cor nao definida'
+        
+        while c == cor_repetida:
+            c=cor(cores,cor_repetida)
+    elif type(cores) == []:
+        c=choice(cores)
+    else:
+        c=cores
+        
+    return c

@@ -310,8 +310,8 @@ zoom=var(zoom,1,lista=areas,tipo='lista')
 
 # proposta
 versao=var(painel,3,lista=possibilidades,tipo='lista')
-versao_cortina=var(cortina,lista=possibilidades,tipo='lista')
-versao_porta=var(porta,lista=possibilidades,tipo='lista')
+versao_cortina=var(cortina,3,lista=possibilidades,tipo='lista')
+versao_porta=var(porta,3,lista=possibilidades,tipo='lista')
 
 # planta
 planta = os.path.join(path_img,'_planta.pdf')
@@ -528,7 +528,7 @@ elif versao_porta==2:
 
 elif versao_porta==3:
     m=20
-    painel_giratorio(m,repeticao_w=8,repeticao_h=2,grid_w=m,grid_h=m,esp=3,gira=1,grid=grid,intercalado=1,xy=(-50,-10),tipo='v')
+    painel_giratorio(m,repeticao_w=8,repeticao_h=2,grid_w=m,grid_h=m,esp=3,gira=1,grid=grid,intercalado=1,xy=(-60,-15),tipo='v')
 
 restore()
 
