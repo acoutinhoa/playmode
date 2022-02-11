@@ -40,8 +40,8 @@ def medidas(painel='',keys=False):
             'h':220,
             'margem':8,
             'dist':4,
-            'base':randint(20,80),
-            'b2':randint(20,80),
+            'base':randint(20,60),
+            'b2':randint(20,60),
             'suporte':'suspenso',
             },
         'painel_corredor':{
@@ -116,13 +116,7 @@ paineis_obras = [
 ]
 
 
-def tecido(largura, altura, base, b2,gira=0,b2c=(0.7,),img=None):
-    if img:
-        im = ImageObject()
-        with im:
-            size(largura,altura-base)
-            image(img,(-l*largura,-base))
-
+def tecido(largura, altura, base, b2,gira=0,b2c=(0.93,),img=None):
     save()
     translate(largura/2,0)
     x=-largura/2
@@ -149,7 +143,7 @@ def tecido(largura, altura, base, b2,gira=0,b2c=(0.7,),img=None):
         fill(1)
     
     if img:
-        image(im,(x,base))
+        image(img,(x,base))
     else:
         rect(x,base,largura,altura-base)
     restore()
@@ -315,6 +309,7 @@ Variable([
     dict(name = "alturas", ui = "CheckBox", args = dict(value = False)),
     dict(name = "gira", ui = "CheckBox", args = dict(value = True)),
     dict(name = "imagem", ui = "CheckBox", args = dict(value = True)),
+    dict(name = "estampa", ui = "CheckBox", args = dict(value = False)),
 ], globals())
     
 fonte=var(fonte,'HelveticaNeue',lista=fontes_do_pc)
@@ -365,26 +360,12 @@ elif tipo==7:
 
 ############################
 
-# painel entrada
-imgs_entrada=[
-    # '0_c_01.pdf',
-    '0_c_02.pdf',
-    # '0_pm_01.pdf',    
-    # '0_pm_02.pdf',    
-    '0_pm_03.pdf',    
-    # '0_pm_04.pdf',
-    # 'grafico',
-    # 'playmode',
-]
-
-############################
-
-
 e_pg=1
 newPage(pw*e_pg,ph*e_pg)
 scale(e_pg)
 
-fill(.8)
+fundo=(0.8,)
+fill(*fundo)
 rect(0,0,pw,ph)
 
 # meio + alturas
@@ -482,17 +463,28 @@ for i,info in enumerate(paineis):
         ################################################
         #tecido
         if tipo==7:
+
+            # painel entrada
+            imgs_entrada=[
+                'c_01',
+                # 'c_02',
+                'pm_01',    
+                'pm_02',    
+                # 'pm_03',    
+                # 'pm_04',
+                # 'grafico',
+                # 'playmode',
+            ]
+
             save()
             if imagem:
                 img=choice(imgs_entrada)
                 if img=='grafico':
                     pass
-                    
-                
                 elif img=='playmode':
                     pass
                 else:
-                    img=os.path.join(path_img,img)
+                    img=os.path.join(path,'img/txt/entrada/%s/%s.pdf' % (img,l))
                     tecido(largura, altura, base, b2, gira=g, b2c=cor('b'),img=img)
             else:
                 for n in range(2):
@@ -506,20 +498,39 @@ for i,info in enumerate(paineis):
 
         #grafico
         if tipo==0:
-            grafico=os.path.join(path_img,'eixo0_0%s_%s.pdf' % (randint(1,4),l))
-            print(grafico)
-            gw,gh=imageSize(grafico)
-    
-            eg=largura/gw
-            save()
-            blendMode('multiply')
-            translate(0,185)
-            scale(eg)
-            for i in range(1):
-                grafico=os.path.join(path_img,'eixo0_0%s_%s.pdf' % (randint(1,4),l))
+            if estampa:
+                # estampa
+                estampa=1
+                grafico=os.path.join(path_img,'0/estampa_%s.pdf' % (randint(1,7)))
+                print(grafico)
+                gw,gh=imageSize(grafico)
+                eg=largura/gw
+
+                save()
+                blendMode('multiply')
+                translate(0,base)
+                scale(eg)
                 image(grafico,(0,0))
-                translate(0,gh/2.5)
-            restore()
+                restore()
+
+            else:
+                # grafico em cima
+                grafico=os.path.join(path_img,'0/%s.pdf' % (randint(1,14)))
+                print(grafico)
+                gw,gh=imageSize(grafico)
+                eg=largura/gw
+                imh=30
+                save()
+                blendMode('multiply')
+                translate(0,altura-imh)
+                scale(eg)
+                image(grafico,(0,0))
+                restore()
+            
+            
+            # limpa resto de imagem rara
+            fill(*fundo)
+            rect(-1,altura+.5,largura+2,ph-altura)
     
 
         #texto
@@ -555,8 +566,17 @@ for i,info in enumerate(paineis):
             tw,th=textSize(txt, width=tw)
             th=(th/c)/2
             
+            twt,tht=textSize(tit, width=tw)
+            
             save()
             translate(margem,meio)
+            
+            if estampa:
+                me=14
+                save()
+                fill(1)
+                rect(-margem,-th-me,largura,2*th+tht+2*me)
+                restore()
             alinha=['left','right']
             for n in range(c):
                 txt=textBox(txt,((tw+ec)*n,-th,tw,2*th),align=alinha[n%2])
@@ -574,10 +594,10 @@ for i,info in enumerate(paineis):
 
 # modulor
 blendMode('darken')
-for i in range(randint(1,2)):
+for i in range(randint(1,1)):
     modulor = os.path.join(path,'img/escala/modulor%s.pdf' % randint(0,3))
     save()
-    translate(randint(120,pw-120),0)
+    translate(randint(220,pw-120),0)
     scale(choice([-1,1]),1)
     image(modulor,(0,0))
     restore()

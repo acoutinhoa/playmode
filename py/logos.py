@@ -70,7 +70,7 @@ m=h/3
 h_linha=6*m
 
 if n_linhas == '1':
-    pw=105*m
+    pw=96*m
 elif n_linhas == '3':
     pw=44*m
 ph=len(linhas)*h_linha+2*m

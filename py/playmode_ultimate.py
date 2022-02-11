@@ -16,10 +16,10 @@ mm = cm/10
 # _____________________________________
 # _____________________________________
 
-fh=4
+fh=1
 
 # faixas=6 # numero de faixas
-faixas=2 # numero de faixas do painel de entrada
+faixas=10 # numero de faixas do painel de entrada
 
 # # cartaz
 # pw=42*cm
@@ -29,13 +29,21 @@ faixas=2 # numero de faixas do painel de entrada
 # pw=faixas*20
 # ph=250
 
-# texto abertura
-pw=800
-ph=440
+# # texto abertura
+# pw=800
+# ph=2200
+# # ph=350
+
+# logo
+pw=1000
+ph=300
+# ph=350
+
 
 # modulos=[1,5,19]
 # modulos=list(range(1,20,5)) # modulos/faixa
-modulos=[2**i for i in range(0,8)] # n_modulos/faixa
+# modulos=[1,]+[2**i for i in range(0,6)] # n_modulos/faixa
+modulos=[2**i for i in range(0,6)] # n_modulos/faixa
 
 caracteres='PLAYMODE PLAYMODE'
 
@@ -61,26 +69,35 @@ sw=0.5 # espessura da linha (px) --- versao: com_linhas
 
 imagens={
     
-    # 'playmode':{
-    #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/painel_1.png',
-    #     'x':'c',
-    #     'y':'c',
-    #     'zoom':'w',
-    #     'inverte_cores':False,
-    #     'brilho':0,
-    #     'contraste':1,
-    # },
-
-    'playmode_abertura_4':{
+    'playmode logo':{
         'path':'/Users/alien/x3/x/qdd/playmode/img/1/painel_1.png',
-        'x':0,
-        'y' : -99.22566995768688,
-        'zoom' : 'w',
+        'x':'c',
+        'y':'c',
+        'zoom':'w',
         'inverte_cores':False,
         'brilho':0,
         'contraste':1,
     },
 
+    # 'playmode_abertura_3':{
+    #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/painel_1.png',
+    #     'x':0,
+    #     'y' : -95.22566995768688,
+    #     'zoom' : 'w',
+    #     'inverte_cores':False,
+    #     'brilho':0,
+    #     'contraste':1,
+    # },
+
+    # 'playmode_abertura_2':{
+    #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/painel_1.png',
+    #     'x':0,
+    #     'y' : 'c',
+    #     'zoom' : 'w',
+    #     'inverte_cores':False,
+    #     'brilho':0,
+    #     'contraste':1,
+    # },
 
     # 'qctx':{
     #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/painel_3.png',
@@ -667,7 +684,7 @@ else:
             
             if jh==fh-1 and f%2:
                 fill(1,0,1)
-                rect(f*fw,ph,fw,fw)
+                rect(f*fw,ph+10,fw,fw)
 
         translate(0,ph)
 
