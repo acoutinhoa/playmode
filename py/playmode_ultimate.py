@@ -16,42 +16,51 @@ mm = cm/10
 # _____________________________________
 # _____________________________________
 
-fh=1
+repete_x=3
+repete_y=1
 
-# faixas=6 # numero de faixas
-faixas=10 # numero de faixas do painel de entrada
+ajuste_texto=0
+
+# # logo
+# pw=1000
+# ph=300
+# faixas=10
+# modulos=[2**i for i in range(0,6)] # n_modulos/faixa
 
 # # cartaz
 # pw=42*cm
 # ph=60*cm
+# faixas=4
+# modulos=[2**i for i in range(1,7)] # n_modulos/faixa
 
 # # painel entrada
-# pw=faixas*20
-# ph=250
+# faixas=19
+# pw=faixas*200
+# ph=2500
+# modulos=[2**i for i in range(0,6)] # n_modulos/faixa
 
 # # texto abertura
 # pw=800
 # ph=2200
 # # ph=350
-
-# logo
-pw=1000
-ph=300
-# ph=350
-
-
-# modulos=[1,5,19]
-# modulos=list(range(1,20,5)) # modulos/faixa
+# faixas=2
 # modulos=[1,]+[2**i for i in range(0,6)] # n_modulos/faixa
-modulos=[2**i for i in range(0,6)] # n_modulos/faixa
+
+# cortina
+faixas=9
+pw=600*faixas
+ph=2500
+modulos=[2**i for i in range(1,6)] # n_modulos/faixa
+
 
 caracteres='PLAYMODE PLAYMODE'
 
 # cores
 # 'rgbcmykw' / (0-1,0-1,0-1,0-1) / [ (0-1,0-1,0-1,0-1),(0-1,0-1,0-1,0-1) ]
-cores_0='k' 
-cores_1='k'
-cores_bg='w'
+cor_0='k' 
+cor_1='k'
+cor_bg='w'
+cor_txt='b'
 
 sw=0.5 # espessura da linha (px) --- versao: com_linhas
 
@@ -69,15 +78,25 @@ sw=0.5 # espessura da linha (px) --- versao: com_linhas
 
 imagens={
     
-    'playmode logo':{
-        'path':'/Users/alien/x3/x/qdd/playmode/img/1/painel_1.png',
-        'x':'c',
-        'y':'c',
-        'zoom':'w',
-        'inverte_cores':False,
-        'brilho':0,
-        'contraste':1,
-    },
+    # 'playmode logo':{
+    #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/painel_1.png',
+    #     'x':'c',
+    #     'y':'c',
+    #     'zoom':'w',
+    #     'inverte_cores':False,
+    #     'brilho':0,
+    #     'contraste':1,
+    # },
+
+    # 'qctx logo':{
+    #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/painel_3.png',
+    #     'x':'r',
+    #     'y':'c',
+    #     'zoom':'w',
+    #     'inverte_cores':False,
+    #     'brilho':0,
+    #     'contraste':1,
+    # },
 
     # 'playmode_abertura_3':{
     #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/painel_1.png',
@@ -89,7 +108,7 @@ imagens={
     #     'contraste':1,
     # },
 
-    # 'playmode_abertura_2':{
+    # 'playmode_entrada_3':{
     #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/painel_1.png',
     #     'x':0,
     #     'y' : 'c',
@@ -99,31 +118,21 @@ imagens={
     #     'contraste':1,
     # },
 
-    # 'qctx':{
-    #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/painel_3.png',
+    # 'bh cortina':{
+    #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/playmode_2_BodoniSvtyTwoITCTT-BookIta.png',
     #     'x':'r',
     #     'y':'r',
-    #     'zoom':randint(1,4),
-    #     'inverte_cores':True,
-    #     'brilho':0,
-    #     'contraste':1,
-    # },
-
-    # 'paciencia':{
-    #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/paciencia.jpeg',
-    #     'x':'c',
-    #     'y':'c',
-    #     'zoom':3,
+    #     'zoom':randint(20,60),
     #     'inverte_cores':False,
     #     'brilho':0,
     #     'contraste':1,
     # },
 
-    # 'bh':{
-    #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/playmode_2_BodoniSvtyTwoITCTT-BookIta.png',
-    #     'x':'r',
-    #     'y':'r',
-    #     'zoom':randint(3,10)/3,
+    # 'playmode_cortina_3':{
+    #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/painel_1.png',
+    #     'x':0,
+    #     'y' : -95.22566995768688,
+    #     'zoom' : 'w',
     #     'inverte_cores':False,
     #     'brilho':0,
     #     'contraste':1,
@@ -139,134 +148,6 @@ imagens={
     #     'contraste':1,
     # },
 
-    # 'bh4':{
-    #     'path':'bh.png',
-    #     'x':'r',
-    #     'y':'r',
-    #     'zoom':randint(3,13),
-    #     'inverte_cores':False,
-    #     'brilho':0,
-    #     'contraste':1,
-    # },
-
-    # 'bh3':{
-    #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/playmode_2_BodoniSvtyTwoITCTT-BookIta.png',
-    #     'x':'r',
-    #     'y':'r',
-    #     'zoom':'w',
-    #     'inverte_cores':False,
-    #     'brilho':0,
-    #     'contraste':1,
-    # },
-
-    # 'q':{
-    #     'path':'pixel_q_1000.png',
-    #     'x':'c',
-    #     'y':'c',
-    #     'zoom':1.3,
-    #     'inverte_cores':False,
-    #     'brilho':0.00,
-    #     'contraste':1,
-    # },
-    # 'qc':{
-    #     'path':'pixel_q_1000.png',
-    #     'x':'c',
-    #     'y':'c',
-    #     'zoom':1.3,
-    #     'inverte_cores':False,
-    #     'brilho':0.05,
-    #     'contraste':1,
-    # },
-    # 'qt':{
-    #     'path':'pixel_q_1000.png',
-    #     'x':'c',
-    #     'y':'c',
-    #     'zoom':1.3,
-    #     'inverte_cores':False,
-    #     'brilho':0.1,
-    #     'contraste':1,
-    # },
-    # 'qx':{
-    #     'path':'pixel_q_1000.png',
-    #     'x':'c',
-    #     'y':'c',
-    #     'zoom':1.3,
-    #     'inverte_cores':False,
-    #     'brilho':0.2,
-    #     'contraste':1,
-    # },
-    
-    # 'c':{
-    #     'path':'pixel_c_1000.png',
-    #     'x':'r',
-    #     'y':'r',
-    #     'zoom':randint(10,30)/10,
-    #     'inverte_cores':False,
-    #     'brilho':0,
-    #     'contraste':1,
-    # },
-
-    # 't':{
-    #     'path':'pixel_t_1000.png',
-    #     'x':'r',
-    #     'y':'r',
-    #     'zoom':randint(10,30)/10,
-    #     'inverte_cores':False,
-    #     'brilho':0,
-    #     'contraste':1,
-    # },
-    
-    # 'x':{
-    #     'path':'pixel_x_1000.png',
-    #     'x':'c',
-    #     'y':'c',
-    #     'zoom':1.4,
-    #     'inverte_cores':False,
-    #     'brilho':0,
-    #     'contraste':1,
-    # },
-
-
-    # 'q100':{
-    #     'path':'pixel_q_100.png',
-    #     'x':'r',
-    #     'y':'r',
-    #     'zoom':randint(12,50),
-    #     'inverte_cores':False,
-    #     'brilho':0.00,
-    #     'contraste':1,
-    # },
-    
-    # 'c100':{
-    #     'path':'pixel_c_100.png',
-    #     'x':'r',
-    #     'y':'r',
-    #     'zoom':randint(10,20),
-    #     'inverte_cores':False,
-    #     'brilho':0,
-    #     'contraste':1,
-    # },
-
-    # 't100':{
-    #     'path':'pixel_t_100.png',
-    #     'x':'r',
-    #     'y':'r',
-    #     'zoom':randint(12,50),
-    #     'inverte_cores':False,
-    #     'brilho':0,
-    #     'contraste':1,
-    # },
-    
-    # 'x100':{
-    #     'path':'pixel_x_100.png',
-    #     'x':'r',
-    #     'y':'r',
-    #     'zoom':randint(10,20),
-    #     'inverte_cores':False,
-    #     'brilho':0,
-    #     'contraste':1,
-    # },
-
     # 'c_painel':{
     #     'path':'pixel_c_100.png',
     #     'x' : -476,
@@ -276,6 +157,75 @@ imagens={
     #     'brilho':0,
     #     'contraste':1,
     # },
+
+    # 'obra_bandeira':{
+    #     'path':'/Users/alien/x3/x/qdd/playmode/img/obras/bandeira.jpeg',
+    #     'x' : -randint(0,700),
+    #     'y' : 'r',
+    #     'zoom' : randint(25,30)/10,
+    #     'inverte_cores':False,
+    #     'brilho':-0.0,
+    #     'contraste':1,
+
+    # 'obra_bandeira_2x1_cartaz':{
+    #     'path':'/Users/alien/x3/x/qdd/playmode/img/obras/bandeira.jpeg',
+    #     'x' : 'r',
+    #     'y' : 'r',
+    #     'zoom' : randint(13,30)/10,
+    #     'inverte_cores':False,
+    #     'brilho':-0.0,
+    #     'contraste':1,
+    # },
+
+    # 'obra_cubo_2x1_cartaz':{
+    #     'path':'/Users/alien/x3/x/qdd/playmode/img/obras/cubo.jpeg',
+    #     'x' : 'r',
+    #     'y' : 'r',
+    #     'zoom' : randint(20,40)/10,
+    #     'inverte_cores':False,
+    #     'brilho':-0.10,
+    #     'contraste':1,
+    # },
+
+    'obra_bandeira_2x1_cortina':{
+        'path':'/Users/alien/x3/x/qdd/playmode/img/obras/bandeira.jpeg',
+        'x' : 'r',
+        'y' : 'r',
+        'zoom' : randint(30,50)/10,
+        'inverte_cores':False,
+        'brilho':-0.0,
+        'contraste':1,
+    },
+
+    # 'obra_cubo_2x1_cortina':{
+    #     'path':'/Users/alien/x3/x/qdd/playmode/img/obras/cubo.jpeg',
+    #     'x' : 'r',
+    #     'y' : 'r',
+    #     'zoom' : randint(60,90)/10,
+    #     'inverte_cores':False,
+    #     'brilho':-0.20,
+    #     'contraste':1,
+    # },
+
+    # 'obra_triangulo_2x1_cortina':{
+    #     'path':'/Users/alien/x3/x/qdd/playmode/img/obras/triangulo.jpeg',
+    #     'x' : 'r',
+    #     'y' : 'r',
+    #     'zoom' : randint(40,70)/10,
+    #     'inverte_cores':False,
+    #     'brilho':-0.0,
+    #     'contraste':1,
+    # },
+
+    'obra_taca_2x1_cortina':{
+        'path':'/Users/alien/x3/x/qdd/playmode/img/obras/taca.jpeg',
+        'x' : 'r',
+        'y' : 'r',
+        'zoom' : randint(20,40)/10,
+        'inverte_cores':False,
+        'brilho':-0.10,
+        'contraste':1,
+    },
 
 }
 
@@ -313,7 +263,11 @@ def playmode(vezes,pontos,layer,c=0,ajuste_txt=0,car_c=0):
         if n==1:
             desenho.removeOverlap()
         if ver==0:
-            cor_=dgd(cor0,cor1,c,len(ordem)-1)
+            if txt_colorido and layer[0] not in ps2:
+                cor_=cor(cor_txt)
+            else:
+                cor_=dgd(cor0,cor1,c,len(ordem)-1)
+                
             if n==0:
                 fill(*cor_)
                 stroke(None)
@@ -442,33 +396,32 @@ Variable([
     dict(name="degrade", ui="CheckBox", args=dict(value=False)),
     dict(name="faixas_randomicas", ui="CheckBox", args=dict(value=False)),
     dict(name="bg_randomico", ui="CheckBox", args=dict(value=False)),
+    dict(name="txt_colorido", ui="CheckBox", args=dict(value=False)),
 ], globals())
 
 #formas geometricas
+ps1=[quadrado,circulo,triangulo,xis]
+ps2=['quadrado','circulo','triangulo','xis',]
+
 px_lista=[]
-if quadrado:
-    px_lista.append('quadrado')
-if circulo:
-    px_lista.append('circulo')
-if triangulo:
-    px_lista.append('triangulo')
-if xis:
-    px_lista.append('xis')
+for i,botao in enumerate(ps1):
+    if botao:
+        px_lista.append(ps2[i])
 
 # cores
-cor0=cor(cores_0)
+cor0=cor(cor_0)
 if degrade:
-    cor1=cor(cores_1)
+    cor1=cor(cor_1)
 else:
     cor1=cor0
-bg=cor(cores_bg,cor0)
+bg=cor(cor_bg,cor0)
 
 # fonte
 fonte_px=var(fonte,'CourierNewPS-BoldMT', lista=fontes_do_pc)
 
 #caracteres
 texto=var(texto,lista=tipos_txt,tipo='lista')
-ajuste_txt=0
+ajuste_txt=ajuste_texto
 
 if texto>1 and caracteres:
     if texto==4:
@@ -490,48 +443,65 @@ print('bg =', bg)
 print('texto =', tipos_txt[texto])
 ##########################################################
 
-# imagens
-w=0
-h=0
-for i in imagens:
-    i=imagens[i]
+# # # # # # imagens
+# # # # # w=0
+# # # # # h=0
+# # # # # for i in imagens:
+# # # # #     i=imagens[i]
 
-    img=i['path']
-    e=i['zoom']
+# # # # #     img=i['path']
+# # # # #     e=i['zoom']
     
-    if len(img.split('/')) == 1:
-        img=os.path.join(path_img,img)
-        i['path']=img
+# # # # #     if len(img.split('/')) == 1:
+# # # # #         img=os.path.join(path_img,img)
+# # # # #         i['path']=img
         
-    imgw,imgh=imageSize(img)
-    i['w']=imgw
-    i['h']=imgh
+# # # # #     imgw,imgh=imageSize(img)
+# # # # #     i['w']=imgw
+# # # # #     i['h']=imgh
 
-    if e not in ['w','h']:
-        imgw=imgw*e
-        imgh=imgh*e
-        if not pw and imgw > w:
-            w=imgw
-        if not ph and imgh > h:
-            h=imgh
+# # # # #     if e not in ['w','h']:
+# # # # #         imgw=imgw*e
+# # # # #         imgh=imgh*e
+# # # # #         if not pw and imgw > w:
+# # # # #             w=imgw
+# # # # #         if not ph and imgh > h:
+# # # # #             h=imgh
 
-# define pagina
-if not pw:
-    pw=w
-if not ph:
-    ph=h
-print('pagina = %spx x %spx' % (pw,ph) )
+# # # # # # define pagina
+# # # # # if not pw:
+# # # # #     pw=w
+# # # # # if not ph:
+# # # # #     ph=h
+# # # # # print('pagina = %spx x %spx' % (pw,ph) )
 
 
-# faixas horizontais
-ph=ph/fh
+# largura da faixa
+fw=pw/faixas
+
+# estampa
+ph=ph/repete_y
+pw=pw/repete_x
 
 for i in imagens:
     i=imagens[i]
     
     i_path=i['path']
-    imgw=i['w']
-    imgh=i['h']
+    # img=i['path']
+    # e=i['zoom']
+    
+    if len(i_path.split('/')) == 1:
+        i_path=os.path.join(path_img,i_path)
+        i['path']=i_path
+        
+    imgw,imgh=imageSize(i_path)
+    i['w']=imgw
+    i['h']=imgh
+
+
+    # # # i_path=i['path']
+    # # # imgw=i['w']
+    # # # imgh=i['h']
     x=i['x']
     y=i['y']
     e=i['zoom']
@@ -591,15 +561,12 @@ for i in imagens:
 if ver==1:
     for i in imagens:
         img=imagens[i]
-        newPage(pw,ph*fh)
-        for j in range(fh):
-            image(img['img'],(0,0))
-            translate(0,ph)
+        newPage(pw*repete_x,ph*repete_y)
+        for rx in range(repete_x):
+            for ry in range(repete_y):
+                image(img['img'],(rx*pw,ry*ph))
 
 else:
-    # largura da faixa
-    fw=pw/faixas
-    
     # cria dicionario com formas basicas formas basicas pra cada zoom
     bases={}
     for nm in modulos:
@@ -617,77 +584,83 @@ else:
         ordem=px_lista+['']
     print('ordem =',ordem)
 
-    newPage(pw,ph*fh)
+    newPage(pw*repete_x,ph*repete_y)
 
     if bg and not faixas_randomicas:
         fill(*bg)
-        rect(0,0,pw,ph*fh)
+        rect(0,0,pw*repete_x,ph*repete_y)
     
-    for jh in range(fh):
-        car_c=0
-        for f in range(faixas):
-            nm=choice(modulos)
-            m=fw/nm
-            m0=m/2 # ponto central do modulo para verificacao da cor
+    save()
+    for rx in range(repete_x):
+        save()
+        for ry in range(repete_y):
+            car_c=0
+            for f in range(faixas):
+                nm=choice(modulos)
+                m=fw/nm
+                m0=m/2 # ponto central do modulo para verificacao da cor
                 
-            # imagem
-            img_i=choice(list(imagens.keys()))
-            img=imagens[img_i]['img']
+                # imagem
+                img_i=choice(list(imagens.keys()))
+                img=imagens[img_i]['img']
         
-            print()
-            print('>>> faixa', f)
-            print('imagem =', img_i)
-            print('n_modulos =', nm)
+                print()
+                print('>>> faixa', f)
+                print('imagem =', img_i)
+                print('n_modulos =', nm)
         
-            # cores
-            if faixas_randomicas:
-                cor0=cor(cores_0)
-                if degrade:
-                    cor1=cor(cores_1)
-                else:
-                    cor1=cor0
-            if bg_randomico:
-                bg=cor(cores_bg,cor0)
-                fill(*bg)
-                rect(f*fw,0,fw,ph)
-        
-            # formas
-            base=bases[nm]
-        
-            # cria lista de pontos
-            pontos_x=[f*fw+m0+m*x for x in range(nm)]
-            pontos_y=[m0*(y+1) for y in range(round(ph/m0)) if not y%2]
-            pontos_y.reverse() # inverte a lista vertical para desenha de cima para baixo
-
-            pontos=[]
-            for j,y in enumerate(pontos_y):
-                for i,x in enumerate(pontos_x):
-                    cinza=imagePixelColor(img,(x,y))
-                    if cinza==None:
-                        cinza=1
+                # cores
+                if faixas_randomicas:
+                    cor0=cor(cor_0)
+                    if degrade:
+                        cor1=cor(cor_1)
                     else:
-                        cinza=cinza[0]
-                    car=int(cinza//(1/len(ordem)))
-                    if car==len(ordem):
-                        car=len(ordem)-1
-                    car=ordem[car]
-                    pontos.append([car,x,y,i,j])
-
-            save()
-            translate(-m0,-m0)
-
-            for c,camada in enumerate(ordem[:-1]):
-                car_c=playmode(vezes,pontos,[camada,],c,ajuste_txt,car_c=car_c)
+                        cor1=cor0
+                if bg_randomico:
+                    bg=cor(cor_bg,cor0)
+                    fill(*bg)
+                    rect(f*fw,0,fw,ph)
         
-            car_c+=nm
-            restore()
+                # formas
+                base=bases[nm]
+        
+                # cria lista de pontos
+                pontos_x=[f*fw+m0+m*x for x in range(nm)]
+                pontos_y=[m0*(y+1) for y in range(round(ph/m0)) if not y%2]
+                pontos_y.reverse() # inverte a lista vertical para desenha de cima para baixo
+
+                pontos=[]
+                for j,y in enumerate(pontos_y):
+                    for i,x in enumerate(pontos_x):
+                        cinza=imagePixelColor(img,(x,y))
+                        if cinza==None:
+                            cinza=1
+                        else:
+                            cinza=cinza[0]
+                        car=int(cinza//(1/len(ordem)))
+                        if car==len(ordem):
+                            car=len(ordem)-1
+                        car=ordem[car]
+                        pontos.append([car,x,y,i,j])
+
+                save()
+                translate(-m0,-m0)
+
+                for c,camada in enumerate(ordem[:-1]):
+                    car_c=playmode(vezes,pontos,[camada,],c,ajuste_txt,car_c=car_c)
+        
+                car_c+=nm
+                restore()
             
-            if jh==fh-1 and f%2:
-                fill(1,0,1)
-                rect(f*fw,ph+10,fw,fw)
+                # desenha quadrados rosas da modulacao fora da pagina
+                if ry==repete_y-1 and f%2:
+                    fill(1,0,1)
+                    rect(f*fw,ph+10,fw,fw)
 
-        translate(0,ph)
-
+            translate(0,ph)
+        restore()
+        translate(pw,0)
+    restore()
 
 # grid
 if grid:
@@ -695,7 +668,7 @@ if grid:
     stroke(0)
     for i in range(faixas):
         if i:
-            line((fw*i,0),(fw*i,ph*fh))
+            line((fw*i,0),(fw*i,ph*repete_y))
 
 ##########################################################
 

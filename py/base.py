@@ -107,8 +107,12 @@ def pixel(ponto,m,car_c,bezier,formas,texto,ajuste_txt=0):
     return bezier,car_c
 
 def cor(cores,cor_repetida=None):
-    if type(cores) == type(''):
-        c_lista=[c for c in cores]
+    if type(cores) == type((0,0,0)):
+        c=cores
+    elif type(cores) == []:
+        c=choice(cores)
+    else:
+        c_lista=[c for c in str(cores)]
         c=choice(c_lista)
         if c == 'r':
             c=(1,0,0)
@@ -131,9 +135,5 @@ def cor(cores,cor_repetida=None):
         
         while c == cor_repetida:
             c=cor(cores,cor_repetida)
-    elif type(cores) == []:
-        c=choice(cores)
-    else:
-        c=cores
-        
+
     return c
