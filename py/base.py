@@ -84,11 +84,13 @@ def dgd(cor1,cor2,p,repete):
     return c
 
 def car_texto(car,car_c,i,j,texto,ajuste=0):
-    if texto == 2:
+    if texto == 2: # alinhado vertical
         car_n=(car_c+i+ajuste)%len(car)
-    elif texto == 3:
+    if texto == 3: # alinhado horizontal
+        car_n=(car_cj+ajuste)%len(car)
+    elif texto == 4: # alinhado diagonal
         car_n=(car_c+i+j+ajuste)%len(car)
-    elif texto == 4:
+    elif texto == 5: # na sequencia
         car_n=car_c%len(car)
         car_c+=1
     car=car[car_n]

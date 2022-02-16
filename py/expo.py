@@ -38,7 +38,7 @@ def medidas(painel='',keys=False):
         'painel_playmode':{
             'w':80,
             'h':220,
-            'margem':8,
+            'margem':6,
             'dist':4,
             'base':randint(20,60),
             'b2':randint(20,60),
@@ -47,14 +47,14 @@ def medidas(painel='',keys=False):
         'painel_corredor':{
             'w':70,
             'h':220,
-            'margem':6,
+            'margem':5,
             'dist':20,
             'base':randint(20,80),
             'b2':randint(20,80),
             'suporte':'suspenso',
             },
         'painel_cortina':{
-            'w':60,
+            'w':80,
             'h':250,
             'margem':0,
             'dist':40,
@@ -337,7 +337,7 @@ def formas(caracteres,m,fs=0,fonte='CourierNewPSMT'):
 #_________
 
 def img_faixas(tipo,l,pasta=''):
-    path_img = os.path.join(path,'img/txt')
+    path_img = os.path.join(path,'img/expo')
     
     path_img = os.path.join(path_img,pasta)
     img_lista = [img for img in os.listdir(path_img) if img[0] not in ['.','_']]
@@ -365,6 +365,132 @@ def limpa_fundo(a=1):
     rect(-1,altura,largura+2,ph-altura+meio)
     restore()
 
+def aberturas():
+    fontes=[
+        'Courier', # 0
+        'Courier-Bold', # 1
+        'Courier-BoldOblique', # 2
+        'Courier-Oblique', # 3
+        'CourierNewPS-BoldItalicMT', # 4
+        'CourierNewPS-BoldMT', # 5
+        'CourierNewPS-ItalicMT', # 6
+        'CourierNewPSMT', # 7
+    ]
+
+    f_tit={
+        'pt':fontes[5],
+        'en':fontes[4],
+    }
+    f_txt={
+        'pt':fontes[0],
+        'en':fontes[3],
+    }
+    f_txt_it={
+        'pt':fontes[3],
+        'en':fontes[0],
+    }
+    f_txt_bld={
+        'pt':fontes[1],
+        'en':fontes[2],
+    }
+
+    # fontSize
+    fs=1.8
+    fst=2.5
+    #lineHeight
+    lh=2.5
+    lht=3
+    #align
+    a='left'
+    at='right'
+    #paragraphTopSpacing
+    pts=2.5
+
+    fmt_tit = FormattedString(
+        font=fontes[5],
+        fontSize=fst, 
+        lineHeight=lht,
+        align=at,
+    )
+    fmt_txt = FormattedString(
+        fontSize=fs, 
+        lineHeight=lh,
+        align=a,
+        paragraphTopSpacing=pts,
+    )
+    
+    # qctx
+    qctx=fmt_txt.copy()
+    qctx.font(fontes[0])
+    qctx.append('◼︎',fontSize=fs-.3,tracking=.1)
+    qctx.append('●',fontSize=fs-.5,baselineShift=+.05,tracking=-.1)
+    qctx.append('▴',fontSize=fs+.1,baselineShift=-.1,tracking=-.2)
+    qctx.append('×',fontSize=fs,baselineShift=-.2)
+    qctx.append('\n\n\n')
+
+    linguas=['pt','en']
+
+    textos={}
+
+    n=0
+    T=0
+    lang=linguas[0]
+
+    # docx
+    doc_path = os.path.join(path,'_/txt/aberturas.docx')
+    doc = Document(doc_path)
+
+    for p,para in enumerate(doc.paragraphs):
+        pt=para.text
+        if not pt:
+            n+=1
+            lang=linguas[0]
+            T=0
+
+        elif pt=='_':
+            lang=linguas[1]
+            T=0
+
+        else:
+            if n not in textos:
+                textos[n]={}
+                for l in linguas:
+                    textos[n][l]={
+                        'titulo':fmt_tit.copy(),
+                        'texto':fmt_txt.copy(),
+                    }
+        
+            if not T:
+                tt=textos[n][lang]['titulo']
+            else:
+                tt=textos[n][lang]['texto']
+
+            for r,run in enumerate(para.runs):
+                t=run.text
+                if t:
+                    if not T:
+                        tt.font(f_tit[lang])
+                        tt.append(t.upper())
+                    else:
+                        if run.bold:
+                            tt.font(f_txt_bld[lang])
+                            # print('    bold')
+                        if run.italic:
+                            tt.font(f_txt_it[lang])
+                            # print('    italico')
+                        else:
+                            tt.font(f_txt[lang])
+                        tt.append(t)
+            T+=1
+            if doc.paragraphs[p+1].text not in ['','_']:
+                tt.append('\n')
+            else:
+                tt.append(qctx)
+    
+
+    return textos
+
+#_________
 
 #########################################
 
@@ -373,19 +499,15 @@ def limpa_fundo(a=1):
 # doc = Document(doc)
 # dump(doc)
 
-# imagens
-path_img = os.path.join(path,'img/txt')
+# # textos
+# path_txt = os.path.join(path,'_/txt')
 
-# textos
-path_txt = os.path.join(path,'_/txt')
-
-aberturas = os.path.join(path_txt,'aberturas.txt')
-with open(aberturas, encoding="utf-8") as file:
-    aberturas = file.read()
-
-# textos
-aberturas=aberturas.split('###')
-aberturas={i:txt.split('___') for i,txt in enumerate(aberturas)}
+# aberturas = os.path.join(path_txt,'aberturas.txt')
+# with open(aberturas, encoding="utf-8") as file:
+#     aberturas = file.read()
+# # textos
+# aberturas=aberturas.split('###')
+# aberturas={i:txt.split('___') for i,txt in enumerate(aberturas)}
 
 print('>>> 1px == 1cm')
 
@@ -401,9 +523,11 @@ tipos = [
     '5_obras',
     '6_paineis',
     '7_entrada',
+    '8_portas',
     ]
 
 Variable([
+    dict(name = "txt_escala_real", ui = "CheckBox", args = dict(value = False)),
     dict(name = "tipo", ui = "PopUpButton", args = dict(items = tipos)),
     dict(name = "altura_randomica", ui = "CheckBox", args = dict(value = True)),
     dict(name = "autoportante", ui = "CheckBox", args = dict(value = True)),
@@ -414,6 +538,7 @@ Variable([
     dict(name = "gira", ui = "CheckBox", args = dict(value = True)),
     dict(name = "imagem", ui = "CheckBox", args = dict(value = True)),
     dict(name = "estampa", ui = "CheckBox", args = dict(value = False)),
+    dict(name = "tecido_transparente", ui = "CheckBox", args = dict(value = False)),
 ], globals())
     
 fonte=var(fonte,'HelveticaNeue',lista=fontes_do_pc)
@@ -424,8 +549,11 @@ tipo=var(tipo,lista=tipos, tipo='lista')-1
 # medidas
 meio=140
 
+# txts aberturas
+txt_aberturas=aberturas()
+
 # pagina:
-if tipo in [4,6]:
+if tipo in [4,6,8]:
     dados = medidas('pg2')
 elif tipo == 7:
     dados = medidas('pg3')
@@ -436,20 +564,20 @@ ph=dados['h']
 
 # painel
 if tipo == 0:
-    paineis=[('painel_playmode',aberturas[0]),]
+    paineis=[('painel_playmode',txt_aberturas[0]),]
 elif tipo == 1:
-    paineis=[('painel_playmode',aberturas[1]),('painel_obra1',['obra',])]
+    paineis=[('painel_playmode',txt_aberturas[1]),('painel_obra1',['obra',])]
 elif tipo==2:
-    paineis=[('painel_corredor',aberturas[2]),('painel_obra2',['obra',])]
+    paineis=[('painel_corredor',txt_aberturas[2]),('painel_obra2',['obra',])]
 elif tipo==3:
-    paineis=[('painel_corredor',aberturas[3]),('painel_obra3',['obra',])]
+    paineis=[('painel_corredor',txt_aberturas[3]),('painel_obra3',['obra',])]
 elif tipo==4:
-    paineis=[('painel_cortina',choice([9,])*['',])]
+    paineis=[('painel_cortina',choice([8,])*['',])]
 elif tipo==5:
     paineis=[('painel_obra1',['obra',]),('painel_obra2',['obra',]),('painel_obra3',['obra',]),]
 elif tipo==6:
     paineis=[
-        ('painel_corredor',aberturas[1]),
+        ('painel_corredor',txt_aberturas[1]),
         ('painel_cortina',['',]), 
         ('painel_obra1',['obra',]),
         ('painel_obra2',['obra',]),
@@ -461,12 +589,17 @@ elif tipo==6:
     ]
 elif tipo==7:
     paineis=[('painel_entrada',19*['',])]
+elif tipo==8:
+    paineis=5*[('painel_cortina',['',])]
+    print(paineis)
 
 # pasta imagens
 if tipo==7:
     pasta='entrada'
 elif tipo==4:
     pasta='cortina'
+elif tipo==8:
+    pasta='portas'
 elif tipo==0:
     if estampa:
         pasta='0/estampa'
@@ -476,40 +609,43 @@ elif tipo==0:
 
 ############################
 
-e_pg=1
-newPage(pw*e_pg,ph*e_pg)
-scale(e_pg)
+if txt_escala_real:
+    e_pg=cm
+else:
+    e_pg=1
+    newPage(pw*e_pg,ph*e_pg)
+    scale(e_pg)
 
-fundo=(0.8,)
-fill(*fundo)
-rect(0,0,pw,ph)
+    fundo=(0.8,)
+    fill(*fundo)
+    rect(0,0,pw,ph)
 
-# meio + alturas
-hs=[meio,]
-if alturas:
-    chaves=medidas(keys=True)
-    for k in chaves:
-        h=medidas(k)['h']
-        if h not in hs:
-            hs.append(h)
+    # meio + alturas
+    hs=[meio,]
+    if alturas:
+        chaves=medidas(keys=True)
+        for k in chaves:
+            h=medidas(k)['h']
+            if h not in hs:
+                hs.append(h)
 
-# alturas
-save()
-fill(None)
-stroke(.4)
-lineDash(1,2)
+    # alturas
+    save()
+    fill(None)
+    stroke(.4)
+    lineDash(1,2)
 
-for h in hs:
-    line((0,h),(width(),h))
-
-if alturas:
-    fs=6
-    fill(0,0,1)
-    stroke(None)
-    fontSize(fs)
     for h in hs:
-        text(str(h)+'cm',(fs/2,h-1.5*fs))        
-restore()
+        line((0,h),(width(),h))
+
+    if alturas:
+        fs=6
+        fill(0,0,1)
+        stroke(None)
+        fontSize(fs)
+        for h in hs:
+            text(str(h)+'cm',(fs/2,h-1.5*fs))        
+    restore()
 
 for i,info in enumerate(paineis):
     painel,texto=info
@@ -525,173 +661,235 @@ for i,info in enumerate(paineis):
     b2=dados['b2']
     suporte_tipo=dados['suporte']
     
-    save()
-    
-    if tipo==5:
-        translate(100*(i+1),0)
-    elif tipo==6:
-        x0=90
-        if not i:
-            translate(x0,0)
-        elif i==1:
-            translate(80*(i+1)+x0*2,0)
-        elif i in [5,6,7]:
+
+    #__________________________
+
+    # só tecido
+    if txt_escala_real:
+
+        if tipo==7:
             autoportante=False
-            translate(70*(i+1)+x0*3.5,0)
-        elif i==8:
-            autoportante=False
-            translate(70*(i+1)+x0*4,0)
+            camadas=4
         else:
-            translate(70*(i+1)+x0*3.1,0)
-        if alturas:
+            camadas=1
+    
+        for camada in range(camadas):
+
+            for l,abertura in enumerate(texto):
+                if tipo==7 and not (camada+l)%2:
+                    desenha=0
+                else:
+                    desenha=1
+
+                if desenha:
+                    if altura_randomica:
+                        base=medidas(painel)['base']
+                        b2=medidas(painel)['b2']
+        
+                    newPage(largura*e_pg,(altura-base)*e_pg)
+                    scale(e_pg)
+                    translate(0,-base)
+
+                    #_________
+
+                    #tecido
+                    img=[img_faixas(tipo,l,pasta=pasta)]
+
+                    a=tecido(largura, altura, base, b2, gira=0,img=img,alfa=1)
+
+                    #_________
+
+                    #texto
+                    if painel in paineis_textos:
+
+                        hyphenation(False)
+                        c=2 # colunas
+                        ec=2 # entrecolunas
+
+                        tit=texto[abertura]['titulo']
+                        txt=texto[abertura]['texto']
+                    
+                        tit.append('\n')
+
+                        tw=(largura-2*margem-(c-1)*ec)/c
+                        tw,th=textSize(txt, width=tw)
+                        th=(th/c)/2
+            
+                        twt,tht=textSize(tit, width=tw)
+            
+                        save()
+                        translate(margem,meio)
+            
+                        if estampa:
+                            me=14
+                            save()
+                            fill(1)
+                            rect(-margem,-th-me,largura,2*th+tht+2*me)
+                            restore()
+                        alinha=['left','right']
+                        for n in range(c):
+                            txt=textBox(txt,((tw+ec)*n,-th,tw,2*th),align=alinha[n%2])
+
+                        twt,tht=textSize(tit, width=tw)
+                        textBox(tit,(0,th,tw,tht))
+
+                        restore()
+                    #_________
+    #__________________________
+
+    else:
+        save()
+    
+        if tipo==5:
+            translate(100*(i+1),0)
+        elif tipo==8:
+            translate(200*(i+1),0)
+        elif tipo==6:
+            x0=90
+            if not i:
+                translate(x0,0)
+            elif i==1:
+                translate(80*(i+1)+x0*2,0)
+            elif i in [5,6,7]:
+                autoportante=False
+                translate(70*(i+1)+x0*3.5,0)
+            elif i==8:
+                autoportante=False
+                translate(70*(i+1)+x0*4,0)
+            else:
+                translate(70*(i+1)+x0*3.1,0)
+            if alturas:
+                save()
+                translate(0,meio)
+                rotate(90)
+                fontSize(6)
+                fill(1,0,0)
+                text(paineis[i][0],(2,10))
+                restore()
+        
+        elif painel in paineis_textos:
+            translate(50,0)
+        elif painel in paineis_obras:
+            translate(310,0)
+        else: 
+            #centraliza
+            tudo=len(texto)*(largura+dist)-dist
+            translate((pw-tudo)/2,0)
+        
+        if tipo==7:
+            autoportante=False
+            camadas=4
+        else:
+            camadas=1
+    
+        if autoportante:
+            suporte_tipo='base_'+suporte_tipo
+            ajuste=10
+            dist+=ajuste
+
+        #=======================
+    
+        total=len(texto)
+        total=total*largura + (total-1)*dist
+    
+        p=.98 # escala da perspectiva
+    
+        for camada in range(camadas):
+        
+            ep = p**(camadas-camada-1)
+        
             save()
-            translate(0,meio)
-            rotate(90)
-            fontSize(6)
-            fill(1,0,0)
-            text(paineis[i][0],(2,10))
+
+            #perspectiva
+            translate(total/2,meio)
+            scale(ep)        
+            translate(-total/2,-meio)
+
+            for l,abertura in enumerate(texto):
+                if altura_randomica:
+                    base=medidas(painel)['base']
+                    b2=medidas(painel)['b2']
+        
+                if gira and suporte_tipo.split('_')[-1]=='mobile':
+                    g=1
+                else:
+                    g=0
+        
+                #_________
+
+                #tecido
+                if tipo in [4,] or tecido_transparente: # tecido transparente
+                    n=2
+                    alfa=.5
+                else:
+                    n=1
+                    alfa=1
+            
+                if tipo==7 and not (camada+l)%2:
+                    desenha=0
+                else:
+                    desenha=1
+
+                if desenha:
+                    img=[]
+                    if imagem and tipo in [4,7,0,8]:
+                        for n in range(n):
+                            img.append(img_faixas(tipo,l,pasta=pasta))
+                    print(i,camada,l,img)
+                    a=tecido(largura, altura, base, b2, gira=g,img=img,alfa=alfa)
+
+                    #_________
+
+                    # suporte
+                    suporte(suporte_tipo,largura,altura,ajuste,a=a,cor_sup=cor_suporte)
+
+                    #_________
+
+                    #texto
+                    if painel in paineis_textos:
+
+                        hyphenation(False)
+                        c=2 # colunas
+                        ec=2 # entrecolunas
+
+                        tit=texto[abertura]['titulo']
+                        txt=texto[abertura]['texto']
+                    
+                        tit.append('\n')
+
+                        tw=(largura-2*margem-(c-1)*ec)/c
+                        tw,th=textSize(txt, width=tw)
+                        th=(th/c)/2
+            
+                        twt,tht=textSize(tit, width=tw)
+            
+                        save()
+                        translate(margem,meio)
+            
+                        if estampa:
+                            me=14
+                            save()
+                            fill(1)
+                            rect(-margem,-th-me,largura,2*th+tht+2*me)
+                            restore()
+                        alinha=['left','right']
+                        for n in range(c):
+                            txt=textBox(txt,((tw+ec)*n,-th,tw,2*th),align=alinha[n%2])
+
+                        twt,tht=textSize(tit, width=tw)
+                        textBox(tit,(0,th,tw,tht))
+
+                        restore()
+            
+                #_________
+            
+                translate(largura+dist,0)
+
             restore()
 
-    elif painel in paineis_textos:
-        translate(50,0)
-    elif painel in paineis_obras:
-        translate(310,0)
-    else: 
-        #centraliza
-        tudo=len(texto)*(largura+dist)-dist
-        translate((pw-tudo)/2,0)
-        
-    if tipo==7:
-        autoportante=False
-        camadas=4
-    else:
-        camadas=1
-    
-    if autoportante:
-        suporte_tipo='base_'+suporte_tipo
-        ajuste=10
-        dist+=ajuste
-
-    #=======================
-    
-    total=len(texto)
-    total=total*largura + (total-1)*dist
-    
-    p=.98 # escala da perspectiva
-    
-    for camada in range(camadas):
-        
-        ep = p**(camadas-camada-1)
-        
-        save()
-
-        #perspectiva
-        translate(total/2,meio)
-        scale(ep)        
-        translate(-total/2,-meio)
-
-        for l,abertura in enumerate(texto):
-            if altura_randomica:
-                base=medidas(painel)['base']
-                b2=medidas(painel)['b2']
-        
-            if gira and suporte_tipo.split('_')[-1]=='mobile':
-                g=1
-            else:
-                g=0
-        
-            #_________
-
-            #tecido
-            if tipo==4: # tecido transparente
-                n=2
-                alfa=.5
-            else:
-                n=1
-                alfa=1
-            
-            img=[]
-            if imagem and tipo in [4,7,0]:
-                for n in range(n):
-                    img.append(img_faixas(tipo,l,pasta=pasta))
-            
-            if tipo==7 and not (camada+l)%2:
-                desenha=0
-            else:
-                desenha=1
-
-            if desenha:
-                a=tecido(largura, altura, base, b2, gira=g,img=img,alfa=alfa)
-
-                #_________
-
-                # suporte
-                suporte(suporte_tipo,largura,altura,ajuste,a=a,cor_sup=cor_suporte)
-
-                #_________
-
-                #texto
-                if painel in paineis_textos:
-                    abertura=abertura.split('\n')
-                    while '' in abertura:
-                        abertura.remove('')
-
-                    hyphenation(False)
-                    c=2
-                    ec=3
-                    fs=2
-                    lh=3.5
-            
-                    tit = FormattedString()
-                    tit.append(abertura[0].upper()+'\n\n',font="CourierNewPS-BoldMT",fontSize=fs+1,lineHeight=lh+.5,align='right')
-            
-                    if not l:
-                        fonte='HelveticaNeueLTStd-Roman'
-                    else:
-                        fonte= 'HelveticaNeueLTStd-Lt'
-
-                    txt = FormattedString()
-                    txt.align(None)
-                    for i,t in enumerate(abertura[1:]):
-                        if i:
-                            txt.append('\n')
-                        txt.append(t, font=fonte, fontSize=fs,paragraphTopSpacing=fs,lineHeight=lh,)
-
-                    txt.append('◼︎●▴×\n\n', font=fonte, fontSize=2,paragraphTopSpacing=2,lineHeight=3.5,)
-
-                    tw=(largura-2*margem-(c-1)*ec)/c
-                    tw,th=textSize(txt, width=tw)
-                    th=(th/c)/2
-            
-                    twt,tht=textSize(tit, width=tw)
-            
-                    save()
-                    translate(margem,meio)
-            
-                    if estampa:
-                        me=14
-                        save()
-                        fill(1)
-                        rect(-margem,-th-me,largura,2*th+tht+2*me)
-                        restore()
-                    alinha=['left','right']
-                    for n in range(c):
-                        txt=textBox(txt,((tw+ec)*n,-th,tw,2*th),align=alinha[n%2])
-
-                    twt,tht=textSize(tit, width=tw)
-                    textBox(tit,(0,th,tw,tht))
-
-                    restore()
-            
-            #_________
-            
-            translate(largura+dist,0)
+        #=======================
 
         restore()
-
-    #=======================
-
-    restore()
 
 # modulor
 if modulor:

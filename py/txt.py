@@ -41,9 +41,6 @@ cm = 72/2.54
 mm = cm/10
 print('>>> 1px == 1cm')
 
-# docx
-doc_path = os.path.join(path,'_/txt/Textos.docx')
-doc = Document(doc_path)
 
 #########################################
 
@@ -95,34 +92,149 @@ doc = Document(doc_path)
 
 #########################################
 
+fontes=[
+    'Courier', # 0
+    'Courier-Bold', # 1
+    'Courier-BoldOblique', # 2
+    'Courier-Oblique', # 3
+    'CourierNewPS-BoldItalicMT', # 4
+    'CourierNewPS-BoldMT', # 5
+    'CourierNewPS-ItalicMT', # 6
+    'CourierNewPSMT', # 7
+]
+
+f_tit={
+    'pt':fontes[3],
+    'en':fontes[4],
+}
+f_txt={
+    'pt':fontes[7],
+    'en':fontes[6],
+}
+f_txt_it={
+    'pt':fontes[6],
+    'en':fontes[7],
+}
+f_txt_bld={
+    'pt':fontes[5],
+    'en':fontes[4],
+}
+
+# fontSize
+fs=2
+fst=3
+#lineHeight
+lh=3.5
+lht=4
+#align
+a='left'
+at='right'
+#paragraphTopSpacing
+pts=fs
+
+fmt_tit = FormattedString(
+    font=fontes[5],
+    fontSize=fst, 
+    lineHeight=lht,
+    align=at,
+)
+fmt_txt = FormattedString(
+    fontSize=fs, 
+    lineHeight=lh,
+    align=a,
+    paragraphTopSpacing=pts,
+)
+
+linguas=['pt','en']
+
+aberturas={}
+
+n=0
+T=0
+lang=linguas[0]
+
+# docx
+doc_path = os.path.join(path,'_/txt/aberturas.docx')
+doc = Document(doc_path)
+
 for p,para in enumerate(doc.paragraphs):
-    print('##############')
-    print(p)
-    # print(para.paragraph_format.left_indent)
+    pt=para.text
+    if not pt:
+        n+=1
+        lang=linguas[0]
+        T=0
 
-    # # # for attr in dir(para):
-    # # #     print("obj.%s = %r" % (attr, getattr(para, attr)))
+    elif pt=='_':
+        lang=linguas[1]
+        T=0
 
-    for r,run in enumerate(para.runs):
-        txt=run.text
+    else:
+        if n not in aberturas:
+            aberturas[n]={}
+            for l in linguas:
+                aberturas[n][l]={
+                    'titulo':fmt_tit.copy(),
+                    'texto':fmt_txt.copy(),
+                }
         
-        if txt:
-            print('    ',r)
-            print(txt)
-        
-        if run.bold:
-            print('    bold')
-        if run.italic:
-            print('    italico')
-        if run.underline:
-            print('    --------underline')
-        # if str(run.font.color.rgb) == '0070C0':
-        if run.font.color.rgb:
-            print('    >>>>>>>>>>>>>>>>>>>>>>>>>>', run.font.color.rgb)
-        # print(type(run.font.color.rgb))
+        if not T:
+            tt=aberturas[n][lang]['titulo']
+        else:
+            tt=aberturas[n][lang]['texto']
 
-        # # # for attr in dir(run):
-        # # #     print("obj.%s = %r" % (attr, getattr(run, attr)))
+        for r,run in enumerate(para.runs):
+            t=run.text
+            if t:
+                if not T:
+                    tt.font(f_tit[lang])
+                else:
+                    if run.bold:
+                        tt.font(f_txt_bld[lang])
+                        # print('    bold')
+                    if run.italic:
+                        tt.font(f_txt_it[lang])
+                        # print('    italico')
+                    else:
+                        tt.font(f_txt[lang])
+                tt.append(t)
+        T+=1
+        tt.append('\n')
+
+
+
+
+
+# for p,para in enumerate(doc.paragraphs):
+    
+#     # txt curatorial
+#     print('##############')
+#     print(p)
+#     # print(para.paragraph_format.left_indent)
+
+#     # # # for attr in dir(para):
+#     # # #     print("obj.%s = %r" % (attr, getattr(para, attr)))
+
+#     for r,run in enumerate(para.runs):
+
+#         txt=run.text
+        
+#         if txt:
+#             print('    ',r)
+#             print(txt)
+        
+#         if run.bold:
+#             print('    bold')
+#         if run.italic:
+#             print('    italico')
+#         if run.underline:
+#             print('    --------underline')
+#         # if str(run.font.color.rgb) == '0070C0':
+#         if run.font.color.rgb:
+#             print('    >>>>>>>>>>>>>>>>>>>>>>>>>>', run.font.color.rgb)
+#         # print(type(run.font.color.rgb))
+
+#         # # # for attr in dir(run):
+#         # # #     print("obj.%s = %r" % (attr, getattr(run, attr)))
 
     
 #########################################

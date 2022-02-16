@@ -10,8 +10,8 @@ path='/'.join(os.path.abspath(os.getcwd()).split('/')[:-1])
 
 ##########################################################
 
-tipo_i=0
-img_i=2
+tipo_i=1
+img_i=4
 
 ##########################################################
 
@@ -22,26 +22,27 @@ def cria_pasta(path):
 
 tipo=[
     ('entrada',19), #0
-    ('cortina',9), #1
+    ('cortina',8), #1
 ]
 
 nome,n=tipo[tipo_i]
 
 # imagens
 path_img = os.path.join(path,'img/painel/%s' % nome)
-img_lista = [img for img in os.listdir(path_img) if img[0]!='.']
+img_lista = [img for img in os.listdir(path_img) if img[0]not in ['.','_']]
 img_lista.sort()
 
-# texto
-path_txt = os.path.join(path,'img/txt/%s' % nome)
-cria_pasta(path_txt)
+# expo
+path_expo = os.path.join(path,'img/expo/%s' % nome)
+cria_pasta(path_expo)
 
 
 img=img_lista[img_i]
 
-path_fx = os.path.join(path_txt,img.split('.')[0])
+path_fx = os.path.join(path_expo,img.split('.')[0])
+path_fx_ = os.path.join(path_expo,'_'+img.split('.')[0])
 
-if os.path.isdir(path_fx):
+if os.path.isdir(path_fx) or os.path.isdir(path_fx_):
     print('pasta ok')
 
 else:
