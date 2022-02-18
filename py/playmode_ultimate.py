@@ -19,19 +19,19 @@ mm = cm/10
 repete_x=1
 repete_y=5
 
-ajuste_texto=0
+ajuste_texto=-1
 
 # # logo
 # pw=1000
 # ph=300
 # faixas=10
-# modulos=[2**i for i in range(0,6)] # n_modulos/faixa
+# modulos=[2**i for i in range(1,6)] # n_modulos/faixa
 
-# # cartaz
-# pw=42*cm
-# ph=60*cm
-# faixas=4
-# modulos=[2**i for i in range(1,7)] # n_modulos/faixa
+# cartaz
+pw=42*cm
+ph=60*cm
+faixas=10
+modulos=[2**i for i in range(1,6)] # n_modulos/faixa
 
 # # painel entrada
 # faixas=19
@@ -64,12 +64,12 @@ ajuste_texto=0
 # ph=2000
 # modulos=[2**i for i in range(0,6)] # n_modulos/faixa
 
-# obra
-faixas=4
-pw=200
-ph=1000
-modulos=[2**i for i in range(0,6)] # n_modulos/faixa
-
+# # obra
+# faixas=4
+# pw=400
+# ph=1200
+# modulos=[1,1,]+[2**i for i in range(0,6)] # n_modulos/faixa
+# # modulos=[1,2,1,16,32,]
 
 # caracteres='PPLLAAYYMMOODDEE'
 caracteres='PLAYMODE'
@@ -97,15 +97,15 @@ sw=0.5 # espessura da linha (px) --- versao: com_linhas
 
 imagens={
     
-    # 'playmode logo':{
-    #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/painel_1.png',
-    #     'x':'c',
-    #     'y':'c',
-    #     'zoom':'w',
-    #     'inverte_cores':False,
-    #     'brilho':0,
-    #     'contraste':1,
-    # },
+    'playmode logo':{
+        'path':'/Users/alien/x3/x/qdd/playmode/img/1/painel_1.png',
+        'x':'c',
+        'y':'c',
+        'zoom':'w',
+        'inverte_cores':False,
+        'brilho':0,
+        'contraste':1,
+    },
 
     # 'qctx logo':{
     #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/painel_3.png',
@@ -117,15 +117,15 @@ imagens={
     #     'contraste':1,
     # },
 
-    'obra_cubo_2x1_estampa':{
-        'path':'/Users/alien/x3/x/qdd/playmode/img/obras/cubo.jpeg',
-        'x' : 'r',
-        'y' : 'r',
-        'zoom' : randint(5,10)/10,
-        'inverte_cores':False,
-        'brilho':-0.10,
-        'contraste':1,
-    },
+    # 'obra_taca_2x1_estampa':{
+    #     'path':'/Users/alien/x3/x/qdd/playmode/img/obras/taca.jpeg',
+    #     'x' : 'c',
+    #     'y' : 'r',
+    #     'zoom' : randint(100,180)/100,
+    #     'inverte_cores':False,
+    #     'brilho':-0.10,
+    #     'contraste':1,
+    # },
 
     # 'q_estampa':{
     #     'path':'pixel_q_100.png',
@@ -392,7 +392,7 @@ def formas(caracteres,m,fs=0,fonte='CourierNewPSMT'):
         fs=m
     base={}
     # formas geometricas
-    car_lista=['#','o','t','x',]
+    car_lista=['#','o','t','x','+']
     for c in car_lista:
         x,y=0,0
         bezier=BezierPath()
@@ -406,9 +406,15 @@ def formas(caracteres,m,fs=0,fonte='CourierNewPSMT'):
             c='triangulo'
             bezier.polygon((x,y),(x+m/2,y+m),(x+m,y))
         elif c == '+':
-            c='cruz'
-            bezier.rect(x+m/4,y,m/2,m)
-            bezier.rect(x,y+m/4,m,m/2)
+            c = 'cruz'
+            esp=m/4.3
+            dist=(m-esp)/2
+            x1=BezierPath()
+            x2=BezierPath()
+            x1.rect(x+dist,y,esp,m)
+            x2.rect(x,y+dist,m,esp)            
+            bezier=x1.union(x2)
+
         elif c == '*':
             c='xis2'
             n=3
@@ -508,6 +514,7 @@ Variable([
     dict(name="circulo", ui="CheckBox", args=dict(value=True)),
     dict(name="triangulo", ui="CheckBox", args=dict(value=True)),
     dict(name="xis", ui="CheckBox", args=dict(value=True)),
+    dict(name="cruz", ui="CheckBox", args=dict(value=False)),
     dict(name="com_linha", ui="CheckBox", args=dict(value=False)),
     dict(name="degrade", ui="CheckBox", args=dict(value=False)),
     dict(name="faixas_randomicas", ui="CheckBox", args=dict(value=False)),
@@ -516,8 +523,8 @@ Variable([
 ], globals())
 
 #formas geometricas
-ps1=[quadrado,circulo,triangulo,xis]
-ps2=['quadrado','circulo','triangulo','xis',]
+ps1=[quadrado,circulo,triangulo,xis,cruz]
+ps2=['quadrado','circulo','triangulo','xis','cruz']
 
 px_lista=[]
 for i,botao in enumerate(ps1):

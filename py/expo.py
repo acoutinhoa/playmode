@@ -24,7 +24,7 @@ def dump(obj):
 def medidas(painel='',keys=False):
     dados={
         'pg1':{
-            'w':410,
+            'w':460,
             'h':320,
             },
         'pg2':{
@@ -65,7 +65,7 @@ def medidas(painel='',keys=False):
         'painel_obra3':{
             'w':30,
             'h':220,
-            'margem':8,
+            'margem':2.5,
             'dist':20,
             'base':randint(20,80),
             'b2':randint(20,80),
@@ -74,7 +74,7 @@ def medidas(painel='',keys=False):
         'painel_obra2':{
             'w':30,
             'h':220,
-            'margem':8,
+            'margem':2.5,
             'dist':50,
             'base':70,
             'b2':None,
@@ -83,7 +83,7 @@ def medidas(painel='',keys=False):
         'painel_obra1':{
             'w':30,
             'h':250,
-            'margem':8,
+            'margem':2.9,
             'dist':20,
             'base':randint(20,80),
             'b2':randint(20,80),
@@ -131,10 +131,13 @@ def tcd_img(img,base,alfa=1):
         if imgh*ei < altura-base:
             fill(1)
             rect(0,0,largura/ei,(altura-base)/ei)
-            if pasta[-1] == '0':
-                y=(altura-base-50)/ei
-            if pasta[-1] == '1':
-                y=(altura-base-30)/ei
+            if painel in paineis_obras:
+                    y=(altura-base-67)/ei
+            else:
+                if pasta[-1] == '0':
+                    y=(altura-base-50)/ei
+                elif pasta[-1] == '1':
+                    y=(altura-base-30)/ei
         else:
             y=0
             
@@ -365,131 +368,328 @@ def limpa_fundo(a=1):
     rect(-1,altura,largura+2,ph-altura+meio)
     restore()
 
-def aberturas():
-    fontes=[
-        'Courier', # 0
-        'Courier-Bold', # 1
-        'Courier-BoldOblique', # 2
-        'Courier-Oblique', # 3
-        'CourierNewPS-BoldItalicMT', # 4
-        'CourierNewPS-BoldMT', # 5
-        'CourierNewPS-ItalicMT', # 6
-        'CourierNewPSMT', # 7
-    ]
+#_________
+#_________
+#_________
 
-    f_tit={
-        'pt':fontes[5],
-        'en':fontes[4],
-    }
-    f_txt={
-        'pt':fontes[0],
-        'en':fontes[3],
-    }
-    f_txt_it={
-        'pt':fontes[3],
-        'en':fontes[0],
-    }
-    f_txt_bld={
-        'pt':fontes[1],
-        'en':fontes[2],
-    }
+# textos
 
-    # fontSize
-    fs=1.8
-    fst=2.5
-    #lineHeight
-    lh=2.5
-    lht=3
-    #align
-    a='left'
-    at='right'
-    #paragraphTopSpacing
-    pts=2.5
+# qctx
+def qctx(fs,enter=0,espaco=0):
+    x=randint(0,3)
+    t=FormattedString()
+    if x==0:
+        t.append(' ◼︎',fontSize=fs-.2,tracking=.1,font=fontes[0])
+    elif x==1:
+        t.append('  ● ',fontSize=fs-.3,baselineShift=+.05,tracking=-.1,font=fontes[0])
+    elif x==2:
+        t.append(' ▴',fontSize=fs+.1,baselineShift=-.1,tracking=-.2,font=fontes[0])
+    elif x==3:
+        t.append(' ×',fontSize=fs,baselineShift=-.1,font=fontes[0])
+    if espaco:
+        t.append(' ')
+    if enter:
+        t.append('\n\n\n\n\n')
+    return t
 
-    fmt_tit = FormattedString(
-        font=fontes[5],
-        fontSize=fst, 
-        lineHeight=lht,
-        align=at,
-    )
-    fmt_txt = FormattedString(
-        fontSize=fs, 
-        lineHeight=lh,
-        align=a,
-        paragraphTopSpacing=pts,
-    )
+fontes=[
+    'Courier', # 0
+    'Courier-Bold', # 1
+    'Courier-BoldOblique', # 2
+    'Courier-Oblique', # 3
+    'CourierNewPS-BoldItalicMT', # 4
+    'CourierNewPS-BoldMT', # 5
+    'CourierNewPS-ItalicMT', # 6
+    'CourierNewPSMT', # 7
+]
+
+f_tit={
+    'pt':fontes[5],
+    'en':fontes[4],
+}
+f_txt={
+    'pt':fontes[0],
+    'en':fontes[6],
+}
+f_txt_it={
+    'pt':fontes[6],
+    'en':fontes[0],
+}
+f_txt_bld={
+    'pt':fontes[1],
+    'en':fontes[2],
+}
+
+# fontSize
+fs=1.8
+fst=2.5
+#lineHeight
+lh=2.5
+lht=3
+#align
+a='left'
+at='right'
+#paragraphTopSpacing
+pts=lh
+
+fmt_tit = FormattedString(
+    font=fontes[5],
+    fontSize=fst, 
+    lineHeight=lht,
+    align=at,
+)
+fmt_txt = FormattedString(
+    fontSize=fs, 
+    lineHeight=lh,
+    align=a,
+    paragraphTopSpacing=pts,
+)
+
+# # qctx
+# qctx=fmt_txt.copy()
+# qctx.font(fontes[0])
+# qctx.append('◼︎',fontSize=fs-.3,tracking=.1,lineHeight=lh/2)
+# qctx.append('●',fontSize=fs-.5,baselineShift=+.05,tracking=-.1,lineHeight=lh/2)
+# qctx.append('▴',fontSize=fs+.1,baselineShift=-.1,tracking=-.2,lineHeight=lh/2)
+# qctx.append('×',fontSize=fs,baselineShift=-.2,lineHeight=lh/2)
+# qctx.append('\n\n\n')
+
+linguas=['pt','en']
+
+txt_aberturas={}
+
+n=0
+T=0
+lang=linguas[0]
+
+# docx
+doc_path = os.path.join(path,'_/txt/aberturas.docx')
+doc = Document(doc_path)
+
+for p,para in enumerate(doc.paragraphs):
+    pt=para.text
+    if not pt:
+        n+=1
+        lang=linguas[0]
+        T=0
+
+    elif pt=='_':
+        lang=linguas[1]
+        T=0
+
+    else:
+        if n not in txt_aberturas:
+            txt_aberturas[n]={}
+            for l in linguas:
+                txt_aberturas[n][l]={
+                    'titulo':fmt_tit.copy(),
+                    'texto':fmt_txt.copy(),
+                }
     
-    # qctx
-    qctx=fmt_txt.copy()
-    qctx.font(fontes[0])
-    qctx.append('◼︎',fontSize=fs-.3,tracking=.1)
-    qctx.append('●',fontSize=fs-.5,baselineShift=+.05,tracking=-.1)
-    qctx.append('▴',fontSize=fs+.1,baselineShift=-.1,tracking=-.2)
-    qctx.append('×',fontSize=fs,baselineShift=-.2)
-    qctx.append('\n\n\n')
-
-    linguas=['pt','en']
-
-    textos={}
-
-    n=0
-    T=0
-    lang=linguas[0]
-
-    # docx
-    doc_path = os.path.join(path,'_/txt/aberturas.docx')
-    doc = Document(doc_path)
-
-    for p,para in enumerate(doc.paragraphs):
-        pt=para.text
-        if not pt:
-            n+=1
-            lang=linguas[0]
-            T=0
-
-        elif pt=='_':
-            lang=linguas[1]
-            T=0
-
+        if not T:
+            tt=txt_aberturas[n][lang]['titulo']
         else:
-            if n not in textos:
-                textos[n]={}
-                for l in linguas:
-                    textos[n][l]={
-                        'titulo':fmt_tit.copy(),
-                        'texto':fmt_txt.copy(),
-                    }
-        
-            if not T:
-                tt=textos[n][lang]['titulo']
-            else:
-                tt=textos[n][lang]['texto']
+            tt=txt_aberturas[n][lang]['texto']
 
-            for r,run in enumerate(para.runs):
-                t=run.text
-                if t:
-                    if not T:
-                        tt.font(f_tit[lang])
-                        tt.append(t.upper())
+        for r,run in enumerate(para.runs):
+            t=run.text
+            if t:
+                if not T:
+                    tt.font(f_tit[lang])
+                    tt.append(t.upper())
+                else:
+                    if run.bold:
+                        tt.font(f_txt_bld[lang])
+                        # print('    bold')
+                    if run.italic:
+                        tt.font(f_txt_it[lang])
+                        # print('    italico')
                     else:
-                        if run.bold:
-                            tt.font(f_txt_bld[lang])
-                            # print('    bold')
-                        if run.italic:
-                            tt.font(f_txt_it[lang])
-                            # print('    italico')
-                        else:
-                            tt.font(f_txt[lang])
-                        tt.append(t)
-            T+=1
-            if doc.paragraphs[p+1].text not in ['','_']:
-                tt.append('\n')
-            else:
-                tt.append(qctx)
+                        # tt.baselineShift(0)
+                        tt.font(f_txt[lang])
+                        tt.fontSize(fs)
+                        tt.lineHeight(lh)
+                    tt.append(t)
+        T+=1
+        if doc.paragraphs[p+1].text not in ['','_']:
+            tt.append('\n')
+        else:
+            tt.append(qctx(fs,enter=1,espaco=0))
     
+base_obras={
+    1:{
+        1:{
+            'nome':'A taça do mundo é nossa',
+            'data':'2018',
+            'imagens':['taca.jpeg',],
+            'pt':{
+                'autoria':[
+                    ['Jaime Lauriano','Brasil, 1985'],
+                ],
+                'info':[
+                    'Réplica da taça Jules Rimet fundida em latão e cartuchos de munições utilizadas pela Forças Armadas Brasileiras sobre base de compensado naval',
+                    '130 x 30 x 30 cm',
+                ],
+                'texto':'''A Taça do Mundo é Nossa é uma escultura feita a partir de uma réplica da taça Jules Rimet, usando restos derretidos de cartuchos de munição coletados em áreas de conflito armado no Brasil; especialmente cartuchos usados pelas forças militares. A escolha por fazer uma réplica precisa da taça Jules Rimet parte de dois eixos conceituais principais: o primeiro eixo conceitual foca sua atenção na utilização do futebol como instrumento de propaganda dos regimes militares, que dominaram a América do Sul entre os anos 1960 e 1980, período esse que ficou marcado pela “Operação Condor”, que promovia a interação entre os serviços de inteligência e repressão das ditaduras de Argentina, Brasil, Chile e Uruguai. Por isso, na base da taça encontra-se gravado o nome desses 4 países e os respectivos períodos de duração das ditaduras. O segundo eixo conceitual é baseado na história da própria taça. Marcada por roubos, a taça original desapareceu no Brasil em 1983. Depois de vencer a Copa do Mundo em 1970 e ficar em definitivo com a taça Jules Rimet, o Brasil começou a mostrá- la publicamente. Porém, em 1983 a taça desapareceu e, para surpresa de todos, foi derretida. Anos depois, a FIFA deu ao Brasil uma réplica; então, a taça em exibição na sede da Confederação Brasileira de Futebol (CBF) nada mais é do que uma réplica.'''
+            },
+            'en':{
+                'autoria':[
+                    ['Jaime Lauriano','Brazil, 1985'],
+                ],
+                'info':[
+                    'Réplica da taça Jules Rimet fundida em latão e cartuchos de munições utilizadas pela Forças Armadas Brasileiras sobre base de compensado naval',
+                    '130 x 30 x 30 cm',
+                ],
+                'texto':'''A Taça do Mundo é Nossa is a sculpture made from a replica of the Jules Rimet trophy using melted remains of ammo cartridges collected in areas of armed conflict in Brazil, especially the ones used by military forces. The choice to make an accurate copy of the Jules Rimet trophy starts from two main conceptual axes: the first focuses its attention on the use of soccer as propaganda instrument for the military regimes which dominated South America from the 1960s to the1980s, a period marked by the called “Operation Condor”, which promoted the interaction between the intelligence services and the repression of the Argentinian, Brazilian, Chilean and Uruguayan dictatorships. Therefore, the name of these 4 countries is engraved on the base of the trophy, as well as their respective durations. The second conceptual axis is based on the history of the trophy itself. Marked by robberies, the original trophy disappeared in Brazil in 1983. After winning the 1970 World Cup and permanently taking the Jules Rimet trophy, Brazil started to exhibit it publicly. However, in 1983 the trophy disappeared, and, to everyone’s surprise, it was melted. Years later, FIFA gave Brazil a replica. So, the trophy on display at the Brazilian Football Confederation (CBF) headquarters is nothing more than a copy.'''
+            },
+        },
+    },    
+}
 
-    return textos
+obras_path = os.path.join(path,'img/obras')
 
+f_tit=fontes[5]
+f_tit_data=fontes[7]
+f_autor=fontes[4]
+f_autor_info=fontes[6]
+
+f_txt={
+    'pt':fontes[0],
+    'en':fontes[6],
+}
+f_txt_it={
+    'pt':fontes[6],
+    'en':fontes[0],
+}
+f_txt_bld={
+    'pt':fontes[1],
+    'en':fontes[2],
+}
+
+# fontSize
+fs=0.9
+fst=1.4
+#lineHeight
+lho=1.3
+lht=1.8
+#align
+a0='right'
+a1='left'
+
+fmt_tit = FormattedString(
+    font=fontes[5],
+    fontSize=fst, 
+    lineHeight=lht,
+    align=at,
+)
+fmt_txt = FormattedString(
+    fontSize=fs, 
+    lineHeight=lho,
+    align=a,
+)
+
+
+
+txt_obras={}
+
+for eixo in base_obras:
+    if eixo not in txt_obras:
+        txt_obras[eixo]={}
+
+    for n in base_obras[eixo]:
+        if n not in txt_obras[eixo]:
+            txt_obras[eixo][n]={}
+        
+        obra=txt_obras[eixo][n]
+        b_obra=base_obras[eixo][n]
+        
+        for l in linguas:
+            obra[l]={}
+            
+            obra[l]['titulo']=fmt_tit.copy()
+            obra[l]['titulo'].append(b_obra['nome'].upper(),font=f_tit,align=a0,)
+            
+            obra[l]['texto']=fmt_txt.copy()
+
+            obra[l]['texto'].append('\n'+b_obra['data']+'\n',font=f_tit_data,align=a0)
+            for autor in b_obra[l]['autoria']:
+                for i,info in enumerate(autor):
+                    if not i:
+                        info=info.upper()
+                        obra[l]['texto'].append(info,font=f_autor,align=a1)
+                        # q=qctx(fs,enter=0,espaco=1)
+                        obra[l]['texto'].append(qctx(fs,enter=0,espaco=1))
+                    else:
+                        obra[l]['texto'].append(info+'\n',font=f_autor_info,align=a1)
+
+            obra[l]['texto'].append('\n\n\n\n')
+            for i in b_obra[l]['info']:
+                obra[l]['texto'].append(i+'\n',font=f_txt_it[l],align=a0)
+            obra[l]['texto'].append('\n\n\n\n'+b_obra[l]['texto'],font=f_txt[l],align=a1)
+            obra[l]['texto'].append(qctx(fs,enter=1,espaco=0))
+
+#_________
+
+
+def desenha_texto():
+    hyphenation(False)
+
+    if painel in paineis_textos:
+        col=2 # colunas
+        ec=2 # entrecolunas
+
+        tit=texto[abertura]['titulo']
+        txt=texto[abertura]['texto']
+        meio_texto=meio
+        line_h=lh
+
+    else:
+        col=1 # colunas
+        ec=0 # entrecolunas
+        
+        tit=texto[abertura]['titulo']
+        txt=texto[abertura]['texto']
+        meio_texto=meio
+        line_h=lho
+        
+
+    tit.append('\n')
+
+    tw=(largura-2*margem-(col-1)*ec)/col
+    tw,th=textSize(txt, width=tw)
+    th=(th/col)/2
+
+    twt,tht=textSize(tit, width=tw)
+
+    save()
+    translate(margem,meio_texto)
+
+    if estampa:
+        me=14
+        save()
+        fill(1)
+        rect(-margem,-th-me,largura,2*th+tht+2*me)
+        restore()
+    
+    for n in range(col):
+        txt=textBox(txt,((tw+ec)*n,-th,tw,2*th))
+
+    twt,tht=textSize(tit, width=tw)
+    textBox(tit,(0,th,tw,tht))
+
+    # translate(0,th)
+    # for n in range(col):
+    #     c=line_h
+    #     while c < 2*th:
+    #         txt=textBox(txt,((tw+ec)*n,-c,tw,line_h))
+    #         c+=line_h
+
+    # twt,tht=textSize(tit, width=tw)
+    # textBox(tit,(0,0,tw,tht))
+
+    restore()
+
+#_________
 #_________
 
 #########################################
@@ -549,9 +749,6 @@ tipo=var(tipo,lista=tipos, tipo='lista')-1
 # medidas
 meio=140
 
-# txts aberturas
-txt_aberturas=aberturas()
-
 # pagina:
 if tipo in [4,6,8]:
     dados = medidas('pg2')
@@ -566,25 +763,25 @@ ph=dados['h']
 if tipo == 0:
     paineis=[('painel_playmode',txt_aberturas[0]),]
 elif tipo == 1:
-    paineis=[('painel_playmode',txt_aberturas[1]),('painel_obra1',['obra',])]
+    paineis=[ ('painel_playmode',txt_aberturas[1]),('painel_obra1',txt_obras[1][1]) ]
 elif tipo==2:
-    paineis=[('painel_corredor',txt_aberturas[2]),('painel_obra2',['obra',])]
+    paineis=[('painel_corredor',txt_aberturas[2]),('painel_obra2',txt_obras[1][1])]
 elif tipo==3:
-    paineis=[('painel_corredor',txt_aberturas[3]),('painel_obra3',['obra',])]
+    paineis=[('painel_corredor',txt_aberturas[3]),('painel_obra3',txt_obras[1][1])]
 elif tipo==4:
     paineis=[('painel_cortina',choice([8,])*['',])]
 elif tipo==5:
-    paineis=[('painel_obra1',['obra',]),('painel_obra2',['obra',]),('painel_obra3',['obra',]),]
+    paineis=[('painel_obra1',txt_obras[1][1]),('painel_obra2',txt_obras[1][1]),('painel_obra3',txt_obras[1][1]),]
 elif tipo==6:
     paineis=[
         ('painel_corredor',txt_aberturas[1]),
         ('painel_cortina',['',]), 
-        ('painel_obra1',['obra',]),
-        ('painel_obra2',['obra',]),
-        ('painel_obra3',['obra',]),
-        ('painel_obra1',['obra',]),
-        ('painel_obra2',['obra',]),
-        ('painel_obra3',['obra',]),
+        ('painel_obra1',txt_obras[1][1]),
+        ('painel_obra2',txt_obras[1][1]),
+        ('painel_obra3',txt_obras[1][1]),
+        ('painel_obra1',txt_obras[1][1]),
+        ('painel_obra2',txt_obras[1][1]),
+        ('painel_obra3',txt_obras[1][1]),
         ('painel_entrada',choice([7,])*['',]),
     ]
 elif tipo==7:
@@ -693,47 +890,23 @@ for i,info in enumerate(paineis):
                     #_________
 
                     #tecido
-                    img=[img_faixas(tipo,l,pasta=pasta)]
+                    if tipo==7 and not (camada+l)%2:
+                        desenha=0
+                    else:
+                        desenha=1
 
-                    a=tecido(largura, altura, base, b2, gira=0,img=img,alfa=1)
+                    if desenha:
+                        img=[]
+                        if imagem and tipo in [4,7,0,8]:
+                            img.append(img_faixas(tipo,l,pasta=pasta))
+                        print(i,camada,l,img)
+                        a=tecido(largura, altura, base, b2, gira=0,img=img,alfa=1)
 
                     #_________
 
                     #texto
-                    if painel in paineis_textos:
-
-                        hyphenation(False)
-                        c=2 # colunas
-                        ec=2 # entrecolunas
-
-                        tit=texto[abertura]['titulo']
-                        txt=texto[abertura]['texto']
-                    
-                        tit.append('\n')
-
-                        tw=(largura-2*margem-(c-1)*ec)/c
-                        tw,th=textSize(txt, width=tw)
-                        th=(th/c)/2
-            
-                        twt,tht=textSize(tit, width=tw)
-            
-                        save()
-                        translate(margem,meio)
-            
-                        if estampa:
-                            me=14
-                            save()
-                            fill(1)
-                            rect(-margem,-th-me,largura,2*th+tht+2*me)
-                            restore()
-                        alinha=['left','right']
-                        for n in range(c):
-                            txt=textBox(txt,((tw+ec)*n,-th,tw,2*th),align=alinha[n%2])
-
-                        twt,tht=textSize(tit, width=tw)
-                        textBox(tit,(0,th,tw,tht))
-
-                        restore()
+                    if texto:
+                        desenha_texto()
                     #_________
     #__________________________
 
@@ -827,12 +1000,16 @@ for i,info in enumerate(paineis):
             
                 if tipo==7 and not (camada+l)%2:
                     desenha=0
+                elif tipo in [5,6] and painel in paineis_obras and l>0:
+                    desenha=0
                 else:
                     desenha=1
 
                 if desenha:
+                    if painel in paineis_obras:
+                        pasta='obras/1/1' 
                     img=[]
-                    if imagem and tipo in [4,7,0,8]:
+                    if imagem and tipo in [4,7,0,8,5]:
                         for n in range(n):
                             img.append(img_faixas(tipo,l,pasta=pasta))
                     print(i,camada,l,img)
@@ -846,40 +1023,9 @@ for i,info in enumerate(paineis):
                     #_________
 
                     #texto
-                    if painel in paineis_textos:
-
-                        hyphenation(False)
-                        c=2 # colunas
-                        ec=2 # entrecolunas
-
-                        tit=texto[abertura]['titulo']
-                        txt=texto[abertura]['texto']
-                    
-                        tit.append('\n')
-
-                        tw=(largura-2*margem-(c-1)*ec)/c
-                        tw,th=textSize(txt, width=tw)
-                        th=(th/c)/2
-            
-                        twt,tht=textSize(tit, width=tw)
-            
-                        save()
-                        translate(margem,meio)
-            
-                        if estampa:
-                            me=14
-                            save()
-                            fill(1)
-                            rect(-margem,-th-me,largura,2*th+tht+2*me)
-                            restore()
-                        alinha=['left','right']
-                        for n in range(c):
-                            txt=textBox(txt,((tw+ec)*n,-th,tw,2*th),align=alinha[n%2])
-
-                        twt,tht=textSize(tit, width=tw)
-                        textBox(tit,(0,th,tw,tht))
-
-                        restore()
+                    if painel in paineis_textos+paineis_obras:
+                        print('>>>>>>',texto)
+                        desenha_texto()
             
                 #_________
             
