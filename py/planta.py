@@ -310,8 +310,8 @@ zoom=var(zoom,1,lista=areas,tipo='lista')
 
 # proposta
 versao=var(painel,3,lista=possibilidades,tipo='lista')
-versao_cortina=var(cortina,3,lista=possibilidades,tipo='lista')
-versao_porta=var(porta,3,lista=possibilidades,tipo='lista')
+versao_cortina=var(cortina,1,lista=possibilidades,tipo='lista')
+versao_porta=var(porta,2,lista=possibilidades,tipo='lista')
 
 # planta
 planta = os.path.join(path_img,'_planta.pdf')
@@ -447,8 +447,8 @@ w=80
 dist=150
 x=700
 y=100
-painel_texto(w,dist,(x,y),base=1,txt=['titulo eixo1 en','txt curatorial pt'])
-painel_texto(w,dist,(x,y+w+20),base=1,txt=['titulo eixo1 pt','txt curatorial en'])
+painel_texto(w,dist,(x,y),base=1,txt=['txt curatorial pt','painel', ])
+painel_texto(w,dist,(x,y+w+20),base=1,txt=['txt curatorial en','painel', ])
 
 painel_texto(w,100,(x-420,y+60),tipo='v',base=1,txt=['txt eixo1 en','txt eixo1 pt'])
 
@@ -457,7 +457,7 @@ restore()
 # cortina
 if versao_cortina == 1:
     m=60
-    painel_giratorio(m,9,1,m+50,m,gira=cortina_mobile,grid=grid,xy=(160,790),base=1)
+    painel_giratorio(m,8,1,m+70,m,gira=cortina_mobile,grid=grid,xy=(160,790),base=1)
 elif versao_cortina == 2:
     m=150
     painel_giratorio(m,3,1,m+200,m,gira=cortina_mobile,grid=grid,xy=(255,800),base=1,bh=60)
@@ -503,8 +503,8 @@ if pessoas:
 
 # cortina
 if versao_cortina == 1:
-    m=60
-    painel_giratorio(m,9,1,m+50,m,gira=cortina_mobile,grid=grid,xy=(160,60),base=1)
+    m=80
+    painel_giratorio(m,8,1,m+50,m,gira=cortina_mobile,grid=grid,xy=(160,60),base=1)
 elif versao_cortina == 2:
     m=180
     painel_giratorio(m,3,1,m+240,m,gira=cortina_mobile,grid=grid,xy=(190,50),base=1,bh=60)
@@ -562,10 +562,10 @@ if pessoas:
 # texto
 save()
 w=70
-dist=randint(100,200)
-painel_texto(w,dist,(50,-300-dist),tipo='v',base=1,txt=['titulo eixo2 en','txt eixo2 en'])
+dist=200
+painel_texto(w,dist,(150,-300-dist),tipo='v',base=1,txt=['titulo eixo2 en','txt eixo2 en'])
 dist=randint(150,300)
-painel_texto(w,dist,(150,-900-dist),tipo='v',base=1,txt=['titulo eixo2 pt','txt eixo2 pt'])
+# painel_texto(w,dist,(50,-900-dist),tipo='v',base=1,txt=['titulo eixo2 pt','txt eixo2 pt'])
 restore()
 
 # porta2
@@ -613,8 +613,8 @@ if pessoas:
 # texto
 save()
 w=70
-painel_texto(w,randint(150,300),(-250,190),tipo='v',base=1,txt=['txt eixo3 en','titulo eixo3 en'])
-painel_texto(w,randint(100,200),(-150,800),tipo='v',base=1,txt=['txt eixo3 pt','titulo eixo3 pt'])
+painel_texto(w,200,(-250,190),tipo='v',base=1,txt=['txt eixo3 en','titulo eixo3 en'])
+# painel_texto(w,randint(100,200),(-150,800),tipo='v',base=1,txt=['txt eixo3 pt','titulo eixo3 pt'])
 restore()
 
 # porta3

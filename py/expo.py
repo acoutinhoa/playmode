@@ -43,6 +43,7 @@ def medidas(painel='',keys=False):
             'base':randint(20,60),
             'b2':randint(20,60),
             'suporte':'suspenso',
+            'fio':30,
             },
         'painel_corredor':{
             'w':70,
@@ -52,15 +53,19 @@ def medidas(painel='',keys=False):
             'base':randint(20,80),
             'b2':randint(20,80),
             'suporte':'suspenso',
+            'fio':30,
             },
         'painel_cortina':{
-            'w':80,
-            'h':250,
+            'w':60,
             'margem':0,
             'dist':40,
-            'base':randint(20,80),
-            'b2':randint(20,80),
+            # 'base':randint(20,80),
+            # 'b2':randint(20,80),
+            'base':70,
+            'b2':20,
             'suporte':'mobile',
+            'fio':15,
+            'h':250-15,
             },
         'painel_obra3':{
             'w':30,
@@ -70,33 +75,37 @@ def medidas(painel='',keys=False):
             'base':randint(20,80),
             'b2':randint(20,80),
             'suporte':'mobile',
+            'fio':30,
             },
         'painel_obra2':{
             'w':30,
-            'h':220,
+            'h':250,
             'margem':2.5,
             'dist':50,
-            'base':70,
+            'base':randint(60,90),
             'b2':None,
             'suporte':'obra2',
+            'fio':30,
             },
         'painel_obra1':{
             'w':30,
-            'h':250,
+            'h':220,
             'margem':2.9,
             'dist':20,
-            'base':randint(20,80),
-            'b2':randint(20,80),
+            'base':randint(60,90),
+            'b2':None,
             'suporte':'suspenso',
+            'fio':30,
             },
         'painel_entrada':{
             'w':20,
             'h':250,
             'margem':0,
-            'dist':5,
-            'base':5,
-            'b2':randint(20,80),
+            'dist':10,
+            'base':10,
+            'b2':5,
             'suporte':'mobile',
+            'fio':30,
             },
     }
     if painel:
@@ -132,12 +141,14 @@ def tcd_img(img,base,alfa=1):
             fill(1)
             rect(0,0,largura/ei,(altura-base)/ei)
             if painel in paineis_obras:
-                    y=(altura-base-67)/ei
+                y=(altura-base-67)/ei
             else:
                 if pasta[-1] == '0':
                     y=(altura-base-50)/ei
                 elif pasta[-1] == '1':
                     y=(altura-base-30)/ei
+                else:
+                    y=0
         else:
             y=0
             
@@ -217,7 +228,7 @@ def tecido(largura, altura, base, b2,gira=0,b2c=(0.93,),img=[],alfa=1):
 
 #_________
 
-def suporte(tipo,largura,altura,ajuste=0,a=1,cor_sup='b'):
+def suporte(tipo,largura,altura,fh,ajuste=0,a=1,cor_sup='b',):
 
     def fio(w,h):
         save()
@@ -244,7 +255,7 @@ def suporte(tipo,largura,altura,ajuste=0,a=1,cor_sup='b'):
     bw=largura+ajuste # largura do suporte base
 
     if tipo == 'base_mobile':
-        fh=30 # altura do fio para os suportes mobile com base
+        # fh=30 # altura do fio para os suportes mobile com base
         bh=altura+fh # altura do suporte base
     else:
         bh=altura
@@ -347,7 +358,8 @@ def img_faixas(tipo,l,pasta=''):
     img_lista.sort()
 
     img=choice(img_lista)
-    
+    # img=n
+        
     if img=='grafico':
         pass
     elif img=='playmode':
@@ -857,6 +869,7 @@ for i,info in enumerate(paineis):
     base=dados['base']
     b2=dados['b2']
     suporte_tipo=dados['suporte']
+    fh=dados['fio']
     
 
     #__________________________
@@ -1018,13 +1031,13 @@ for i,info in enumerate(paineis):
                     #_________
 
                     # suporte
-                    suporte(suporte_tipo,largura,altura,ajuste,a=a,cor_sup=cor_suporte)
+                    suporte(suporte_tipo,largura,altura,fh,ajuste,a=a,cor_sup=cor_suporte)
 
                     #_________
 
                     #texto
                     if painel in paineis_textos+paineis_obras:
-                        print('>>>>>>',texto)
+                        # print('>>>>>>',texto)
                         desenha_texto()
             
                 #_________

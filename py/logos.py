@@ -16,8 +16,8 @@ mm = cm/10
 ###############################
 
 ordem=[
-    ('Produção',1.5), #0
-    ('',2.7), #1
+    ('',3.1), #1
+    ('Produção',1.2), #0
     ('Apoio',2), #2
     ('Patrocínio',3), #3
     ('Realização',3), #4
@@ -26,7 +26,7 @@ ordem=[
 # linhas
 ordem_linhas={
     '1':[[0,1,2,3,4]],
-    '3':[[0],[1,2],[3,4]],
+    '3':[[0,1],[2,3],[4]],
     }
 
 ###############################
@@ -44,7 +44,7 @@ Variable([
     dict(name="linhas", ui="PopUpButton", args=dict(items=n_linhas)),
     dict(name="altura_ccbb_mm", ui="EditText", args=dict(text='30')),
     dict(name="fonte", ui="PopUpButton", args=dict(items=fontes_do_pc)),
-    dict(name="fonteSize_px", ui="EditText", args=dict(text='12')),
+    dict(name="fonteSize_px", ui="EditText", args=dict(text='20')),
 ], globals())
 
 #linhas
@@ -67,12 +67,12 @@ print('fonte size =', fs, 'px')
 #_____________________________________________
 
 m=h/3
-h_linha=6*m
+h_linha=7*m
 
 if n_linhas == '1':
-    pw=96*m
+    pw=100*m
 elif n_linhas == '3':
-    pw=44*m
+    pw=40*m
 ph=len(linhas)*h_linha+2*m
 
 size(pw,ph)
@@ -86,7 +86,7 @@ for linha in linhas:
         txt,nm=ordem[n]
 
         path_logos= os.path.join(path_img,str(n))
-        logos = [img for img in os.listdir(path_logos) if img[0]!='.']
+        logos = [img for img in os.listdir(path_logos) if img[0] not in ['.','_']]
         logos.sort()
     
         # texto
@@ -96,7 +96,7 @@ for linha in linhas:
         font(fonte)
         fontSize(fs)
         cmykFill(0,0,0,1)
-        textBox(txt,( 0 , 3*m , fs*len(txt) , m*1.5 ))
+        textBox(txt,( 0 , 4*m , fs*len(txt) , fs*1.5 ))
     
         # logos
         for logo in logos:
@@ -110,9 +110,9 @@ for linha in linhas:
             image(logo,(0,-lh/4))
             restore()
         
-            translate(lw*e+m,0)
+            translate(lw*e+1.2*m,0)
 
-        translate(m,0)
+        translate(1.5*m,0)
 
     restore()
     translate(0,h_linha)

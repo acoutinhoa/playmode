@@ -71,7 +71,7 @@ Variable([
 s=var(frame_time,tipo='numero')
 s=s/10
 
-gif=var(gif,lista=gifs)
+gif=var(gif,'0', lista=gifs)
 if gif == 'ps':
     path_gif=os.path.join(pasta, 'ps/0')
     path_pdf=os.path.join(pasta, 'pdf/0')
@@ -90,7 +90,7 @@ if inverte_ordem:
     img_lista.reverse()
 
 imgw,imgh=0,0
-pw,ph=0,0
+pw,ph=1500,600
 for img_path in img_lista:
     print(img_path)
     imgw,imgh=imageSize(img_path)
@@ -112,7 +112,7 @@ for img_path in img_lista:
 
 
 # # # para salvar antere o valor de n e descomente as linhas abaixo
-# path_save=os.path.join(pasta,'gif/gif_%s_%ss.mp4' % (gif,s))
+# path_save=os.path.join(pasta,'gif/playmode_gif_%s_%ss.mp4' % (gif,s))
 # saveImage(path_save)
 # print('\ngif salvo >>>')
 # print(path_save)

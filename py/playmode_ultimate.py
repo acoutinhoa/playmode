@@ -16,22 +16,22 @@ mm = cm/10
 # _____________________________________
 # _____________________________________
 
-repete_x=1
-repete_y=5
+repete_x=2
+repete_y=1
 
 ajuste_texto=-1
 
 # # logo
 # pw=1000
-# ph=300
+# ph=900
+# faixas=10
+# modulos=[2**i for i in range(0,5)] # n_modulos/faixa
+
+# # cartaz
+# pw=42*cm
+# ph=60*cm
 # faixas=10
 # modulos=[2**i for i in range(1,6)] # n_modulos/faixa
-
-# cartaz
-pw=42*cm
-ph=60*cm
-faixas=10
-modulos=[2**i for i in range(1,6)] # n_modulos/faixa
 
 # # painel entrada
 # faixas=19
@@ -64,12 +64,12 @@ modulos=[2**i for i in range(1,6)] # n_modulos/faixa
 # ph=2000
 # modulos=[2**i for i in range(0,6)] # n_modulos/faixa
 
-# # obra
-# faixas=4
-# pw=400
-# ph=1200
-# modulos=[1,1,]+[2**i for i in range(0,6)] # n_modulos/faixa
-# # modulos=[1,2,1,16,32,]
+# obra
+faixas=4
+pw=30*cm
+ph=60*cm
+modulos=[1,1,]+[2**i for i in range(0,6)] # n_modulos/faixa
+# modulos=[1,2,1,16,32,]
 
 # caracteres='PPLLAAYYMMOODDEE'
 caracteres='PLAYMODE'
@@ -97,15 +97,15 @@ sw=0.5 # espessura da linha (px) --- versao: com_linhas
 
 imagens={
     
-    'playmode logo':{
-        'path':'/Users/alien/x3/x/qdd/playmode/img/1/painel_1.png',
-        'x':'c',
-        'y':'c',
-        'zoom':'w',
-        'inverte_cores':False,
-        'brilho':0,
-        'contraste':1,
-    },
+    # 'playmode logo':{
+    #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/painel_1.png',
+    #     'x':'c',
+    #     'y':'c',
+    #     'zoom':'w',
+    #     'inverte_cores':False,
+    #     'brilho':0,
+    #     'contraste':1,
+    # },
 
     # 'qctx logo':{
     #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/painel_3.png',
@@ -117,15 +117,15 @@ imagens={
     #     'contraste':1,
     # },
 
-    # 'obra_taca_2x1_estampa':{
-    #     'path':'/Users/alien/x3/x/qdd/playmode/img/obras/taca.jpeg',
-    #     'x' : 'c',
-    #     'y' : 'r',
-    #     'zoom' : randint(100,180)/100,
-    #     'inverte_cores':False,
-    #     'brilho':-0.10,
-    #     'contraste':1,
-    # },
+    'obra_taca_2x1_estampa':{
+        'path':'/Users/alien/x3/x/qdd/playmode/img/obras/taca.jpeg',
+        'x' : 'c',
+        'y' : 'r',
+        'zoom' : randint(100,180)/100,
+        'inverte_cores':False,
+        'brilho':-0.10,
+        'contraste':1,
+    },
 
     # 'q_estampa':{
     #     'path':'pixel_q_100.png',
@@ -368,20 +368,28 @@ def playmode(vezes,pontos,layer,c=0,ajuste_txt=0,car_c=0):
                         desenho,car_c=pixel(pt,m,car_c,desenho,base,texto)
                 else:
                     desenho,car_c=pixel(pt,m,car_c,desenho,base,texto,ajuste_txt)
-        if n==1:
+        
+        if unir_formas:
             desenho.removeOverlap()
+
         if ver==0:
             if txt_colorido and layer[0] not in ps2:
-                cor_=cor(cor_txt)
+                cor_=cor(cor_txt,cmyk=cmyk)
             else:
                 cor_=dgd(cor0,cor1,c,len(ordem)-1)
                 
             if n==0:
-                fill(*cor_)
+                if cmyk:
+                    cmykFill(*cor_)
+                else:
+                    fill(*cor_)
                 stroke(None)
             elif n==1:
                 fill(None)
-                stroke(*cor_)
+                if cmyk:
+                    cmykStroke(*cor_)
+                else:
+                    stroke(*cor_)
                 strokeWidth(sw)
                 miterLimit(sw)
             drawPath(desenho)
@@ -441,31 +449,55 @@ def formas(caracteres,m,fs=0,fonte='CourierNewPSMT'):
         base[c]=bezier
     return base
 
-def cor(cores,cor_repetida=None):
+def cor(cores,cor_repetida=None,cmyk=False):
     if type(cores) == type(''):
         c_lista=[c for c in cores]
         c=choice(c_lista)
         if c == 'r':
-            c=(1,0,0)
+            if cmyk:
+                c=(0,1,1,0)
+            else:
+                c=(1,0,0)
         elif c == 'g':
-            c=(0,1,0)
+            if cmyk:
+                c=(1,1,0,0)
+            else:
+                c=(0,1,0)
         elif c == 'b':
-            c=(0,0,1)
+            if cmyk:
+                c=(1,0,1,0)
+            else:
+                c=(0,0,1)
         elif c == 'c':
-            c=(0,1,1)
+            if cmyk:
+                c=(1,0,0,0)
+            else:
+                c=(0,1,1)
         elif c == 'm':
-            c=(1,0,1)
+            if cmyk:
+                c=(0,1,0,0)
+            else:
+                c=(1,0,1)
         elif c == 'y':
-            c=(1,1,0)
+            if cmyk:
+                c=(0,0,1,0)
+            else:
+                c=(1,1,0)
         elif c == 'k':
-            c=(0,0,0)
+            if cmyk:
+                c=(0,0,0,1)
+            else:
+                c=(0,0,0)
         elif c == 'w':
-            c=(1,1,1)
+            if cmyk:
+                c=(0,0,0,0)
+            else:
+                c=(1,1,1)
         else:
             c='cor nao definida'
         
         while c == cor_repetida:
-            c=cor(cores,cor_repetida)
+            c=cor(cores,cor_repetida,cmyk=cmyk)
     elif type(cores) == []:
         c=choice(cores)
     else:
@@ -504,8 +536,11 @@ tipos_txt=[
 #     '4_texto corrido',
 #     ]
 
+unir_formas=False
+
 Variable([
-    # dict(name="CMYK", ui="CheckBox", args=dict(value=False)),
+    dict(name="cmyk", ui="CheckBox", args=dict(value=True)),
+    # dict(name="unir_formas", ui="CheckBox", args=dict(value=False)),
     dict(name="ver", ui="PopUpButton", args=dict(items=opcoes)),
     dict(name="grid", ui="CheckBox", args=dict(value=False)),
     dict(name="fonte", ui="PopUpButton", args=dict(items=fontes_do_pc)),
@@ -532,12 +567,12 @@ for i,botao in enumerate(ps1):
         px_lista.append(ps2[i])
 
 # cores
-cor0=cor(cor_0)
+cor0=cor(cor_0,cmyk=cmyk)
 if degrade:
-    cor1=cor(cor_1)
+    cor1=cor(cor_1,cmyk=cmyk)
 else:
     cor1=cor0
-bg=cor(cor_bg,cor0)
+bg=cor(cor_bg,cor0,cmyk=cmyk)
 
 # fonte
 fonte_px=var(fonte,'CourierNewPS-BoldMT', lista=fontes_do_pc)
@@ -577,8 +612,6 @@ for i in imagens:
     i=imagens[i]
     
     i_path=i['path']
-    # img=i['path']
-    # e=i['zoom']
     
     if len(i_path.split('/')) == 1:
         i_path=os.path.join(path_img,i_path)
@@ -588,10 +621,6 @@ for i in imagens:
     i['w']=imgw
     i['h']=imgh
 
-
-    # # # i_path=i['path']
-    # # # imgw=i['w']
-    # # # imgh=i['h']
     x=i['x']
     y=i['y']
     e=i['zoom']
@@ -633,7 +662,10 @@ for i in imagens:
     img = ImageObject()
     with img:
         size(pw,ph)
-        fill(1)
+        if cmyk:
+            cmykFill(*cor('w',cmyk=cmyk))
+        else:
+            fill(*cor('w',cmyk=cmyk))
         rect(0,0,pw,ph)
         translate(x,y)
         scale(e)
@@ -657,6 +689,12 @@ if ver==1:
                 image(img['img'],(rx*pw,ry*ph))
 
 else:
+    
+    # #gif
+    # gif=1
+    # while gif<50:
+    #     modulos=[gif,]
+    
     # cria dicionario com formas basicas formas basicas pra cada zoom
     bases={}
     for nm in modulos:
@@ -677,9 +715,12 @@ else:
     newPage(pw*repete_x,ph*repete_y)
 
     if bg and not faixas_randomicas:
-        fill(*bg)
+        if cmyk:
+            cmykFill(*bg)
+        else:
+            fill(*bg)
         rect(0,0,pw*repete_x,ph*repete_y)
-    
+
     save()
     for rx in range(repete_x):
         save()
@@ -694,36 +735,40 @@ else:
                 nm=choice(modulos)
                 m=fw/nm
                 m0=m/2 # ponto central do modulo para verificacao da cor
-                
+            
                 # imagem
                 img_i=choice(list(imagens.keys()))
                 img=imagens[img_i]['img']
-        
+    
                 print()
                 print('>>> faixa', f)
                 print('imagem =', img_i)
                 print('n_modulos =', nm)
-        
+    
                 # cores
                 if faixas_randomicas:
-                    cor0=cor(cor_0)
+                    cor0=cor(cor_0,cmyk=cmyk)
                     if degrade:
-                        cor1=cor(cor_1)
+                        cor1=cor(cor_1,cmyk=cmyk)
                     else:
                         cor1=cor0
                 if bg_randomico:
-                    bg=cor(cor_bg,cor0)
-                    fill(*bg)
+                    bg=cor(cor_bg,cor0,cmyk=cmyk)
+
+                    if cmyk:
+                        cmykFill(*bg)
+                    else:
+                        fill(*bg)
                     rect(f*fw,0,fw,ph)
-        
+    
                 # formas
                 base=bases[nm]
-        
+    
                 # cria lista de pontos
                 pontos_x=[f*fw+m0+m*x for x in range(nm)]
                 pontos_y=[m0*y for y in range(ceil(ph/m0)) if y%2]
                 pontos_y.reverse() # inverte a lista vertical para desenha de cima para baixo
-                
+            
                 pontos=[]
                 for j,y in enumerate(pontos_y):
                     for i,x in enumerate(pontos_x):
@@ -743,30 +788,56 @@ else:
 
                 for c,camada in enumerate(ordem[:-1]):
                     car_c=playmode(vezes,pontos,[camada,],c,ajuste_txt,car_c=car_c)
-                
+            
                 if texto in [2,4]:
                     car_c+=nm
                 if texto in [3,4] and not f:
                     car0=car_c+len(pontos_y)
 
                 restore()
-            
+        
                 # desenha quadrados rosas da modulacao fora da pagina
                 if not ry and f%2:
-                    fill(1,0,1)
-                    rect(f*fw,ph+10,fw,fw)
-                
-                
-                
+                    if cmyk:
+                        cmykStroke(*cor('m',cmyk=cmyk))
+                    else:
+                        fill(*cor('m',cmyk=cmyk))
+                    rect(f*fw,ph+10,fw,1*cm)
+            
+            
+            
             translate(0,-ph)
         restore()
         translate(pw,0)
     restore()
 
+
+        # # # # # salvar
+        # # ordem=str(gif)
+        # # ordem=(3-len(ordem))*'0'+ordem
+        # # pasta='7'
+        # # nome='gif/%s/%s_playmode.pdf' % (pasta,ordem)
+        # # path_save=os.path.join( path,nome )
+        # # saveImage(path_save, multipage=False)
+        # # print('gif salvo >>>')
+        # # print(path_save)
+        
+        
+        # if gif>=40:
+        #     gif+=10
+        # elif gif>=20:
+        #     gif+=5
+        # else:
+        #     gif+=1
+
+
 # grid
 if grid:
     fill(None)
-    stroke(0)
+    if cmyk:
+        cmykStroke(*cor('w',cmyk=cmyk))
+    else:
+        stroke(*cor('w',cmyk=cmyk))
     for i in range(faixas):
         if i:
             line((fw*i,0),(fw*i,ph*repete_y))
@@ -775,9 +846,10 @@ if grid:
 
 print('\n---------------------')
 for img in imagens:
-    print("    '%s' :" % img)
+    print("    '%s' : {" % img)
     for i in imagens[img]:
         print("        '%s' : %s," % (i,str(imagens[img][i])))
+    print('    },')
     print()
 print('---------------------')
 
