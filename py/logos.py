@@ -40,7 +40,10 @@ fontes_do_pc = ['?',]+installedFonts()
 
 n_linhas=list(ordem_linhas.keys())
 
+cores=['colorido','pb_fundo escuro']
+
 Variable([
+    dict(name="cor", ui="PopUpButton", args=dict(items=cores)),
     dict(name="linhas", ui="PopUpButton", args=dict(items=n_linhas)),
     dict(name="altura_ccbb_mm", ui="EditText", args=dict(text='30')),
     dict(name="fonte", ui="PopUpButton", args=dict(items=fontes_do_pc)),
@@ -56,6 +59,7 @@ fonte=var(fonte,'CourierNewPS-BoldMT', lista=fontes_do_pc)
 fs=var(fonteSize_px,tipo='float')
 
 # logos
+path_img = os.path.join(path_img,str(cor))
 h=var(altura_ccbb_mm,tipo='float')*mm
 
 #_____________________________________________
@@ -76,6 +80,11 @@ elif n_linhas == '3':
 ph=len(linhas)*h_linha+2*m
 
 size(pw,ph)
+
+if cor==1:
+    cmykFill(0,0,0,1)
+    rect(0,0,pw,ph)
+
 translate(2*m,2*m)
 
 linhas.reverse()
@@ -95,7 +104,10 @@ for linha in linhas:
     
         font(fonte)
         fontSize(fs)
-        cmykFill(0,0,0,1)
+        if cor == 0:
+            cmykFill(0,0,0,1)
+        elif cor == 1:
+            cmykFill(0,0,0,0)
         textBox(txt,( 0 , 4*m , fs*len(txt) , fs*1.5 ))
     
         # logos

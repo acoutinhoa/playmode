@@ -540,6 +540,7 @@ unir_formas=False
 
 Variable([
     dict(name="cmyk", ui="CheckBox", args=dict(value=True)),
+    dict(name="grafica", ui="CheckBox", args=dict(value=True)),
     # dict(name="unir_formas", ui="CheckBox", args=dict(value=False)),
     dict(name="ver", ui="PopUpButton", args=dict(items=opcoes)),
     dict(name="grid", ui="CheckBox", args=dict(value=False)),
@@ -761,9 +762,6 @@ else:
                         fill(*bg)
                     rect(f*fw,0,fw,ph)
     
-                # formas
-                base=bases[nm]
-    
                 # cria lista de pontos
                 pontos_x=[f*fw+m0+m*x for x in range(nm)]
                 pontos_y=[m0*y for y in range(ceil(ph/m0)) if y%2]
@@ -782,6 +780,9 @@ else:
                             car=len(ordem)-1
                         car=ordem[car]
                         pontos.append([car,x,y,i,j])
+
+                # formas
+                base=bases[nm]
 
                 save()
                 translate(-m0,-m0)

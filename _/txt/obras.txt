@@ -27,11 +27,11 @@ Mary Flanagan*
 
 
 [mapscotch] — [bombscotch], 2013 
-Vinyl and beanbags; dimensions variable 
+Vinyl and beanbags; Variable dimensions 
 Courtesy of the artist 
 
 
-Hopscotch is probably one of the most popular and universal games ever, enjoyed by millions of children around the world. The basis of its popularity is certainly its simplicity and ease of play. All you need is a piece of chalk or tile, a small stone, one or more people and the desire to play. 
+Hopscotch is probably one of the most popular and universal games ever, enjoyed by millions of children around the world. The basis of its popularity is certainly its simplicity and ease of play. All you need is a piece of chalk or tile, a small stone, one or more people and the desire to play.
 
 
 In [mapscotch], Mary Flanagan asks players to draw their own field of play, exploring critical issues related to their social and cultural context. In the [bombscotch] version, Flanagan slightly modifies the hopscotch’s terrain, replacing the numbers in the circular spaces with words related to the war atrocities committed by the USA or to other socio-political issues. 
@@ -64,7 +64,7 @@ Laura Lima and Marcius Galan*
 Mesa de Jogos, 2020
 Wooden table with different materials (decks, wooden pieces, rubber bands, snooker pocket, snooker balls...) 
 220 x 110 cm
-Laura Lima and Marcius Galan’s work Mesa de Jogos (2020) questions the importance of rules in ludic and sometimes rigid systems of contemporaneity. In this context, it is proposed a deconstruction of these rules through play. In this sense, from existing tools in games, such as chess board, decks of cards and other props, a table freed from traditional constraints is created to inquire about the relationship between play (paidia), whose rules can be freely modified, and game (ludus), which implies a more closed structure whose rules are non-negotiable without jeopardizing the playful experience. In that regard, the interaction arises as a hybrid between rules, which are deconstructed form other games, and the multiple possibilities of deviation and subversion through play.
+Laura Lima and Marcius Galan’s work Mesa de Jogos (2020) questions the importance of rules in ludic and sometimes rigid systems of contemporaneity. In this context, it is proposed a deconstruction of these rules through play. In this sense, from existing tools in games, such as chess boards, decks of cards and other props, a table freed from traditional constraints is created to inquire about the relationship between play (paidia), whose rules can be freely modified, and game (ludus), which implies a more closed structure whose rules are non-negotiable without jeopardizing the playful experience. In that regard, the interaction arises as a hybrid between rules, which are deconstructed form other games, and the multiple possibilities of deviation and subversion through play.
 *Brazil,1971; United States, 1972. 
 
 
@@ -187,7 +187,7 @@ Monitor vídeo, mala, computador de xadrez, transmissor sem fios de 2,4 GHz, ant
 Cortesia dos artistas 
 
 
-Na véspera da 30ª edição dos Jogos Olímpicos de Londres, em 2012, o duo de artistas !Mediengruppe Bitnik infiltrou-se no sistema de vigilância por vídeo de uma das estações de metrô mais controladas da capital inglesa. Nesta performance-jogo de estilo hacker, os artistas interceptam a frequência do sinal de transmissão da câmera de vigilância, substituindo a imagem transmitida pela imagem de um tabuleiro de xadrez. À frente dos monitores, o vigilante torna-se um potencial jogador, recebendo as instruções de jogo de uma voz pré-gravada. O espaço de vigilância e de controle transforma-se, por breves instantes, em espaço de jogo bidirecional, em que o poder se encontra distribuído e equilibrado. 
+Na véspera da 30ª edição dos Jogos Olímpicos de Londres, em 2012, o duo de artistas !Mediengruppe Bitnik infiltrou-se no sistema de vigilância por vídeo de uma das estações de metrô mais controladas da capital inglesa. Nesta performance-jogo de estilo %%hacker%%, os artistas interceptam a frequência do sinal de transmissão da câmera de vigilância, substituindo a imagem transmitida pela imagem de um tabuleiro de xadrez. À frente dos monitores, o vigilante torna-se um potencial jogador, recebendo as instruções de jogo de uma voz pré-gravada. O espaço de vigilância e de controle transforma-se, por breves instantes, em espaço de jogo bidirecional, em que o poder se encontra distribuído e equilibrado. 
 
 
 * Carmen Weisskopf, Suiça, 1976; Domagoj Smoljo, Croácia, 1979. 
@@ -259,7 +259,7 @@ Réplica da taça Jules Rimet fundida em latão e cartuchos de munições utiliz
 A violência militar no Brasil e as narrativas do colonialismo sul-americano são dimensões centrais que atravessam o imaginário e a obra artística de Jaime Lauriano. Através de uma série de objetos e instalações manifestamente políticos, Lauriano invoca e desconstrói períodos e episódios da ditadura militar brasileira, da colonização e do tráfico de escravos que marcam profundamente a história contemporânea do Brasil. 
 
 
-A Taça do Mundo é Nossa é um objeto escultórico, uma réplica do famoso troféu Jules Rimet, que galardoou a vitória do Brasil no tricampeonato da Copa do mundo em 1970. Lauriano replicou esse objeto icônico derretendo restos de cartuchos de munição que foram usados pelas forças militares do Brasil em várias zonas de conflito. Para o artista, esta apropriação representa simbolicamente a instrumentalização do futebol como elemento de propaganda em regimes repressivos na Argentina, Brasil, Chile e Uruguai, entre os anos sessenta e setenta. Na base da taça, podemos ler o nome desses países assim como as datas das respectivas ditaduras. 
+A Taça do Mundo é Nossa é um objeto escultórico, uma réplica do famoso troféu Jules Rimet, que galardoou a vitória do Brasil no tricampeonato da Copa do Mundo em 1970. Lauriano replicou esse objeto icônico derretendo restos de cartuchos de munição que foram usados pelas forças militares do Brasil em várias zonas de conflito. Para o artista, esta apropriação representa simbolicamente a instrumentalização do futebol como elemento de propaganda em regimes repressivos em Argentina, Brasil, Chile e Uruguai, entre os anos sessenta e setenta. Na base da taça, podemos ler o nome desses países assim como as datas das respectivas ditaduras. 
 
 
 *Brasil, 1985.
@@ -296,7 +296,7 @@ Morte Súbita, 2014
 Vídeo projeção em loop
 
 
-Morte Súbita nos apresenta uma cena estranhamente familiar que remete ao momento televisivo no início de uma partida de futebol, em que os jogadores de ambas as equipes são apresentados. No entanto, nesta sequência realizada por Jaime Lauriano, os presumíveis jogadores da equipe brasileira surgem de cara tapada pela camiseta da seleção, com as mãos atrás da cabeça. Durante quase vinte e cinco minutos, os nomes que se fazem ouvir não se referem a jogadores, mas aos mortos e desaparecidos, vítimas do regime repressivo brasileiro no ano de 1970. Como som de fundo, ouvem-se os sons de aclamação vibrante nas bancadas de um estádio, confundidos e intercalados com os sons de guerrilha. 
+Morte Súbita nos apresenta uma cena estranhamente familiar que remete ao momento televisivo no início de uma partida de futebol, em que os jogadores de ambas as equipes são apresentados. No entanto, nesta sequência realizada por Jaime Lauriano, os presumíveis jogadores da equipe brasileira surgem de cara tapada pela camiseta da seleção, com as mãos atrás da cabeça. Durante quase vinte e cinco minutos, os nomes que se fazem ouvir não se referem a jogadores, mas aos mortos e desaparecidos, vítimas do regime repressivo brasileiro no ano de 1970. Ao fundo, ouvem-se os sons de aclamação vibrante nas bancadas de um estádio, confundidos e intercalados com os sons de guerrilha. 
 
 
 Tal como no trabalho posterior, A Taça do Mundo é Nossa (2018), Morte Súbita (2014) explora a relação entre o poder do futebol e a sua utilização como instrumento de propaganda política no regime militar Brasileiro dos anos setenta. Esse vídeo faz referência a um momento histórico particular, o da celebração da grande vitória do tricampeonato da Copa do Mundo e aos atos letais da ditadura militar de 1970. 
@@ -337,7 +337,7 @@ Vídeo, cor, som; 60 min, loop
 Cortesia do artista 
 
 
-SuperMario Sleeping faz parte da série Videos after Videogames (1996–2006), que Miltos Manetas, pioneiro no reconhecimento e na celebração da influência dos videogames na arte contemporânea e na cultura visual da atualidade, criou e produziu. Trabalhando em pintura, vídeo e instalação desde a década de 1990, o artista grego foi dos primeiros a compreender a importância da Game Art e a trabalhar em “machinima”, um termo que surge da junção de «máquina» e «animação» (do inglês, «machine» e «animation»), propondo a utilização de motores de jogos virtuais para a criação e produção de vídeos. SuperMario Sleeping tira partido do videogame Super Mario 64 (1996), desenvolvido para o Nintendo 64, e propõe um ready-made da personagem da Nintendo, podendo recordar-nos ainda o filme Sleep (1963), de Andy Warhol e com John Giorno. 
+SuperMario Sleeping faz parte da série Videos After Videogames (1996–2006), que Miltos Manetas, pioneiro no reconhecimento e na celebração da influência dos videogames na arte contemporânea e na cultura visual da atualidade, criou e produziu. Trabalhando em pintura, vídeo e instalação desde a década de 1990, o artista grego foi dos primeiros a compreender a importância da Game Art e a trabalhar em “machinima”, um termo que surge da junção de «máquina» e «animação» (do inglês, «machine» e «animation»), propondo a utilização de motores de jogos virtuais para a criação e produção de vídeos. SuperMario Sleeping tira partido do videogame Super Mario 64 (1996), desenvolvido para o Nintendo 64, e propõe um ready-made da personagem da Nintendo, podendo recordar-nos ainda o filme Sleep (1963), de Andy Warhol e com John Giorno. 
 
 
 * Grécia, 1964.
@@ -354,7 +354,7 @@ Video, color, sound; 60 min, loop
 Courtesy of the artist 
 
 
-SuperMario Sleeping is part of the series Videos after Videogames (1996–2006) created and produced by Miltos Manetas, a pioneer in the recognition and celebration of the influence of video games on present day visual culture. Working in painting, video and installation since the 1990s, the Greek artist was one of the first to realize the importance of Game Art and to work in “machinima”, a term that combines the words “machine” and “animation”, proposing the use of game engines to create and produce videos. SuperMario Sleeping draws on the video game Super Mario 64 (1996), developed for the Nintendo 64, to create a ready-made of the Nintendo character, potentially recalling Andy Warhol’s film Sleep (1963) featuring John Giorno. 
+SuperMario Sleeping is part of the series Videos After Videogames (1996–2006) created and produced by Miltos Manetas, a pioneer in the recognition and celebration of the influence of video games on present day visual culture. Working in painting, video and installation since the 1990s, the Greek artist was one of the first to realize the importance of Game Art and to work in “machinima”, a term that combines the words “machine” and “animation”, proposing the use of game engines to create and produce videos. SuperMario Sleeping draws on the video game Super Mario 64 (1996), developed for the Nintendo 64, to create a ready-made of the Nintendo character, potentially recalling Andy Warhol’s film Sleep (1963) featuring John Giorno. 
 
 
 * Greece, 1964.
@@ -391,11 +391,11 @@ Video game; variable duration
 Courtesy of the artist 
 
 
-In the United States of America, thousands of people every year are victims of violent crime involving firearms. Joseph DeLappe explores this issue by modifying the popular video game Grand Theft Auto V (Rockstar North, 2013). Instead of inviting visitors to the exhibition to play, the artist depicts a series of crimes with firearms in the streets of a North American city. This is an excerpt from a longer video in which the game engine plays by itself, without human involvement, for a whole year.** Day after day, the system presents the total number of murders in the USA since the beginning of the year. At midnight, the counter returns to 0 and the slaughter restarts. The ecosystem is updated in real time according to the records available on the Gun Violence Archive website. On 4 July 2018, there were 7,293 recorded crimes committed with firearms; by the end of that year, the figure had doubled. 
+In the United States of America, thousands of people every year are victims of violent crime involving firearms. Joseph DeLappe explores this issue by modifying the popular video game Grand Theft Auto V (Rockstar North, 2013). Instead of inviting visitors to the exhibition to play, the artist depicts a series of crimes with firearms in the streets of a North American city. This is an excerpt from a longer video in which the game engine plays by itself, without human involvement, for a whole year.** Day after day, the system presents the total number of murders in the USA since the beginning of the year. At midnight, the counter returns to 0 and the slaughter restarts. The ecosystem is updated in real time according to the records available on the Gun Violence Archive website. On July 4, 2018, there were 7,293 recorded crimes committed with firearms; by the end of that year, the figure had doubled. 
 
 
 * United States of America, 1963. 
-** Broadcast on &&twitch.tv/josephdelappe&& between 4 July 2018 and 4 July 2019. 
+** Broadcast on &&twitch.tv/josephdelappe&& between July 4, 2018 and July 4, 2019. 
 
 
 Non-interactive.
@@ -412,7 +412,7 @@ Protótipo**, técnica mista; 23 cm (esfera)
 Cortesia do artista 
 
 
-Não há partida de futebol sem bola, e em The 23rd Player — A Behavioral Ball, esta ganha estatuto de ator principal. Nesta reinterpretação do futebol, as regras são claras: nenhum jogador pode tocar na bola, apenas pode tentar influenciar o seu movimento com a posição do seu corpo no terreno de jogo. O 23º jogador é o piloto que tenta telecomandar o movimento da bola. Porém, essa atividade nem sempre é bem-sucedida. Frequentemente, a bola parece agir de forma autônoma, sem respeitar as ordens que lhe foram dadas pelo piloto. A partida transforma-se numa curiosa performance dançante em que os jogadores pairam à volta da bola, tentando compreender o seu movimento, o seu comportamento, e influenciá-la para marcarem gol. 
+Não há partida de futebol sem bola, e em The 23rd Player — A Behavioral Ball, esta ganha estatuto de atriz principal. Nesta reinterpretação do futebol, as regras são claras: nenhum jogador pode tocar na bola, apenas pode tentar influenciar o seu movimento com a posição do seu corpo no terreno de jogo. O 23º jogador é o piloto que tenta telecomandar o movimento da bola. Porém, essa atividade nem sempre é bem-sucedida. Frequentemente, a bola parece agir de forma autônoma, sem respeitar as ordens que lhe foram dadas pelo piloto. A partida transforma-se numa curiosa performance dançante em que os jogadores pairam à volta da bola, tentando compreender o seu movimento, o seu comportamento, e influenciá-la para marcarem gol. 
 
 
 * França, 1971. 
@@ -749,25 +749,25 @@ Hand hygiene before interaction is mandatory.
 
 
 Guilherme Meneses, Bobware e Beya Xinã Bena* 
-Huni Kuin
+Huni Kuin, 2016
 Videogame; duração variável 
 Cortesia do artista 
 
 
-O jogo %%Huni Kuin: Yube Baitana%% (%%Os Caminhos da Jiboia%%, 2017) resulta de uma colaboração entre antropólogos, programadores e artistas de São Paulo (SP) e indígenas do povo Huni Kuĩ (Kaxinawá) do Rio Jordão (AC) no Brasil. O intercâmbio entre os saberes indígenas — designadamente cantos, grafismos, histórias, mitos e rituais — e as tecnologias de interação nos traz a história do casal de gêmeos Kaxinawá concebidos pela jiboia Yube. Um caçador e uma artesã passam por uma série de desafios para se tornarem, respectivamente, um curandeiro (%%mukaya%%) e uma mestra dos desenhos (%%kene%%). Nessa jornada, adquirem habilidades e conhecimentos ancestrais relacionados com animais e plantas e se comunicam com entidades visíveis e invisíveis da floresta (yuxin) para assim se tornarem seres humanos (%%Huni Kuin%%). O jogo se insere na categoria de videogames  sobre o mundo (%%world games%%) e é uma contribuição para uma reflexão sobre como os processos colaborativos podem contribuir para questionar o lugar dos humanos no planeta Terra. 
+O jogo %%Huni Kuin: Yube Baitana%% (%%Os Caminhos da Jiboia%%, 2016) resulta de uma colaboração entre antropólogos, programadores e artistas de São Paulo (SP) e indígenas do povo Huni Kuĩ (Kaxinawá) do Rio Jordão (AC) no Brasil. O intercâmbio entre os saberes indígenas — designadamente cantos, grafismos, histórias, mitos e rituais — e as tecnologias de interação nos traz a história do casal de gêmeos Kaxinawá concebidos pela jiboia Yube. Um caçador e uma artesã passam por uma série de desafios para se tornarem, respectivamente, um curandeiro (%%mukaya%%) e uma mestra dos desenhos (%%kene%%). Nessa jornada, adquirem habilidades e conhecimentos ancestrais relacionados com animais e plantas e se comunicam com entidades visíveis e invisíveis da floresta (yuxin) para assim se tornarem seres humanos (%%Huni Kuin%%). O jogo se insere na categoria de videogames  sobre o mundo (%%world games%%) e é uma contribuição para uma reflexão sobre como os processos colaborativos podem contribuir para questionar o lugar dos humanos no planeta Terra. 
 *Brasil, 1988; Brasil, fundada em 2001; Brasil, fundado em 2014.
 
 
 A higienização das mãos antes da interação é obrigatória.
 
 
-Guilherme Meneses, Bobware e Beya Xinã Bena* 
+Guilherme Meneses, Bobware and Beya Xinã Bena* 
 
 
-Huni Kuin
+Huni Kuin, 2016
 Video game; variable duration
 Courtesy of the artist 
-The Huni Kuin: Yube Baitana game (Os Caminhos da Jiboia, 2017) results from collaboration between anthropologists, programmers, and artists from São Paulo (SP), and indigenous persons of the Huni Kuĩ (Kaxinawá) people from Rio Jordão (AC), in Brazil. The exchange between indigenous knowledge, namely songs, graphics, stories, myths and rituals, and interaction technologies brings us the story of the Kaxinawá twins who were conceived by the python Yube. A hunter and an artisan go through a series of challenges to become, respectively, a healer (mukaya) and a master of drawings (kene). In this journey, they acquire ancestral skills and knowledge related to animals and plants and communicate themselves with visible and invisible entities of the forest (yuxin) to become human beings (Huni Kuin). The game belongs to the category of video games about the world (world games) and is a contribution to the reflection on how collaborative processes can help to question the role of humans on planet Earth. 
+The Huni Kuin: Yube Baitana game (Os Caminhos da Jiboia, 2016) results from collaboration between anthropologists, programmers, and artists from São Paulo (SP), and indigenous persons of the Huni Kuĩ (Kaxinawá) people from Rio Jordão (AC), in Brazil. The exchange between indigenous knowledge, namely songs, graphics, stories, myths and rituals, and interaction technologies brings us the story of the Kaxinawá twins who were conceived by the python Yube. A hunter and an artisan go through a series of challenges to become, respectively, a healer (mukaya) and a master of drawings (kene). In this journey, they acquire ancestral skills and knowledge related to animals and plants and communicate themselves with visible and invisible entities of the forest (yuxin) to become human beings (Huni Kuin). The game belongs to the category of video games about the world (world games) and is a contribution to the reflection on how collaborative processes can help to question the role of humans on planet Earth. 
 *Brazil, 1988; Brazil, founded in 2001; Brazil, founded in 2014.
 
 
@@ -863,7 +863,7 @@ Vídeo Full-HD, 16:9, cor, som; 6 min 47 s
 Museu de Arte Contemporânea de Elvas_Coleção António Cachola 
 
 
-Nos vídeos For a Better World e Naar de Speeltuin! (To the Playground!), Priscila Fernandes retrata dois tipos de atividade lúdica ou brincadeira. No primeiro vídeo, a artista filma na KidZania de Lisboa. Nessa multinacional de recreação, as crianças brincam em hospitais e caixas de supermercado, entre outros locais de trabalho da vida adulta. Nessa sociedade de crianças, que até tem moeda própria — o KidZo —, compram-se e vendem-se produtos das marcas que patrocinam a KidZania. Neste jogo de normalização e de fidelização, a criança aprende desde cedo as mecânicas do mundo adulto. Como contraponto dessa visão capitalista do jogo e da brincadeira, Naar de Speeltuin! (To the Playground!) põe em cena um grupo de adultos que brincam num parque infantil e evoca, assim, a importância do regresso à brincadeira autotélica e desinteressada.
+Nos vídeos For a Better World e Naar de Speeltuin! (To the Playground!), Priscila Fernandes retrata dois tipos de atividade lúdica ou brincadeira. No primeiro vídeo, a artista filma na KidZania de Lisboa. Nessa multinacional de recreação, as crianças brincam em hospitais e caixas de supermercado, entre outros locais de trabalho da vida adulta. Nessa sociedade de crianças, que até tem moeda própria — o KidZo —, compram-se e vendem-se produtos das marcas que patrocinam a KidZania. Neste jogo de normalização e de fidelização, a criança aprende desde cedo as mecânicas do mundo adulto. Como contraponto a essa visão capitalista do jogo e da brincadeira, Naar de Speeltuin! (To the Playground!) põe em cena um grupo de adultos que brincam num parque infantil e evoca, assim, a importância do regresso à brincadeira autotélica e desinteressada.
 
 
 * Portugal, 1981. 
@@ -1026,12 +1026,10 @@ Brad Downey*
 
 
 Endless Column in Context, 2005 
-House of Cards #2, 2007 
 House of Cards #3, 2007 
 Castles Beneath Cities, 2008 
 Broken Bike Lane, 2009 
 Chalk Mark (Hopscotch), 2010 
-Barricades, 2013 
 The Use of Books, 2015 
 Impressões digitais sobre papel; várias dimensões 
 Cortesia do artista 
@@ -1059,12 +1057,10 @@ Brad Downey*
 
 
 Endless Column in Context, 2005 
-House of Cards #2, 2007 
 House of Cards #3, 2007 
 Castles Beneath Cities, 2008 
 Broken Bike Lane, 2009 
 Chalk Mark (Hopscotch), 2010 
-Barricades, 2013 
 The Use of Books, 2015 
 Digital prints on paper; various dimensions 
 Courtesy of the artist 
