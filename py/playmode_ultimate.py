@@ -2,11 +2,16 @@ import time
 start = time.time()
 
 ##########################################################
+
 import os
 from base import var,dgd
 
+##########################################################
+
 # caminho da pasta do playmode
 path='/'.join(os.path.abspath(os.getcwd()).split('/')[:-1])
+
+##########################################################
 
 # unidades
 cm = 72/2.54
@@ -16,14 +21,26 @@ mm = cm/10
 # _____________________________________
 # _____________________________________
 
-repete_x=2
-repete_y=1
+repete_x=1
+repete_y=4
 
-ajuste_texto=-1
+ajuste_texto=0
+
+# caracteres='PPLLAAYYMMOODDEE'
+caracteres='PLAYMODE PLAYMODE'
+
+# cores
+# 'rgbcmykw' / (0-1,0-1,0-1,0-1) / [ (0-1,0-1,0-1,0-1),(0-1,0-1,0-1,0-1) ]
+cor_0='k' 
+cor_1='k'
+cor_bg='w'
+cor_txt='b'
+
+sw=0.5 # espessura da linha (px) --- versao: com_linhas
 
 # # logo
-# pw=1000
-# ph=900
+# pw=500
+# ph=100
 # faixas=10
 # modulos=[2**i for i in range(0,5)] # n_modulos/faixa
 
@@ -33,11 +50,11 @@ ajuste_texto=-1
 # faixas=10
 # modulos=[2**i for i in range(1,6)] # n_modulos/faixa
 
-# # painel entrada
-# faixas=19
-# pw=faixas*200
-# ph=2500
-# modulos=[2**i for i in range(1,5)] # n_modulos/faixa
+# painel entrada
+faixas=19
+pw=faixas*200
+ph=2500
+modulos=[2**i for i in range(0,6)] # n_modulos/faixa
 
 # # texto abertura
 # pw=800
@@ -64,24 +81,16 @@ ajuste_texto=-1
 # ph=2000
 # modulos=[2**i for i in range(0,6)] # n_modulos/faixa
 
-# obra
-faixas=4
-pw=30*cm
-ph=60*cm
-modulos=[1,1,]+[2**i for i in range(0,6)] # n_modulos/faixa
-# modulos=[1,2,1,16,32,]
+# # obra
+# faixas=4
+# pw=30*cm
+# ph=60*cm
+# modulos=[1,1,]+[2**i for i in range(0,6)] # n_modulos/faixa
+# # modulos=[1,2,1,16,32,]
 
-# caracteres='PPLLAAYYMMOODDEE'
-caracteres='PLAYMODE'
 
-# cores
-# 'rgbcmykw' / (0-1,0-1,0-1,0-1) / [ (0-1,0-1,0-1,0-1),(0-1,0-1,0-1,0-1) ]
-cor_0='k' 
-cor_1='k'
-cor_bg='w'
-cor_txt='b'
 
-sw=0.5 # espessura da linha (px) --- versao: com_linhas
+
 
 
 # _____________________________________
@@ -97,15 +106,15 @@ sw=0.5 # espessura da linha (px) --- versao: com_linhas
 
 imagens={
     
-    # 'playmode logo':{
-    #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/painel_1.png',
-    #     'x':'c',
-    #     'y':'c',
-    #     'zoom':'w',
-    #     'inverte_cores':False,
-    #     'brilho':0,
-    #     'contraste':1,
-    # },
+    'playmode logo':{
+        'path':'/Users/alien/x3/x/qdd/playmode/img/1/painel_1.png',
+        'x':'c',
+        'y':'c',
+        'zoom':'w',
+        'inverte_cores':False,
+        'brilho':0,
+        'contraste':1,
+    },
 
     # 'qctx logo':{
     #     'path':'/Users/alien/x3/x/qdd/playmode/img/1/painel_3.png',
@@ -117,15 +126,15 @@ imagens={
     #     'contraste':1,
     # },
 
-    'obra_taca_2x1_estampa':{
-        'path':'/Users/alien/x3/x/qdd/playmode/img/obras/taca.jpeg',
-        'x' : 'c',
-        'y' : 'r',
-        'zoom' : randint(100,180)/100,
-        'inverte_cores':False,
-        'brilho':-0.10,
-        'contraste':1,
-    },
+    # 'obra_taca_2x1_estampa':{
+    #     'path':'/Users/alien/x3/x/qdd/playmode/img/obras/taca.jpeg',
+    #     'x' : 'c',
+    #     'y' : 'r',
+    #     'zoom' : randint(100,180)/100,
+    #     'inverte_cores':False,
+    #     'brilho':-0.10,
+    #     'contraste':1,
+    # },
 
     # 'q_estampa':{
     #     'path':'pixel_q_100.png',
@@ -329,6 +338,12 @@ def cria_pasta(path):
     if not os.path.isdir(path):
         os.mkdir(path)
         print('>>> pasta criada \n>>>',path)
+
+def save_file(nome):
+    path_save=os.path.join( path,nome )
+    saveImage(path_save, multipage=False)
+    print('salvo', randint(2,19)*choice(['>','=']))
+    print(path_save)
 
 def car_texto(car,car_c,i,j,texto,ajuste=0):
     if texto == 2: # alinhado vertical
@@ -540,7 +555,7 @@ unir_formas=False
 
 Variable([
     dict(name="cmyk", ui="CheckBox", args=dict(value=True)),
-    dict(name="grafica", ui="CheckBox", args=dict(value=True)),
+    dict(name="grafica", ui="CheckBox", args=dict(value=False)),
     # dict(name="unir_formas", ui="CheckBox", args=dict(value=False)),
     dict(name="ver", ui="PopUpButton", args=dict(items=opcoes)),
     dict(name="grid", ui="CheckBox", args=dict(value=False)),
@@ -680,6 +695,9 @@ for i in imagens:
     i['img']=img
 
 
+# arquivo para gerar as faixas separadas para grafica
+faixas_grafica={}
+
 # visualiza imagens
 if ver==1:
     for i in imagens:
@@ -724,6 +742,8 @@ else:
 
     save()
     for rx in range(repete_x):
+        if rx not in faixas_grafica:
+            faixas_grafica[rx]={}
         save()
         car0=0
         translate(0,height()-ph)
@@ -732,7 +752,13 @@ else:
                 car_c=car0
             else:
                 car_c=0
+
             for f in range(faixas):
+                if f not in faixas_grafica[rx]:
+                    faixas_grafica[rx][f]={}
+                if ry not in faixas_grafica[rx][f]:
+                    faixas_grafica[rx][f][ry]=[]
+
                 nm=choice(modulos)
                 m=fw/nm
                 m0=m/2 # ponto central do modulo para verificacao da cor
@@ -783,20 +809,24 @@ else:
 
                 # formas
                 base=bases[nm]
-
+            
+                # salva pontos pra grafica
+                if grafica:
+                    faixas_grafica[rx][f][ry].append([base,pontos,m0,ordem,car_c,vezes,ajuste_txt])
+                
                 save()
                 translate(-m0,-m0)
 
                 for c,camada in enumerate(ordem[:-1]):
                     car_c=playmode(vezes,pontos,[camada,],c,ajuste_txt,car_c=car_c)
-            
+        
                 if texto in [2,4]:
                     car_c+=nm
                 if texto in [3,4] and not f:
                     car0=car_c+len(pontos_y)
 
                 restore()
-        
+    
                 # desenha quadrados rosas da modulacao fora da pagina
                 if not ry and f%2:
                     if cmyk:
@@ -804,8 +834,6 @@ else:
                     else:
                         fill(*cor('m',cmyk=cmyk))
                     rect(f*fw,ph+10,fw,1*cm)
-            
-            
             
             translate(0,-ph)
         restore()
@@ -830,6 +858,38 @@ else:
         #     gif+=5
         # else:
         #     gif+=1
+
+# grafica
+if grafica:
+    for x in faixas_grafica:
+        for faixa in faixas_grafica[x]:
+
+            newPage(fw/repete_x,ph*repete_y)
+            translate(-faixa*fw/repete_x,height()-ph)
+
+            for y in faixas_grafica[x][faixa]:
+                for i,item in enumerate(faixas_grafica[x][faixa][y]):
+                    base,pontos,m0,ordem,car_c,vezes,ajuste_txt=item
+        
+                    save()
+                    translate(-m0,-m0)
+                    for c,camada in enumerate(ordem[:-1]):
+                        car_c=playmode(vezes,pontos,[camada,],c,ajuste_txt,car_c=car_c)
+                    restore()
+
+                translate(0,-ph)
+                
+            #salvar
+            n=0
+            pasta='entrada'
+            nome='pdf'
+            nomes=['grafica','0',pasta,'0','%s-%s.pdf' % (n,i)]
+            for nova_pasta in nomes:
+                pasta=os.path.join( path,nome )
+                cria_pasta(pasta)
+                nome=os.path.join( nome,nova_pasta )
+
+            save_file(nome)
 
 
 # grid
@@ -859,4 +919,6 @@ print('---------------------')
 ##########################################################
 
 end = time.time()
-print('\n>>>', end-start, 's')
+tempo=end-start
+print('\n>>>', tempo, 's')
+print('\n>>>', tempo/60, 's')
